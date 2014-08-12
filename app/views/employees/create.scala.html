@@ -1,0 +1,35 @@
+@(employeeForm: Form[Employee])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
+
+@main(Messages("employee.form")) {
+    <div class="panel panel-default">
+            <!-- Default panel contents -->
+        <div class="panel-heading">
+            @Messages("Новый сотрудник")
+            <div class="pull-right">
+                <a href="@routes.Employees.index()"><span class="glyphicon glyphicon-list"></span></a>
+            </div>
+        </div>
+        <div class="panel-body">
+        @helper.form(action = routes.Employees.save() ) {
+            <fieldset>
+                @inputText(employeeForm("surname"))
+                @inputText(employeeForm("firstname"))
+                @helper.inputText(employeeForm("lastname"))
+                @helper.inputDate(employeeForm("birthday"), 'class->"form-control")
+                @helper.inputText(employeeForm("citizenship"))
+                @helper.inputText(employeeForm("insurance_number"))
+                @helper.inputText(employeeForm("tax_number"))
+                @helper.inputText(employeeForm("home_phone"))
+                @helper.inputText(employeeForm("mobile_phone"))
+                @helper.inputText(employeeForm("email"))
+            </fieldset>
+            <p><input type="submit" class="btn btn-primary"
+            value='@Messages("Сохранить")'></p>
+        }
+        </div>
+    </div>
+}

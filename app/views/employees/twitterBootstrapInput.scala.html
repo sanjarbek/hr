@@ -1,0 +1,12 @@
+@(elements: helper.FieldElements)
+
+@**************************************************
+* Generate input according twitter bootsrap rules *
+**************************************************@
+<div class="clearfix form-group @if(elements.hasErrors) {error}">
+    <label for="@elements.id">@elements.label</label>
+    <div class="input">
+        @elements.input
+        <span class="help-inline">@elements.errors.mkString(", ")</span>
+    </div>
+</div>

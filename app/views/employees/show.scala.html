@@ -1,0 +1,17 @@
+@(employee: Employee)
+
+@main(Messages("Описание сотрудника")) {
+    <div class="panel panel-default">
+            <!-- Default panel contents -->
+        <div class="panel-heading">
+            Описание продукта №@employee.id
+            <div class="pull-right">
+                <a href="@routes.Employees.index()"><span class="glyphicon glyphicon-list"></span></a>
+            </div>
+        </div>
+        <dl class="dl-horizontal">
+            <dt>@Messages("Имя"):</dt>
+            <dd>@employee.firstname</dd>
+        </dl>
+    </div>
+}

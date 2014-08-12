@@ -12,6 +12,19 @@
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
     </head>
     <body>
-        @content
+        <div class="container">
+            <div class="header row">
+                <ul class="nav nav-pills pull-left">
+                    <li class="active"><a href="#">Главная</a></li>
+                    <li><a href="@routes.Employees.index()">Сотрудники</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr />
+        <div class="container">
+            <div class="row">
+            @content
+            </div>
+        </div>
     </body>
 </html>
