@@ -1,8 +1,5 @@
 @(elements: helper.FieldElements)
 
-@**************************************************
-* Generate input according twitter bootsrap rules *
-**************************************************@
 <div class="clearfix form-group @if(elements.hasErrors) {has-error}">
     <label for="@elements.id">@Messages(elements.label.toString)</label>
     <div class="input">

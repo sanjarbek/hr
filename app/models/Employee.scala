@@ -23,7 +23,7 @@ case class Employee(
   email: String ) extends KeyedEntity[Long]
 
 object Employee {
-  import Database.{employeeTable}
+  import Database.{employeeTable, familyTable}
 
   def allQ: Query[Employee] = from(employeeTable) {
     employee => select(employee)
@@ -45,5 +45,11 @@ object Employee {
 
   def update(employee: Employee) {
     inTransaction{ employeeTable.update(employee)}
+  }
+
+  def listOfFamily(employee: Employee)  = inTransaction{
+    from(familyTable) {
+      family => where(family.employee_id===employee.id).compute(count)
+    }.toLong
   }
 }

@@ -1,4 +1,4 @@
-@(employeeForm: Form[Employee])
+@(employeeForm: Form[Employee])(implicit lang: Lang, request: RequestHeader)
 
 @import helper._
 
@@ -6,7 +6,6 @@
 
 @main(Messages("employee.form")) {
     <div class="panel panel-default">
-            <!-- Default panel contents -->
         <div class="panel-heading">
             @Messages("Новый сотрудник")
             <div class="pull-right">
@@ -14,20 +13,28 @@
             </div>
         </div>
         <div class="panel-body">
-        @helper.form(action = routes.Employees.save() ) {
+        @helper.form(action = routes.Employees.save()) {
             <fieldset>
-                @inputText(employeeForm("surname"))
-                @inputText(employeeForm("firstname"))
-                @helper.inputText(employeeForm("lastname"))
-                @helper.inputDate(employeeForm("birthday"), 'class->"form-control")
-                @helper.inputText(employeeForm("citizenship"))
-                @helper.inputText(employeeForm("insurance_number"))
-                @helper.inputText(employeeForm("tax_number"))
-                @helper.inputText(employeeForm("home_phone"))
-                @helper.inputText(employeeForm("mobile_phone"))
-                @helper.inputText(employeeForm("email"))
+                <div class="row">
+                    <div class="col-sm-4">@inputText(employeeForm("surname"), 'class->"form-control  input-sm")</div>
+                    <div class="col-sm-4">@inputText(employeeForm("firstname"), 'class->"form-control input-sm")</div>
+                    <div class="col-sm-4">@helper.inputText(employeeForm("lastname"), 'class->"form-control input-sm")</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">@helper.inputDate(employeeForm("birthday"), 'class->"form-control input-sm")</div>
+                    <div class="col-sm-4">@helper.inputText(employeeForm("citizenship"), 'class->"form-control input-sm")</div>
+                    <div class="col-sm-4">@helper.inputText(employeeForm("insurance_number"), 'class->"form-control input-sm", 'type->"number")</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">@helper.inputText(employeeForm("tax_number"), 'class->"form-control input-sm")</div>
+                    <div class="col-sm-4">@helper.inputText(employeeForm("home_phone"), 'class->"form-control input-sm")</div>
+                    <div class="col-sm-4">@helper.inputText(employeeForm("mobile_phone"), 'class->"form-control input-sm")</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">@helper.inputText(employeeForm("email"), 'class->"form-control input-sm", 'type->"email", 'required->"required")</div>
+                </div>
             </fieldset>
-            <p><input type="submit" class="btn btn-primary"
+            <p><input type="submit" class="btn btn-primary pull-right"
             value='@Messages("Сохранить")'></p>
         }
         </div>

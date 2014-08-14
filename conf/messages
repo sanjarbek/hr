@@ -1,1 +1,12 @@
 application.name = Отдел кадров
+
+firstname = Имя
+surname = Фамилия
+lastname = Отчество
+birthday = Дата рождения
+citizenship = Гражданство
+insurance_number = Пенсионный страхавой номер
+tax_number = Налоговый номер
+home_phone = Домашний номер
+mobile_phone = Мобильный номер
+email = Электронная почта

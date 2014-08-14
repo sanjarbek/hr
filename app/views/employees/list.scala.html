@@ -1,13 +1,11 @@
-@(employees: Iterable[Employee])
+@(employees: Iterable[Employee])(implicit request: RequestHeader)
 
 @main("Список пользователей") {
     <div class="panel panel-default">
             <!-- Default panel contents -->
         <div class="panel-heading">
-            Список сотрудников
-            <div class="pull-right">
-                <a href="@routes.Employees.newEmployee()"><span class="glyphicon glyphicon-plus"></span></a>
-            </div>
+            <a href="@routes.Employees.newEmployee()" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+            <strong>Список сотрудников</strong>
         </div>
         <table class="table table-bordered table-condensed">
         @for(employee <- employees){
@@ -16,17 +14,12 @@
                 <td>@employee.surname</td>
                 <td>@employee.firstname</td>
                 <td>@employee.lastname</td>
-                <td>@employee.birthday</td>
-                <td>@employee.citizenship</td>
-                <td>@employee.insurance_number</td>
-                <td>@employee.tax_number</td>
-                <td>@employee.home_phone</td>
-                <td>@employee.mobile_phone</td>
-                <td>@employee.email</td>
-                @*<td>*@
+                <td><a href="@routes.Families.family(employee.id)">@Employee.listOfFamily(employee)</a></td>
+                <td>
                     @*<a href="@routes.Products.edit(product.id)"><span class="glyphicon glyphicon-edit"></span></a>*@
-                    @*<a href="@routes.Products.show(product.id)"><span class="glyphicon glyphicon-eye-open"></span></a>*@
-                @*</td>*@
+                    <a href="@routes.Employees.show(employee.id)"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <a href="@routes.Families.newFamily(employee.id)"><span class="glyphicon glyphicon-plus"></span></a>
+                </td>
             </tr>
         }
         </table>

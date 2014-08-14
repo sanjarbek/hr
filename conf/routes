@@ -3,18 +3,30 @@
 # ~~~~
 
 # Home page
-GET         /                        controllers.Application.index
+#GET         /                         controllers.Application.index
+
+# Состояния работоспособности сервера
+GET         /connection/status        controllers.Application.serverStatus()
 
 # Сотрудники
-GET         /employees               controllers.Employees.index
-GET         /employees/create        controllers.Employees.newEmployee
-GET         /employees/show          controllers.Employees.show(id: Long)
-POST        /employees/save          controllers.Employees.save
+GET         /employees                controllers.Employees.index
+GET         /employees/create         controllers.Employees.newEmployee
+GET         /employees/show           controllers.Employees.show(id: Long)
+POST        /employees/save           controllers.Employees.save
+GET         /employees/family         controllers.Families.family(employeeId: Long)
+
+# Состав семьи
+GET         /family                   controllers.Families.index
+GET         /family/create            controllers.Families.newFamily(employeeId: Long)
+GET         /family/show              controllers.Families.show(id: Long)
+POST        /family/save              controllers.Families.save(employeeId: Long)
+
+
 
 # Webjar plugin included.
-GET         /webjars/*file           controllers.WebJarAssets.at(file)
+GET         /webjars/*file            controllers.WebJarAssets.at(file)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file            controllers.Assets.at(path="/public", file)
+GET         /assets/*file             controllers.Assets.at(path="/public", file)
 
     

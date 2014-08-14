@@ -26,16 +26,13 @@ object Employees extends Controller {
     )(Employee.apply)(Employee.unapply)
   )
 
-  def index = Action {
+  def index = Action { implicit  request =>
     val employees = Employee.findAll
     Ok(views.html.employees.list(employees))
   }
 
   def newEmployee = Action { implicit request =>
-    employeeForm.bindFromRequest.fold(
-      formWithErrors => Ok(views.html.employees.create(formWithErrors)),
-      value => Ok("created: " + value)
-    )
+    Ok(views.html.employees.create(employeeForm))
   }
 
   def save = Action { implicit request =>
@@ -50,11 +47,9 @@ object Employees extends Controller {
     )
   }
 
-  def show(id: Long) = Action {
+  def show(id: Long) = Action { implicit request =>
     Employee.findById(id).map{ employee =>
         Ok(views.html.employees.show(employee))
     }.getOrElse(NotFound)
-
   }
-
 }
