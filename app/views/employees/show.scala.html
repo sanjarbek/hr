@@ -1,6 +1,6 @@
 @(employee: Employee)(implicit request: RequestHeader)
 
-@main(Messages("Описание сотрудника")) {
+@main(Messages("Описание сотрудника"), "employees") {
     <div class="panel panel-default">
         <div class="panel-heading">
             Описание продукта №@employee.id

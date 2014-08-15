@@ -1,6 +1,6 @@
 @(employees: Iterable[Employee])(implicit request: RequestHeader)
 
-@main("Список пользователей") {
+@main("Список пользователей", "employees") {
     <div class="panel panel-default">
             <!-- Default panel contents -->
         <div class="panel-heading">

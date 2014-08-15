@@ -1,6 +1,6 @@
 @(family: Family)(implicit request: RequestHeader)
 
-@main(Messages("Описание семьи")) {
+@main(Messages("Описание семьи"), "families") {
     <div class="panel panel-default">
         <div class="panel-heading">
             Описание семьи №@family.id

@@ -3,10 +3,12 @@
 @**************************************************
 * Generate input according twitter bootsrap rules *
 **************************************************@
-<div class="clearfix form-group @if(elements.hasErrors) {has-error}">
+<div class="form-group @if(elements.hasErrors) {has-error}">
     <label for="@elements.id">@Messages(elements.label.toString)</label>
     <div class="input">
         @elements.input
-        <span class="help-inline">@if(elements.hasErrors) {@elements.infos.mkString(", ")}</span>
+        @if(elements.hasErrors) {
+            <span class="help-inline"> @elements.errors.mkString(", ")</span>
+        }
     </div>
 </div>

@@ -4,7 +4,7 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
 
-@main(Messages("employee.form")) {
+@main(Messages("employee.form"), "employees") {
     <div class="panel panel-default">
         <div class="panel-heading">
             @Messages("Новый сотрудник")
@@ -16,7 +16,7 @@
         @helper.form(action = routes.Employees.save()) {
             <fieldset>
                 <div class="row">
-                    <div class="col-sm-4">@inputText(employeeForm("surname"), 'class->"form-control  input-sm")</div>
+                    <div class="col-sm-4">@inputText(employeeForm("surname"), 'class->"form-control  input-sm", 'showConstraints -> false)</div>
                     <div class="col-sm-4">@inputText(employeeForm("firstname"), 'class->"form-control input-sm")</div>
                     <div class="col-sm-4">@helper.inputText(employeeForm("lastname"), 'class->"form-control input-sm")</div>
                 </div>

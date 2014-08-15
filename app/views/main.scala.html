@@ -1,4 +1,4 @@
-@(title: String)(content: Html)(implicit request: RequestHeader)
+@(title: String, section: String)(content: Html)(implicit request: RequestHeader)
 
 <!DOCTYPE html>
 
@@ -16,16 +16,30 @@
     <body>
         <div class="container">
             <div class="header row">
-                <ul class="nav nav-pills pull-left">
-                    <li class="active"><a href="#">Главная</a></li>
-                    <li><a href="@routes.Employees.index()">Сотрудники</a></li>
+                @menuItems = @{Seq(
+                    ("employees", "Сотрудники", routes.Employees.index),
+                    ("families", "Семьи", routes.Families.index)
+                )}
+
+                <ul class="nav nav-tabs">
+                @menuItems.map {
+                    case (key, title, _) if key == section => {
+                        <li class="active">
+                            <a href="#">@title</a>
+                        </li>
+                    }
+                    case (key, title, url) => {
+                        <li><a href="@url">@title</a></li>
+                    }
+                }
                 </ul>
             </div>
         </div>
-        <hr />
+        <br />
+        @*<hr />*@
         <div class="container">
             <div class="row">
-            @content
+                @content
             </div>
 
             <footer>
