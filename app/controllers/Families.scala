@@ -6,14 +6,14 @@ import play.api._
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
-import models.Family
+import models.{Family,Employee}
 
 object Families extends Controller {
 
   private val familyForm: Form[Family] = Form(
     mapping(
       "id" -> ignored(0L),
-      "employee_id" -> longNumber,
+      "employee_id" -> longNumber.verifying("There is not exists employee.", Employee.findById(_).nonEmpty),
       "relationship" -> number,
       "surname" -> nonEmptyText(minLength = 2, maxLength = 20),
       "firstname" -> nonEmptyText(minLength = 2, maxLength = 20),
