@@ -4,6 +4,7 @@
 
 # Home page
 #GET         /                         controllers.Application.index
+GET         /                         controllers.Application.admin
 
 # Состояния работоспособности сервера
 GET         /connection/status        controllers.Application.serverStatus()
