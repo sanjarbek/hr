@@ -8,6 +8,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import models.Employee
 import play.api.data.validation._
+import play.api.libs.json._
 
 object Employees extends Controller {
 
@@ -27,19 +28,28 @@ object Employees extends Controller {
     )(Employee.apply)(Employee.unapply)
   )
 
-  def index = Action { implicit  request =>
-    val employees = Employee.findAll
-    Ok(views.html.employees.list(employees))
+//  def index = Action { implicit  request =>
+//    val employees = Employee.findAll
+//    Ok(views.html.employees.list(employees))
+//  }
+
+  def list = Action { implicit  request =>
+    Ok(views.html.employees.list())
+  }
+
+  def jsonList = Action {
+    val employees = Employee.findAll.map { employee => Json.toJson(employee)}
+    Ok(Json.toJson(employees))
   }
 
   def newEmployee = Action { implicit request =>
-    Ok(views.html.employees.create(employeeForm))
+    Ok(views.html.employees.create())
   }
 
   def save = Action { implicit request =>
     employeeForm.bindFromRequest.fold(
       hasErrors = { form =>
-        Ok(views.html.employees.create(form))
+        Ok(views.html.employees.create())
       },
       success = { newEmployee =>
         val employee = Employee.insert(newEmployee)

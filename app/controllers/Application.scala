@@ -23,4 +23,8 @@ object Application extends Controller {
 
   def getConnectionStatus = Calendar.getInstance().getTime.toLocaleString()
 
+  def test = Action {
+    Ok(views.html.angular())
+  }
+
 }

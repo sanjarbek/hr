@@ -1,42 +1,66 @@
-@(employeeForm: Form[Employee])(implicit lang: Lang, request: RequestHeader)
 
-@import helper._
-
-@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
-
-@main(Messages("employee.form"), "employees") {
     <div class="panel panel-default">
         <div class="panel-heading">
             @Messages("Новый сотрудник")
             <div class="pull-right">
-                <a href="@routes.Employees.index()"><span class="glyphicon glyphicon-list"></span></a>
+                <a ui-sref="employeeList"><span class="glyphicon glyphicon-list"></span></a>
             </div>
         </div>
         <div class="panel-body">
-        @helper.form(action = routes.Employees.save()) {
+        <form target="@routes.Employees.save()" method="POST">
             <fieldset>
-                <div class="row">
-                    <div class="col-sm-4">@inputText(employeeForm("surname"), 'class->"form-control  input-sm", 'showConstraints -> false)</div>
-                    <div class="col-sm-4">@inputText(employeeForm("firstname"), 'class->"form-control input-sm")</div>
-                    <div class="col-sm-4">@helper.inputText(employeeForm("lastname"), 'class->"form-control input-sm")</div>
+                <div class="form-group">
+                    <label for="surname">Surname</label>
+                    <input type="text" name="surname" ng-model="newEmployee.surname"/>
+                    <span class="help-inline"></span>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">@helper.inputDate(employeeForm("birthday"), 'class->"form-control input-sm")</div>
-                    <div class="col-sm-4">@helper.inputText(employeeForm("citizenship"), 'class->"form-control input-sm")</div>
-                    <div class="col-sm-4">@helper.inputText(employeeForm("insurance_number"), 'class->"form-control input-sm", 'type->"number")</div>
+                <div class="form-group">
+                    <label for="firstname">Firstname</label>
+                    <input type="text" name="firstname" ng-model="newEmployee.firstname"/>
+                    <span class="help-inline"></span>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">@helper.inputText(employeeForm("tax_number"), 'class->"form-control input-sm")</div>
-                    <div class="col-sm-4">@helper.inputText(employeeForm("home_phone"), 'class->"form-control input-sm")</div>
-                    <div class="col-sm-4">@helper.inputText(employeeForm("mobile_phone"), 'class->"form-control input-sm")</div>
+                <div class="form-group">
+                    <label for="lastname">Lastname</label>
+                    <input type="text" name="lastname" ng-model="newEmployee.lastname"/>
+                    <span class="help-inline"></span>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">@helper.inputText(employeeForm("email"), 'class->"form-control input-sm", 'type->"email", 'required->"required")</div>
+                <div class="form-group">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" name="birthday" ng-model="newEmployee.birthday"/>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group">
+                    <label for="citizenship">Citizenship</label>
+                    <input type="text" name="citizenship" ng-model="newEmployee.citizenship"/>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group">
+                    <label for="insurance_number">Insurance number</label>
+                    <input type="text" name="insurance_number" ng-model="newEmployee.insurance_number"/>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group">
+                    <label for="tax_number">Tax number</label>
+                    <input type="text" name="tax_number" ng-model="newEmployee.tax_number"/>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group">
+                    <label for="home_phone">Home phone</label>
+                    <input type="text" name="home_phone" ng-model="newEmployee.home_phone"/>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group">
+                    <label for="mobile_phone">Mobile phone</label>
+                    <input type="text" name="mobile_phone" ng-model="newEmployee.mobile_phone"/>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" ng-model="newEmployee.email"/>
+                    <span class="help-inline"></span>
                 </div>
             </fieldset>
             <p><input type="submit" class="btn btn-primary pull-right"
             value='@Messages("Сохранить")'></p>
-        }
         </div>
     </div>
-}

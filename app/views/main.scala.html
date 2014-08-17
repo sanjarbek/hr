@@ -17,7 +17,7 @@
         <div class="container">
             <div class="header row">
                 @menuItems = @{Seq(
-                    ("employees", "Сотрудники", routes.Employees.index),
+                    ("employees", "Сотрудники", routes.Employees.list()),
                     ("families", "Семьи", routes.Families.index)
                 )}
 
