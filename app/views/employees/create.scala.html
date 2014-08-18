@@ -7,60 +7,83 @@
             </div>
         </div>
         <div class="panel-body">
-        <form target="@routes.Employees.save()" method="POST">
+        <form ng-submit="saveEmployee()" class="form-horizontal">
             <fieldset>
-                <div class="form-group">
-                    <label for="surname">Surname</label>
-                    <input type="text" name="surname" ng-model="newEmployee.surname"/>
+                <div class="form-group form-group-sm">
+                    <label for="surname" class="col-sm-2 control-label">Surname</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="surname" ng-model="newEmployeeForm.surname"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="firstname">Firstname</label>
-                    <input type="text" name="firstname" ng-model="newEmployee.firstname"/>
+                <div class="form-group form-group-sm">
+                    <label for="firstname" class="col-sm-2 control-label">Firstname</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="firstname" ng-model="newEmployeeForm.firstname"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="lastname">Lastname</label>
-                    <input type="text" name="lastname" ng-model="newEmployee.lastname"/>
+                <div class="form-group form-group-sm">
+                    <label for="lastname" class="col-sm-2 control-label">Lastname</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="lastname" ng-model="newEmployeeForm.lastname"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="birthday">Birthday</label>
-                    <input type="date" name="birthday" ng-model="newEmployee.birthday"/>
+                <div class="form-group form-group-sm">
+                    <label for="birthday" class="col-sm-2 control-label">Birthday</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="date" name="birthday" ng-model="newEmployeeForm.birthday" class="input-sm form-control"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="citizenship">Citizenship</label>
-                    <input type="text" name="citizenship" ng-model="newEmployee.citizenship"/>
+                <div class="form-group form-group-sm">
+                    <label for="citizenship" class="col-sm-2 control-label">Citizenship</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="citizenship" ng-model="newEmployeeForm.citizenship"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="insurance_number">Insurance number</label>
-                    <input type="text" name="insurance_number" ng-model="newEmployee.insurance_number"/>
+                <div class="form-group form-group-sm">
+                    <label for="insurance_number" class="col-sm-2 control-label">Insurance number</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="insurance_number" ng-model="newEmployeeForm.insurance_number"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="tax_number">Tax number</label>
-                    <input type="text" name="tax_number" ng-model="newEmployee.tax_number"/>
+                <div class="form-group form-group-sm">
+                    <label for="tax_number" class="col-sm-2 control-label">Tax number</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="tax_number" ng-model="newEmployeeForm.tax_number"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="home_phone">Home phone</label>
-                    <input type="text" name="home_phone" ng-model="newEmployee.home_phone"/>
+                <div class="form-group form-group-sm">
+                    <label for="home_phone" class="col-sm-2 control-label">Home phone</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="home_phone" ng-model="newEmployeeForm.home_phone"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="mobile_phone">Mobile phone</label>
-                    <input type="text" name="mobile_phone" ng-model="newEmployee.mobile_phone"/>
+                <div class="form-group form-group-sm">
+                    <label for="mobile_phone" class="col-sm-2 control-label">Mobile phone</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="text" name="mobile_phone" ng-model="newEmployeeForm.mobile_phone"/>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" ng-model="newEmployee.email"/>
+                <div class="form-group form-group-sm">
+                    <label for="email" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                    <input class="form-control"  type="email" name="email" ng-model="newEmployeeForm.email" />
+                        </div>
                     <span class="help-inline"></span>
                 </div>
             </fieldset>
-            <p><input type="submit" class="btn btn-primary pull-right"
-            value='@Messages("Сохранить")'></p>
+            <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+        </form>
         </div>
     </div>
+    <pre>
+	{{ newEmployeeForm }}
+    </pre>

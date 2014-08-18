@@ -46,16 +46,27 @@ object Employees extends Controller {
     Ok(views.html.employees.create())
   }
 
-  def save = Action { implicit request =>
-    employeeForm.bindFromRequest.fold(
-      hasErrors = { form =>
-        Ok(views.html.employees.create())
-      },
-      success = { newEmployee =>
-        val employee = Employee.insert(newEmployee)
-        Redirect(routes.Employees.show(employee.id))
-      }
-    )
+  def save = Action(parse.json) { implicit request =>
+    val employeeJson = request.body
+    val employee = employeeJson.as[Employee]
+
+    try {
+      Employee.insert(employee)
+      Ok("Saved")
+    }
+    catch {
+      case e: IllegalArgumentException =>
+        BadRequest("Can not save employee information.")
+    }
+//    employeeForm.bindFromRequest.fold(
+//      hasErrors = { form =>
+//        Ok(views.html.employees.create())
+//      },
+//      success = { newEmployee =>
+//        val employee = Employee.insert(newEmployee)
+//        Redirect(routes.Employees.show(employee.id))
+//      }
+//    )
   }
 
   def show(id: Long) = Action { implicit request =>

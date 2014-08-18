@@ -25,19 +25,19 @@ app.service('EmployeeService', function ($http) {
     //save method create a new employee if not already exists
     //else update the existing object
     this.save = function (employee) {
-        if (employee.id == null) {
-            //if this is new employee, add it in employees array
-            employee.id = uid++;
-            employees.push(employee);
-        } else {
-            //for existing contact, find this employee using id
-            //and update it.
-            for (i in employees) {
-                if (employees[i].id == employee.id) {
-                    employees[i] = employee;
+        $http.post('/employees/save', employee)
+            .success(function(employee) {
+                console.log(employee);
+
+                if (!employee.success) {
+                    // if not successful, bind errors to error variables
+                    $scope.errorName = employee.errors.name;
+                    $scope.errorSuperhero = employee.errors.superheroAlias;
+                } else {
+                    // if successful, bind success message to message
+                    $scope.message = employee.message;
                 }
-            }
-        }
+            });
 
     }
 
@@ -76,8 +76,21 @@ app.controller('EmployeeController', function ($scope, EmployeeService) {
     $scope.employees = EmployeeService.list();
 
     $scope.saveEmployee = function () {
-        EmployeeService.save($scope.newEmployee);
-        $scope.newEmployee = {};
+        var data = {
+            surname: $scope.newEmployeeForm.surname,
+            firstname: $scope.newEmployeeForm.firstname,
+            lastname: $scope.newEmployeeForm.lastname,
+            birthday: $scope.newEmployeeForm.birthday,
+            citizenship: $scope.newEmployeeForm.citizenship,
+            insurance_number: $scope.newEmployeeForm.insurance_number,
+            tax_number: $scope.newEmployeeForm.tax_number,
+            home_phone: $scope.newEmployeeForm.home_phone,
+            mobile_phone: $scope.newEmployeeForm.mobile_phone,
+            email: $scope.newEmployeeForm.email
+        };
+
+        EmployeeService.save(data);
+        $scope.newEmployeeForm = {};
     }
 
 
