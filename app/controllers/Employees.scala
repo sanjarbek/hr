@@ -9,6 +9,7 @@ import play.api.data.Forms._
 import models.Employee
 import play.api.data.validation._
 import play.api.libs.json._
+import play.api.templates.Html
 
 object Employees extends Controller {
 
@@ -69,9 +70,17 @@ object Employees extends Controller {
 //    )
   }
 
-  def show(id: Long) = Action { implicit request =>
-    Employee.findById(id).map{ employee =>
-        Ok(views.html.employees.show(employee))
-    }.getOrElse(NotFound)
+//  def show(id: Long) = Action { implicit request =>
+//    Employee.findById(id).map{ employee =>
+//        Ok(views.html.employees.show(employee))
+//    }.getOrElse(NotFound)
+//  }
+
+  def show = Action {
+    Ok(views.html.employees.show())
+  }
+
+  def template = Action {
+    Ok(views.html.employees.default())
   }
 }

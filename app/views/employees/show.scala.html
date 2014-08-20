@@ -1,16 +1,25 @@
-@(employee: Employee)(implicit request: RequestHeader)
-
-@main(Messages("Описание сотрудника"), "employees") {
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Описание продукта №@employee.id
-            <div class="pull-right">
-                <a href="@routes.Employees.list()"><span class="glyphicon glyphicon-list"></span></a>
+<div class="row">
+    <div class="col-sm-3 col-md-2">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="#" class="thumbnail">
+                    <img ng-src="@routes.Assets.at("images/mario.jpg")" alt="Тест">
+                </a>
             </div>
         </div>
-        <dl class="dl-horizontal">
-            <dt>@Messages("Имя"):</dt>
-            <dd>@employee.firstname</dd>
-        </dl>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="list-group">
+                    <a href="#" class="list-group-item">Личные данные</a>
+                    <a href="#" class="list-group-item">Контактные данные</a>
+                    <a href="#" class="list-group-item">Паспортные данные</a>
+                    <a href="#" class="list-group-item">Воинская обязанность</a>
+                    <a href="#" class="list-group-item">Состав семьи</a>
+                </div>
+            </div>
+        </div>
     </div>
-}
+    <div class="col-sm-9  col-md-10">
+        <div ui-view></div>
+    </div>
+</div>

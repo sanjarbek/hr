@@ -1,14 +1,24 @@
-var app = angular.module('app', ['ui.router']);
+var app = angular.module('app', ['ui.router', 'ngTable', 'ngAnimate']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider
-        .state('employeeCreate', {
+        .state('employees', {
+            url: '',
+            templateUrl : '/employees/template',
+            controller  : 'EmployeeController'
+        })
+        .state('employees.create', {
             url: '/employees/create',
             templateUrl : '/employees/create',
             controller  : 'EmployeeController'
         })
-        .state('employeeList', {
+        .state('employees.details', {
+            url: '/employees/show',
+            templateUrl : '/employees/show',
+            controller  : 'EmployeeController'
+        })
+        .state('employees.list', {
             url: '/employees/list',
             templateUrl : '/employees/list',
             controller  : 'EmployeeController'
@@ -29,14 +39,14 @@ app.service('EmployeeService', function ($http) {
             .success(function(employee) {
                 console.log(employee);
 
-                if (!employee.success) {
-                    // if not successful, bind errors to error variables
-                    $scope.errorName = employee.errors.name;
-                    $scope.errorSuperhero = employee.errors.superheroAlias;
-                } else {
-                    // if successful, bind success message to message
-                    $scope.message = employee.message;
-                }
+//                if (!employee.success) {
+//                    // if not successful, bind errors to error variables
+//                    $scope.errorName = employee.errors.name;
+//                    $scope.errorSuperhero = employee.errors.superheroAlias;
+//                } else {
+//                    // if successful, bind success message to message
+//                    $scope.message = employee.message;
+//                }
             });
 
     }
@@ -71,12 +81,17 @@ app.service('EmployeeService', function ($http) {
     }
 });
 
-app.controller('EmployeeController', function ($scope, EmployeeService) {
+app.controller('EmployeeController', function ($scope, EmployeeService, ngTableParams) {
 
     $scope.employees = EmployeeService.list();
 
+    $scope.getList = function(){
+        $scope.employees = EmployeeService.list();
+    }
+
     $scope.saveEmployee = function () {
         var data = {
+            id: 0,
             surname: $scope.newEmployeeForm.surname,
             firstname: $scope.newEmployeeForm.firstname,
             lastname: $scope.newEmployeeForm.lastname,
@@ -91,11 +106,22 @@ app.controller('EmployeeController', function ($scope, EmployeeService) {
 
         EmployeeService.save(data);
         $scope.newEmployeeForm = {};
+        employees=[];
+        employees = $scope.getList();
     }
+
+    $scope.employeeTableParams = new ngTableParams({
+        page: 2,            // show first page
+        count: 10           // count per page
+    }, {
+        total: $scope.employees.length, // length of data
+        getData: function($defer, params) {
+            $defer.resolve($scope.employees.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
 
 
     $scope.delete = function (id) {
-
         EmployeeService.delete(id);
         if ($scope.newEmployee.id == id) $scope.newEmployee = {};
     }

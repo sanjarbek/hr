@@ -9,10 +9,11 @@ GET         /                           controllers.Application.test
 GET         /connection/status          controllers.Application.serverStatus()
 
 # Сотрудники
+GET         /employees/template         controllers.Employees.template
 GET         /employees/list             controllers.Employees.list
 GET         /employees/json/list        controllers.Employees.jsonList
 GET         /employees/create           controllers.Employees.newEmployee
-GET         /employees/show             controllers.Employees.show(id: Long)
+GET         /employees/show             controllers.Employees.show
 POST        /employees/save             controllers.Employees.save
 GET         /employees/family           controllers.Families.family(employeeId: Long)
 

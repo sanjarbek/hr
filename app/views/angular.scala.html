@@ -2,37 +2,59 @@
 
 <html  ng-app="app">
     <head>
-        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.css"))'>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.css"))'>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/main.css"))'>
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
+        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/animate.css"))'>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("angular.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-ui-router.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-animate.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.js"))'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/app.js")'></script>
     </head>
-    <body>
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+    <body ng-controller="EmployeeController" ng-init="getList()">
+        <header>
+            <nav class="navbar navbar-static-top navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Тест</a>
+                    </a>
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a ui-sref="employees">Сотрудники</a></li>
+                            <li class="#"><a ui-sref="employees.create">Отчеты</a></li>
+                            <li class="#"><a ui-sref="employees.list">Штатное расписание</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="#"><a ui-sref="employees.details">Справочники</a></li>
+                            <li class="#"><a ui-sref="employeeCreate">Настройки</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a ui-sref="employeeList">Сотрудники</a></li>
-                        <li class="#"><a ui-sref="employeeCreate">Создать</a></li>
-                    </ul>
+            </nav>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div ui-view ng-animate="'view'"></div>
                 </div>
             </div>
-        </nav>
-        <div class="container">
-            <div ui-view></div>
         </div>
+
     </body>
 </html>
