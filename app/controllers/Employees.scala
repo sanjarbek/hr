@@ -29,11 +29,6 @@ object Employees extends Controller {
     )(Employee.apply)(Employee.unapply)
   )
 
-//  def index = Action { implicit  request =>
-//    val employees = Employee.findAll
-//    Ok(views.html.employees.list(employees))
-//  }
-
   def list = Action { implicit  request =>
     Ok(views.html.employees.list())
   }
@@ -59,22 +54,7 @@ object Employees extends Controller {
       case e: IllegalArgumentException =>
         BadRequest("Can not save employee information.")
     }
-//    employeeForm.bindFromRequest.fold(
-//      hasErrors = { form =>
-//        Ok(views.html.employees.create())
-//      },
-//      success = { newEmployee =>
-//        val employee = Employee.insert(newEmployee)
-//        Redirect(routes.Employees.show(employee.id))
-//      }
-//    )
   }
-
-//  def show(id: Long) = Action { implicit request =>
-//    Employee.findById(id).map{ employee =>
-//        Ok(views.html.employees.show(employee))
-//    }.getOrElse(NotFound)
-//  }
 
   def show = Action {
     Ok(views.html.employees.show())

@@ -22,7 +22,19 @@ app.config(function($stateProvider, $urlRouterProvider) {
             url: '/employees/list',
             templateUrl : '/employees/list',
             controller  : 'EmployeeController'
-        });
+        })
+        .state('employees.details.relationships', {
+            url: '/relationships/list',
+            templateUrl : '/relationships/list',
+            controller  : 'EmployeeController'
+        })
+        .state('employees.details.create', {
+            url: '/relationships/create',
+            templateUrl : '/relationships/create',
+            controller  : 'EmployeeController'
+        })
+
+    ;
 });
 
 app.service('EmployeeService', function ($http) {
@@ -81,11 +93,59 @@ app.service('EmployeeService', function ($http) {
     }
 });
 
-app.controller('EmployeeController', function ($scope, EmployeeService, ngTableParams) {
+app.service('RelationshipService', function ($http) {
+    //to create unique relationship id
+    var uid = 1;
+
+    //relationships array to hold list of all relationships
+    var relationships = [];
+
+    //save method create a new relationship if not already exists
+    //else update the existing object
+    this.save = function (relationship) {
+        $http.post('/relationships/save', relationship)
+            .success(function(relationship) {
+                console.log(relationship);
+            });
+    }
+
+    //simply search contacts list for given id
+    //and returns the relationship object if found
+    this.get = function (id) {
+        for (i in relationships) {
+            if (relationships[i].id == id) {
+                return relationships[i];
+            }
+        }
+
+    }
+
+    //iterate through relationships list and delete
+    //contact if found
+    this.delete = function (id) {
+        for (i in relationships) {
+            if (relationships[i].id == id) {
+                relationships.splice(i, 1);
+            }
+        }
+    }
+
+    //simply returns the relationships list
+    this.list = function () {
+        $http.get('/relationships/json/list' ).success(function (largeLoad) {
+            relationships = largeLoad;
+        });
+        return relationships;
+    }
+});
+
+app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService, ngTableParams) {
 
     $scope.employees = EmployeeService.list();
 
-    $scope.getList = function(){
+    $scope.relationships = RelationshipService.list();
+
+    $scope.getEmployeesList = function(){
         $scope.employees = EmployeeService.list();
     }
 
@@ -110,6 +170,30 @@ app.controller('EmployeeController', function ($scope, EmployeeService, ngTableP
         employees = $scope.getList();
     }
 
+    $scope.saveRelationship = function () {
+        var data = {
+            id: 0,
+            employee_id: 1,
+            degree: $scope.newRelationshipForm.degree,
+            surname: $scope.newRelationshipForm.surname,
+            firstname: $scope.newRelationshipForm.firstname,
+            lastname: $scope.newRelationshipForm.lastname,
+            birthday: $scope.newRelationshipForm.birthday
+        };
+
+        RelationshipService.save(data);
+        $scope.newRelationshipForm = {};
+    }
+
+    $scope.delete = function (id) {
+        EmployeeService.delete(id);
+        if ($scope.newEmployee.id == id) $scope.newEmployee = {};
+    }
+
+    $scope.edit = function (id) {
+        $scope.newEmployee = angular.copy(EmployeeService.get(id));
+    }
+
     $scope.employeeTableParams = new ngTableParams({
         page: 2,            // show first page
         count: 10           // count per page
@@ -120,14 +204,14 @@ app.controller('EmployeeController', function ($scope, EmployeeService, ngTableP
         }
     });
 
+    $scope.relationshipTableParams = new ngTableParams({
+        page: 2,            // show first page
+        count: 10           // count per page
+    }, {
+        total: $scope.relationships.length, // length of data
+        getData: function($defer, params) {
+            $defer.resolve($scope.relationships.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
 
-    $scope.delete = function (id) {
-        EmployeeService.delete(id);
-        if ($scope.newEmployee.id == id) $scope.newEmployee = {};
-    }
-
-
-    $scope.edit = function (id) {
-        $scope.newEmployee = angular.copy(EmployeeService.get(id));
-    }
 })

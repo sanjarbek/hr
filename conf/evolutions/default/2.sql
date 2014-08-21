@@ -1,9 +1,9 @@
 # --- !Ups
 
-CREATE TABLE family (
+CREATE TABLE relationships (
   id BIGSERIAL,
   employee_id BIGINT NOT NULL,
-  relationship int,
+  degree int,
   surname varchar(20),
   firstname varchar(20),
   lastname varchar(20),
@@ -11,5 +11,5 @@ CREATE TABLE family (
 );
 
 # -- !Downs
-DROP TABLE if exists family;
-DROP SEQUENCE if exists family_id_seq;
+DROP TABLE if exists relationships;
+DROP SEQUENCE if exists relationships_id_seq;

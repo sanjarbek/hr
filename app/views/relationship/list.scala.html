@@ -1,0 +1,20 @@
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a ui-sref="employees.details.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                    <strong>Список состава семьи</strong>
+                </div>
+                <table class="table table-bordered table-condensed" ng-table="relationshipTableParams">
+                    <tr ng-repeat="relationship in relationships">
+                        <td data-title="'Surname'">{{ relationship.surname }}</td>
+                        <td data-title="'Firstname'">{{ relationship.firstname }}</td>
+                        <td data-title="'Lastname'">{{ relationship.lastname }}</td>
+                        <td data-title="'Date'">{{ relationship.birthday }}</td>
+                        <td data-title="'Degree'">{{ relationship.degree }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>

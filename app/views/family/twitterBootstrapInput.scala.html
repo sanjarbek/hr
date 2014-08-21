@@ -1,9 +1,0 @@
-@(elements: helper.FieldElements)
-
-<div class="clearfix form-group @if(elements.hasErrors) {has-error}">
-    <label for="@elements.id">@Messages(elements.label.toString)</label>
-    <div class="input">
-        @elements.input
-        <span class="help-inline">@if(elements.hasErrors) {@elements.infos.mkString(", ")}</span>
-    </div>
-</div>

@@ -25,7 +25,7 @@ case class Employee(
   email: String ) extends KeyedEntity[Long]
 
 object Employee {
-  import Database.{employeeTable, familyTable}
+  import Database.{employeeTable, relationshipTable}
 
   implicit val employeeWrites: Writes[Employee] = (
     (JsPath \ "id").write[Long] and
@@ -78,7 +78,7 @@ object Employee {
   }
 
   def listOfFamily(employee: Employee)  = inTransaction{
-    from(familyTable) {
+    from(relationshipTable) {
       family => where(family.employee_id===employee.id).compute(count)
     }.toLong
   }

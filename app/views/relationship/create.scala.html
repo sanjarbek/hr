@@ -1,0 +1,52 @@
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @Messages("Новый сотрудник")
+            <div class="pull-right">
+                <a ui-sref="employees.details.relationships.list"><span class="glyphicon glyphicon-list"></span></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <form ng-submit="saveRelationship()" class="form-horizontal">
+                <fieldset>
+                    <div class="form-group form-group-sm">
+                        <label for="degree" class="col-sm-2 control-label">Degree</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  type="number" name="degree" ng-model="newRelationshipForm.degree"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="surname" class="col-sm-2 control-label">Surname</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  type="text" name="surname" ng-model="newRelationshipForm.surname"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="firstname" class="col-sm-2 control-label">Firstname</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  type="text" name="firstname" ng-model="newRelationshipForm.firstname"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="lastname" class="col-sm-2 control-label">Lastname</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  type="text" name="lastname" ng-model="newRelationshipForm.lastname"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="birthday" class="col-sm-2 control-label">Birthday</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  type="date" name="birthday" ng-model="newRelationshipForm.birthday" class="input-sm form-control"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                </fieldset>
+                <p><input type="submit" class="btn btn-primary pull-right"
+                value='@Messages("Сохранить")'></p>
+            </form>
+        </div>
+    </div>
