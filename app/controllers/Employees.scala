@@ -9,6 +9,7 @@ import play.api.data.Forms._
 import models.Employee
 import play.api.data.validation._
 import play.api.libs.json._
+import play.api.libs.json.Reads._
 import play.api.templates.Html
 
 object Employees extends Controller {
@@ -44,16 +45,15 @@ object Employees extends Controller {
 
   def save = Action(parse.json) { implicit request =>
     val employeeJson = request.body
-    val employee = employeeJson.as[Employee]
-
-    try {
-      Employee.insert(employee)
-      Ok("Saved")
-    }
-    catch {
-      case e: IllegalArgumentException =>
-        BadRequest("Can not save employee information.")
-    }
+    employeeJson.validate[Employee].fold(
+      valid = { employee =>
+        Employee.insert(employee)
+        Ok("Saved")
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
   }
 
   def show = Action {

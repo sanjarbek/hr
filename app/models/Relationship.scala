@@ -9,6 +9,7 @@ import org.squeryl._
 import org.squeryl.Query
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+import play.api.libs.json.Reads._
 import collection.Iterable
 
 case class Relationship(
@@ -38,7 +39,7 @@ object Relationship {
     (JsPath \ "id").read[Long] and
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "degree").read[Int] and
-      (JsPath \ "surname").read[String] and
+      (JsPath \ "surname").read[String](minLength[String](2) keepAnd maxLength[String](20)) and
       (JsPath \ "firstname").read[String] and
       (JsPath \ "lastname").read[String] and
       (JsPath \ "birthday").read[Date]

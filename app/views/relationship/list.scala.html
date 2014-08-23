@@ -3,8 +3,8 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a ui-sref="employees.details.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
-                    <strong>Список состава семьи</strong>
+                    <a ui-sref="employees.detail.relationship.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                    Список состава семьи
                 </div>
                 <table class="table table-bordered table-condensed" ng-table="relationshipTableParams">
                     <tr ng-repeat="relationship in relationships">
@@ -18,3 +18,4 @@
             </div>
         </div>
     </div>
+    <p>{{ activeEmployee}}</p>

@@ -5,31 +5,40 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('employees', {
             url: '',
-            templateUrl : '/employees/template',
-            controller  : 'EmployeeController'
+            template: '<div ui-view></div>',
         })
         .state('employees.create', {
             url: '/employees/create',
             templateUrl : '/employees/create',
             controller  : 'EmployeeController'
         })
-        .state('employees.details', {
-            url: '/employees/show',
+        .state('employees.detail', {
+            url: '/employees/{:employeeId}',
             templateUrl : '/employees/show',
-            controller  : 'EmployeeController'
+            controller  : 'EmployeeController',
+            resolve: {
+                activeEmployeeData: function(EmployeeService, $stateParams) {
+//                    EmployeeService.activeEmployee = EmployeeService.get($stateParams.employeeId);
+                    return EmployeeService.get($stateParams.employeeId);
+                }
+            }
         })
         .state('employees.list', {
             url: '/employees/list',
             templateUrl : '/employees/list',
             controller  : 'EmployeeController'
         })
-        .state('employees.details.relationships', {
-            url: '/relationships/list',
+        .state('employees.detail.relationship', {
+            url: '/relationship',
+            template : '<div ui-view></div>'
+        })
+        .state('employees.detail.relationship.list', {
+            url: '/list',
             templateUrl : '/relationships/list',
             controller  : 'EmployeeController'
         })
-        .state('employees.details.create', {
-            url: '/relationships/create',
+        .state('employees.detail.relationship.create', {
+            url: '/create',
             templateUrl : '/relationships/create',
             controller  : 'EmployeeController'
         })
@@ -38,11 +47,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 
 app.service('EmployeeService', function ($http) {
-    //to create unique employee id
-    var uid = 1;
-
     //employees array to hold list of all employees
     var employees = [];
+
+    var activeEmployee = {id: 0};
 
     //save method create a new employee if not already exists
     //else update the existing object
@@ -50,20 +58,11 @@ app.service('EmployeeService', function ($http) {
         $http.post('/employees/save', employee)
             .success(function(employee) {
                 console.log(employee);
-
-//                if (!employee.success) {
-//                    // if not successful, bind errors to error variables
-//                    $scope.errorName = employee.errors.name;
-//                    $scope.errorSuperhero = employee.errors.superheroAlias;
-//                } else {
-//                    // if successful, bind success message to message
-//                    $scope.message = employee.message;
-//                }
             });
 
     }
 
-    //simply search contacts list for given id
+    //simply search employees list for given id
     //and returns the employee object if found
     this.get = function (id) {
         for (i in employees) {
@@ -74,7 +73,7 @@ app.service('EmployeeService', function ($http) {
 
     }
 
-    //iterate through contacts list and delete
+    //iterate through employees list and delete
     //contact if found
     this.delete = function (id) {
         for (i in employees) {
@@ -84,7 +83,7 @@ app.service('EmployeeService', function ($http) {
         }
     }
 
-    //simply returns the contacts list
+    //simply returns the employees list
     this.list = function () {
         $http.get('/employees/json/list' ).success(function (largeLoad) {
             employees = largeLoad;
@@ -93,7 +92,7 @@ app.service('EmployeeService', function ($http) {
     }
 });
 
-app.service('RelationshipService', function ($http) {
+app.service('RelationshipService', function ($http, EmployeeService) {
     //to create unique relationship id
     var uid = 1;
 
@@ -132,14 +131,15 @@ app.service('RelationshipService', function ($http) {
 
     //simply returns the relationships list
     this.list = function () {
-        $http.get('/relationships/json/list' ).success(function (largeLoad) {
+        $http.get('/relationships/json/list').success(function (largeLoad) {
             relationships = largeLoad;
         });
         return relationships;
     }
 });
 
-app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService, ngTableParams) {
+app.controller('EmployeeController', [ '$scope', 'EmployeeService', 'RelationshipService', 'ngTableParams', 'activeEmployeeData' ,
+    function ($scope, EmployeeService, RelationshipService, ngTableParams, activeEmployeeData) {
 
     $scope.employees = EmployeeService.list();
 
@@ -147,6 +147,27 @@ app.controller('EmployeeController', function ($scope, EmployeeService, Relation
 
     $scope.getEmployeesList = function(){
         $scope.employees = EmployeeService.list();
+    }
+
+    $scope.activeEmployee = activeEmployeeData;//EmployeeService.activeEmployee;
+
+    $scope.goto = function(employeeId) {
+        alert(employeeId);
+        $scope.activeEmployee = EmployeeService.get(employeeId);
+        $state.go("employees.detail");
+    }
+
+    $scope.relationship_types = [
+        {id: 1, name: "Отец"},
+        {id: 2, name: "Дедушка"},
+        {id: 3, name: "Мама"},
+        {id: 4, name: "Брат"},
+        {id: 5, name: "Бабушка"},
+        {id: 6, name: "Сестра"}
+    ];
+
+    $scope.selectEmployee = function(emp) {
+        $scope.activeEmployee = emp;
     }
 
     $scope.saveEmployee = function () {
@@ -173,8 +194,8 @@ app.controller('EmployeeController', function ($scope, EmployeeService, Relation
     $scope.saveRelationship = function () {
         var data = {
             id: 0,
-            employee_id: 1,
-            degree: $scope.newRelationshipForm.degree,
+            employee_id: $scope.activeEmployee.id,
+            degree: $scope.newRelationshipForm.degree.id,
             surname: $scope.newRelationshipForm.surname,
             firstname: $scope.newRelationshipForm.firstname,
             lastname: $scope.newRelationshipForm.lastname,
@@ -214,4 +235,4 @@ app.controller('EmployeeController', function ($scope, EmployeeService, Relation
         }
     });
 
-})
+}])

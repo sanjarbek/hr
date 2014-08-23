@@ -39,16 +39,15 @@ object Relationships extends Controller {
 
   def save = Action(parse.json) { implicit request =>
     val relationshipJson = request.body
-    val relationship = relationshipJson.as[Relationship]
-
-    try {
-      Relationship.insert(relationship)
-      Ok("Saved")
-    }
-    catch {
-      case e: IllegalArgumentException =>
-        BadRequest("Can not save relationship information.")
-    }
+    relationshipJson.validate[Relationship].fold(
+      valid = { relationship =>
+        Relationship.insert(relationship)
+        Ok("Saved")
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
   }
 
   def show = Action {
