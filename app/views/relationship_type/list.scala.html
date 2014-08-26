@@ -1,0 +1,17 @@
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a ui-sref="relationship_types.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                    Виды родства
+                </div>
+                <table class="table table-bordered table-condensed" ng-table="relationshipTableParams">
+                    <tr ng-repeat="relationship_type in relationship_types">
+                        <td data-title="'ID'">{{ relationship_type.id}}</td>
+                        <td data-title="'Name'">{{ relationship_type.name}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>

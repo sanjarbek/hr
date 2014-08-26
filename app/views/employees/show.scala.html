@@ -10,11 +10,11 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="list-group">
-                    <a href="#" class="list-group-item">Личные данные</a>
-                    <a href="#" class="list-group-item">Контактные данные</a>
-                    <a href="#" class="list-group-item">Паспортные данные</a>
-                    <a href="#" class="list-group-item">Воинская обязанность</a>
-                    <a ui-sref="employees.detail.relationship.list" class="list-group-item">Состав семьи</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Личные данные</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Контактные данные</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Паспортные данные</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Воинская обязанность</a>
+                    <a ui-sref="employees.detail.relationship.list" class="list-group-item" ng-class="{active: $state.includes('employees.detail.relationship')}">Состав семьи</a>
                 </div>
             </div>
         </div>

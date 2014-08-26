@@ -1,19 +1,39 @@
-var app = angular.module('app', ['ui.router', 'ngTable', 'ngAnimate']);
+var app = angular.module('app', ['ui.router', 'ngTable']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('employees', {
-            url: '',
+            url: '/employees',
             abstract: true,
             template: '<div ui-view></div>'
         })
         .state('employees.create', {
-            url: '/employees/create',
-            templateUrl : '/employees/create'
+            url: '/create',
+            templateUrl : '/employees/create',
+            controller: function($scope, EmployeeService){
+                $scope.saveEmployee = function () {
+                    var data = {
+                        id: 0,
+                        surname: $scope.newEmployeeForm.surname,
+                        firstname: $scope.newEmployeeForm.firstname,
+                        lastname: $scope.newEmployeeForm.lastname,
+                        birthday: $scope.newEmployeeForm.birthday,
+                        citizenship: $scope.newEmployeeForm.citizenship,
+                        insurance_number: $scope.newEmployeeForm.insurance_number,
+                        tax_number: $scope.newEmployeeForm.tax_number,
+                        home_phone: $scope.newEmployeeForm.home_phone,
+                        mobile_phone: $scope.newEmployeeForm.mobile_phone,
+                        email: $scope.newEmployeeForm.email
+                    };
+
+                    EmployeeService.save(data);
+                    $scope.newEmployeeForm = {};
+                }
+            }
         })
         .state('employees.detail', {
-            url: '/employees/{:employeeId}',
+            url: '/{:employeeId}',
             templateUrl : '/employees/show',
             resolve: {
                 activeEmployeeData: function(EmployeeService, $stateParams) {
@@ -25,7 +45,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('employees.list', {
-            url: '/employees/list',
+            url: '/list',
             templateUrl : '/employees/list',
             resolve: {
                 employeesData: function(EmployeeService) {
@@ -46,6 +66,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('employees.detail.relationship', {
+            absract: true,
             url: '/relationship',
             template : '<div ui-view></div>'
         })
@@ -72,10 +93,77 @@ app.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('employees.detail.relationship.create', {
             url: '/create',
-            templateUrl : '/relationships/create'
+            templateUrl : '/relationships/create',
+            resolve: {
+                relationshipTypesData : function(RelationshipTypeService) {
+                    return RelationshipTypeService.list();
+                }
+            },
+            controller : function ($scope, RelationshipService, relationshipTypesData) {
+
+                $scope.relationship_types = relationshipTypesData;
+
+                $scope.saveRelationship = function () {
+                    var data = {
+                        id: 0,
+                        employee_id: $scope.activeEmployee.id,
+                        degree: $scope.newRelationshipForm.degree.id,
+                        surname: $scope.newRelationshipForm.surname,
+                        firstname: $scope.newRelationshipForm.firstname,
+                        lastname: $scope.newRelationshipForm.lastname,
+                        birthday: $scope.newRelationshipForm.birthday
+                    };
+
+                    RelationshipService.save(data);
+                    $scope.newRelationshipForm = {};
+                }
+            }
+        })
+        .state('employees.detail.relationship.type', {
+            abstract: true,
+            url: '/create',
+            template : '<div ui-view></div>'
+        })
+        .state('employees.detail.relationship.type.create', {
+            url: '/create',
+            templateUrl : '/relationship_types/create'
+        })
+        .state('relationship_types', {
+            abstract: true,
+            url: '/relationship_types',
+            template : '<div ui-view></div>'
+        })
+        .state('relationship_types.list', {
+            url: '/list',
+            templateUrl : '/relationship_types/list',
+            resolve: {
+                relationshipTypesData: function(RelationshipTypeService) {
+                    return RelationshipTypeService.list();
+                }
+            },
+            controller: function($scope, relationshipTypesData) {
+                $scope.relationship_types = relationshipTypesData;
+            }
+        })
+        .state('relationship_types.create', {
+            url: '/create',
+            templateUrl : '/relationship_types/create',
+            controller: function($scope, RelationshipTypeService) {
+                $scope.saveRelationshipType = function () {
+                    var data = {
+                        id: 0,
+                        name: $scope.newRelationshipTypeForm.name
+                    };
+
+                    RelationshipTypeService.save(data);
+                    $scope.newRelationshipTypeForm = {};
+                }
+            }
         })
 
     ;
+}).run(function($rootScope, $state) {
+    $rootScope.$state = $state;
 });
 
 app.service('EmployeeService', function ($http) {
@@ -171,52 +259,71 @@ app.service('RelationshipService', function ($http, EmployeeService) {
     }
 });
 
+app.service('RelationshipTypeService', function ($http) {
+
+    //save method create a new relationship if not already exists
+    //else update the existing object
+    this.save = function (relationship_type) {
+        $http.post('/relationship_types/save', relationship_type)
+            .success(function(relationship_type) {
+                console.log(relationship_type);
+            });
+    }
+
+    //simply returns the relationship_types list
+    this.list = function () {
+        return $http.get('/relationship_types/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+});
+
 app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
 
-    $scope.relationship_types = [
-        {id: 1, name: "Отец"},
-        {id: 2, name: "Дедушка"},
-        {id: 3, name: "Мама"},
-        {id: 4, name: "Брат"},
-        {id: 5, name: "Бабушка"},
-        {id: 6, name: "Сестра"}
-    ];
+//    $scope.relationship_types = [
+//        {id: 1, name: "Отец"},
+//        {id: 2, name: "Дедушка"},
+//        {id: 3, name: "Мама"},
+//        {id: 4, name: "Брат"},
+//        {id: 5, name: "Бабушка"},
+//        {id: 6, name: "Сестра"}
+//    ];
 
-    $scope.saveEmployee = function () {
-        var data = {
-            id: 0,
-            surname: $scope.newEmployeeForm.surname,
-            firstname: $scope.newEmployeeForm.firstname,
-            lastname: $scope.newEmployeeForm.lastname,
-            birthday: $scope.newEmployeeForm.birthday,
-            citizenship: $scope.newEmployeeForm.citizenship,
-            insurance_number: $scope.newEmployeeForm.insurance_number,
-            tax_number: $scope.newEmployeeForm.tax_number,
-            home_phone: $scope.newEmployeeForm.home_phone,
-            mobile_phone: $scope.newEmployeeForm.mobile_phone,
-            email: $scope.newEmployeeForm.email
-        };
-
-        EmployeeService.save(data);
-        $scope.newEmployeeForm = {};
-        employees=[];
-        employees = $scope.getList();
-    }
-
-    $scope.saveRelationship = function () {
-        var data = {
-            id: 0,
-            employee_id: $scope.activeEmployee.id,
-            degree: $scope.newRelationshipForm.degree.id,
-            surname: $scope.newRelationshipForm.surname,
-            firstname: $scope.newRelationshipForm.firstname,
-            lastname: $scope.newRelationshipForm.lastname,
-            birthday: $scope.newRelationshipForm.birthday
-        };
-
-        RelationshipService.save(data);
-        $scope.newRelationshipForm = {};
-    }
+//    $scope.saveEmployee = function () {
+//        var data = {
+//            id: 0,
+//            surname: $scope.newEmployeeForm.surname,
+//            firstname: $scope.newEmployeeForm.firstname,
+//            lastname: $scope.newEmployeeForm.lastname,
+//            birthday: $scope.newEmployeeForm.birthday,
+//            citizenship: $scope.newEmployeeForm.citizenship,
+//            insurance_number: $scope.newEmployeeForm.insurance_number,
+//            tax_number: $scope.newEmployeeForm.tax_number,
+//            home_phone: $scope.newEmployeeForm.home_phone,
+//            mobile_phone: $scope.newEmployeeForm.mobile_phone,
+//            email: $scope.newEmployeeForm.email
+//        };
+//
+//        EmployeeService.save(data);
+//        $scope.newEmployeeForm = {};
+//        employees=[];
+//        employees = $scope.getList();
+//    }
+//
+//    $scope.saveRelationship = function () {
+//        var data = {
+//            id: 0,
+//            employee_id: $scope.activeEmployee.id,
+//            degree: $scope.newRelationshipForm.degree.id,
+//            surname: $scope.newRelationshipForm.surname,
+//            firstname: $scope.newRelationshipForm.firstname,
+//            lastname: $scope.newRelationshipForm.lastname,
+//            birthday: $scope.newRelationshipForm.birthday
+//        };
+//
+//        RelationshipService.save(data);
+//        $scope.newRelationshipForm = {};
+//    }
 
     $scope.delete = function (id) {
         EmployeeService.delete(id);

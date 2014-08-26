@@ -3,32 +3,37 @@
 # ~~~~
 
 # Home page
-GET         /                               controllers.Application.test
+GET         /                                    controllers.Application.test
 
 # Состояния работоспособности сервера
-GET         /connection/status              controllers.Application.serverStatus()
+GET         /connection/status                   controllers.Application.serverStatus()
 
 # Сотрудники
-GET         /employees/template             controllers.Employees.template
-GET         /employees/list                 controllers.Employees.list
-GET         /employees/json/list            controllers.Employees.jsonList
-GET         /employees/json/get             controllers.Employees.jsonGet(id: Long)
-GET         /employees/create               controllers.Employees.newEmployee
-GET         /employees/show                 controllers.Employees.show
-POST        /employees/save                 controllers.Employees.save
-GET         /employees/json/family          controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
+GET         /employees/template                  controllers.Employees.template
+GET         /employees/list                      controllers.Employees.list
+GET         /employees/json/list                 controllers.Employees.jsonList
+GET         /employees/json/get                  controllers.Employees.jsonGet(id: Long)
+GET         /employees/create                    controllers.Employees.newEmployee
+GET         /employees/show                      controllers.Employees.show
+POST        /employees/save                      controllers.Employees.save
+GET         /employees/json/family               controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
 
 # Состав семьи
-GET         /relationships/list             controllers.Relationships.list
-GET         /relationships/create           controllers.Relationships.create
-GET         /relationships/show             controllers.Relationships.show
-POST        /relationships/save             controllers.Relationships.save
-GET         /relationships/json/list        controllers.Relationships.jsonList
+GET         /relationships/list                  controllers.Relationships.list
+GET         /relationships/create                controllers.Relationships.create
+GET         /relationships/show                  controllers.Relationships.show
+POST        /relationships/save                  controllers.Relationships.save
+GET         /relationships/json/list             controllers.Relationships.jsonList
+
+GET         /relationship_types/create           controllers.RelationshipTypes.create
+GET         /relationship_types/list             controllers.RelationshipTypes.list
+GET         /relationship_types/json/list        controllers.RelationshipTypes.jsonList
+POST        /relationship_types/save             controllers.RelationshipTypes.save
 
 # Webjar plugin included.
-GET         /webjars/*file                  controllers.WebJarAssets.at(file)
+GET         /webjars/*file                       controllers.WebJarAssets.at(file)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                   controllers.Assets.at(path="/public", file)
+GET         /assets/*file                        controllers.Assets.at(path="/public", file)
 
     
