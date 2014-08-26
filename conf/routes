@@ -12,10 +12,11 @@ GET         /connection/status              controllers.Application.serverStatus
 GET         /employees/template             controllers.Employees.template
 GET         /employees/list                 controllers.Employees.list
 GET         /employees/json/list            controllers.Employees.jsonList
+GET         /employees/json/get             controllers.Employees.jsonGet(id: Long)
 GET         /employees/create               controllers.Employees.newEmployee
 GET         /employees/show                 controllers.Employees.show
 POST        /employees/save                 controllers.Employees.save
-#GET         /employees/family           controllers.Relationships.family(employeeId: Long)
+GET         /employees/json/family          controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
 
 # Состав семьи
 GET         /relationships/list             controllers.Relationships.list

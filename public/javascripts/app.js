@@ -5,28 +5,45 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('employees', {
             url: '',
-            template: '<div ui-view></div>',
+            abstract: true,
+            template: '<div ui-view></div>'
         })
         .state('employees.create', {
             url: '/employees/create',
-            templateUrl : '/employees/create',
-            controller  : 'EmployeeController'
+            templateUrl : '/employees/create'
         })
         .state('employees.detail', {
             url: '/employees/{:employeeId}',
             templateUrl : '/employees/show',
-            controller  : 'EmployeeController',
             resolve: {
                 activeEmployeeData: function(EmployeeService, $stateParams) {
-//                    EmployeeService.activeEmployee = EmployeeService.get($stateParams.employeeId);
                     return EmployeeService.get($stateParams.employeeId);
                 }
+            },
+            controller: function($scope, activeEmployeeData) {
+                $scope.activeEmployee = activeEmployeeData;
             }
         })
         .state('employees.list', {
             url: '/employees/list',
             templateUrl : '/employees/list',
-            controller  : 'EmployeeController'
+            resolve: {
+                employeesData: function(EmployeeService) {
+                    return EmployeeService.list();
+                }
+            },
+            controller  : function($scope, ngTableParams, employeesData) {
+                $scope.employees = employeesData;
+                $scope.employeeTableParams = new ngTableParams({
+                    page: 2,            // show first page
+                    count: 10           // count per page
+                }, {
+                    total: $scope.employees.length, // length of data
+                    getData: function($defer, params) {
+                        $defer.resolve($scope.employees.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                    }
+                });
+            }
         })
         .state('employees.detail.relationship', {
             url: '/relationship',
@@ -35,12 +52,27 @@ app.config(function($stateProvider, $urlRouterProvider) {
         .state('employees.detail.relationship.list', {
             url: '/list',
             templateUrl : '/relationships/list',
-            controller  : 'EmployeeController'
+            resolve: {
+                relationshipsData: function(activeEmployeeData, RelationshipService) {
+                    return RelationshipService.list(activeEmployeeData.id);
+                }
+            },
+            controller  : function($scope, relationshipsData, ngTableParams){
+                $scope.relationships = relationshipsData;
+                $scope.relationshipTableParams = new ngTableParams({
+                    page: 2,            // show first page
+                    count: 10           // count per page
+                }, {
+                    total: $scope.relationships.length, // length of data
+                    getData: function($defer, params) {
+                        $defer.resolve($scope.relationships.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                    }
+                });
+            }
         })
         .state('employees.detail.relationship.create', {
             url: '/create',
-            templateUrl : '/relationships/create',
-            controller  : 'EmployeeController'
+            templateUrl : '/relationships/create'
         })
 
     ;
@@ -50,7 +82,7 @@ app.service('EmployeeService', function ($http) {
     //employees array to hold list of all employees
     var employees = [];
 
-    var activeEmployee = {id: 0};
+    var activeEmployee = {};
 
     //save method create a new employee if not already exists
     //else update the existing object
@@ -65,11 +97,14 @@ app.service('EmployeeService', function ($http) {
     //simply search employees list for given id
     //and returns the employee object if found
     this.get = function (id) {
-        for (i in employees) {
-            if (employees[i].id == id) {
-                return employees[i];
-            }
-        }
+//        for (i in employees) {
+//            if (employees[i].id == id) {
+//                return employees[i];
+//            }
+//        }
+        return $http.get('/employees/json/get', { params : {'id' : id}}).then(function(result) {
+            return result.data;
+        })
 
     }
 
@@ -85,10 +120,9 @@ app.service('EmployeeService', function ($http) {
 
     //simply returns the employees list
     this.list = function () {
-        $http.get('/employees/json/list' ).success(function (largeLoad) {
-            employees = largeLoad;
+        return $http.get('/employees/json/list' ).then(function (result) {
+            return result.data;
         });
-        return employees;
     }
 });
 
@@ -130,32 +164,14 @@ app.service('RelationshipService', function ($http, EmployeeService) {
     }
 
     //simply returns the relationships list
-    this.list = function () {
-        $http.get('/relationships/json/list').success(function (largeLoad) {
-            relationships = largeLoad;
+    this.list = function (id) {
+        return $http.get('/employees/json/family', { params : {'employeeId' : id}} ).then(function (result) {
+            return result.data;
         });
-        return relationships;
     }
 });
 
-app.controller('EmployeeController', [ '$scope', 'EmployeeService', 'RelationshipService', 'ngTableParams', 'activeEmployeeData' ,
-    function ($scope, EmployeeService, RelationshipService, ngTableParams, activeEmployeeData) {
-
-    $scope.employees = EmployeeService.list();
-
-    $scope.relationships = RelationshipService.list();
-
-    $scope.getEmployeesList = function(){
-        $scope.employees = EmployeeService.list();
-    }
-
-    $scope.activeEmployee = activeEmployeeData;//EmployeeService.activeEmployee;
-
-    $scope.goto = function(employeeId) {
-        alert(employeeId);
-        $scope.activeEmployee = EmployeeService.get(employeeId);
-        $state.go("employees.detail");
-    }
+app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
 
     $scope.relationship_types = [
         {id: 1, name: "Отец"},
@@ -165,10 +181,6 @@ app.controller('EmployeeController', [ '$scope', 'EmployeeService', 'Relationshi
         {id: 5, name: "Бабушка"},
         {id: 6, name: "Сестра"}
     ];
-
-    $scope.selectEmployee = function(emp) {
-        $scope.activeEmployee = emp;
-    }
 
     $scope.saveEmployee = function () {
         var data = {
@@ -214,25 +226,4 @@ app.controller('EmployeeController', [ '$scope', 'EmployeeService', 'Relationshi
     $scope.edit = function (id) {
         $scope.newEmployee = angular.copy(EmployeeService.get(id));
     }
-
-    $scope.employeeTableParams = new ngTableParams({
-        page: 2,            // show first page
-        count: 10           // count per page
-    }, {
-        total: $scope.employees.length, // length of data
-        getData: function($defer, params) {
-            $defer.resolve($scope.employees.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-    });
-
-    $scope.relationshipTableParams = new ngTableParams({
-        page: 2,            // show first page
-        count: 10           // count per page
-    }, {
-        total: $scope.relationships.length, // length of data
-        getData: function($defer, params) {
-            $defer.resolve($scope.relationships.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-    });
-
-}])
+})

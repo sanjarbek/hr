@@ -34,6 +34,15 @@ object Employees extends Controller {
     Ok(views.html.employees.list())
   }
 
+  def jsonGet(id: Long) = Action {
+    Employee.findById(id).map{ employee =>
+      Ok(Json.toJson(employee))
+    }.getOrElse(NotFound)
+
+//    val employee = Employee.findById(id)
+//    Ok(Json.toJson(employee))
+  }
+
   def jsonList = Action {
     val employees = Employee.findAll.map { employee => Json.toJson(employee)}
     Ok(Json.toJson(employees))

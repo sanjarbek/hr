@@ -33,6 +33,11 @@ object Relationships extends Controller {
     Ok(Json.toJson(relationships))
   }
 
+  def jsonEmployeeFamily(employeeId: Long) = Action {
+    val relationships = Relationship.findEmployeeFamily(employeeId).map { relationship => Json.toJson(relationship)}
+    Ok(Json.toJson(relationships))
+  }
+
   def create = Action { implicit request =>
     Ok(views.html.relationship.create())
   }

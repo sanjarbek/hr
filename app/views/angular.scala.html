@@ -14,7 +14,7 @@
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.js"))'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/app.js")'></script>
     </head>
-    <body ng-controller="EmployeeController">
+    <body>
         <header>
             <nav class="navbar navbar-static-top navbar-default" role="navigation">
                 <div class="container-fluid">
@@ -35,9 +35,9 @@
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li  ui-sref-active="active"><a ui-sref="employees">Сотрудники</a></li>
+                            <li  ui-sref-active="active"><a ui-sref="employees.list">Сотрудники</a></li>
                             <li  ui-sref-active="active"><a ui-sref="employees.create">Отчеты</a></li>
-                            <li  ui-sref-active="active"><a ui-sref="employees.list">Штатное расписание</a></li>
+                            <li  ui-sref-active="active"><a ui-sref="employees">Штатное расписание</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="#"><a ui-sref="employees.detail">Справочники</a></li>
