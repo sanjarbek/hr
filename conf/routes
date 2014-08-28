@@ -40,6 +40,11 @@ GET         /office_types/list                   controllers.OfficeTypes.list
 GET         /office_types/json/list              controllers.OfficeTypes.jsonList
 POST        /office_types/save                   controllers.OfficeTypes.save
 
+GET         /offices/create                      controllers.Offices.create
+GET         /offices/list                        controllers.Offices.list
+GET         /offices/json/list                   controllers.Offices.jsonList
+POST        /offices/save                        controllers.Offices.save
+
 # Webjar plugin included.
 GET         /webjars/*file                       controllers.WebJarAssets.at(file)
 

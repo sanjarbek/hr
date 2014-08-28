@@ -224,6 +224,54 @@ app.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('offices', {
+            abstract: true,
+            url: '/offices',
+            template : '<div ui-view></div>'
+        })
+        .state('offices.list', {
+            url: '/list',
+            templateUrl : '/offices/list',
+            resolve: {
+                officesData: function(OfficeService) {
+                    return OfficeService.list();
+                }
+            },
+            controller: function($scope, officesData) {
+                $scope.offices = officesData;
+            }
+        })
+        .state('offices.create', {
+            url: '/create',
+            templateUrl : '/offices/create',
+            resolve: {
+                office_typesData: function(OfficeTypeService){
+                    return OfficeTypeService.list();
+                },
+                officesData: function(OfficeService) {
+                    return OfficeService.list();
+                }
+            },
+            controller: function($scope, OfficeService, office_typesData, officesData) {
+                $scope.saveOffice = function () {
+                    var data = {
+                        id: 0,
+                        parent_id: $scope.newOfficeForm.parent_id.id,
+                        type_id: $scope.newOfficeForm.type_id.id,
+                        name: $scope.newOfficeForm.name,
+                        email: $scope.newOfficeForm.email,
+                        phone: $scope.newOfficeForm.phone,
+                        fax: $scope.newOfficeForm.fax,
+                        address: $scope.newOfficeForm.address
+                    };
+
+                    OfficeService.save(data);
+                    $scope.newOfficeForm = {};
+                }
+                $scope.office_types = office_typesData;
+                $scope.offices = officesData;
+            }
+        })
 
     ;
 }).run(function($rootScope, $state) {
@@ -375,6 +423,24 @@ app.service('OfficeTypeService', function ($http) {
     }
 
 });
+
+app.service('OfficeService', function ($http) {
+
+    this.save = function (office) {
+        $http.post('/offices/save', office)
+            .success(function(result) {
+                console.log(result);
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/offices/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+});
+
 
 app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
 

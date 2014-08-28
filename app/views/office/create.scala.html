@@ -1,0 +1,68 @@
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @Messages("Создать новый офис")
+            <div class="pull-right">
+                <a ui-sref="offices.list"><span class="glyphicon glyphicon-list"></span></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <form ng-submit="saveOffice()" class="form-horizontal">
+                <fieldset>
+                    <div class="form-group form-group-sm">
+                        <label for="parent_id" class="col-sm-2 control-label">Вышестоящий офис</label>
+                        <div class="col-sm-10">
+                            <select required class="form-control" name="parent_id" ng-model="newOfficeForm.parent_id"
+                            ng-options="office.name for office in offices"></select>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="type_id" class="col-sm-2 control-label">Вид офиса</label>
+                        <div class="col-sm-10">
+                            <select required class="form-control" name="type_id" ng-model="newOfficeForm.type_id"
+                            ng-options="type.name for type in office_types"></select>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="name" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input required class="form-control"  type="text" name="name" ng-model="newOfficeForm.name"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="phone" class="col-sm-2 control-label">Phone</label>
+                        <div class="col-sm-10">
+                            <input required class="form-control"  type="text" name="phone" ng-model="newOfficeForm.phone"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="fax" class="col-sm-2 control-label">Fax</label>
+                        <div class="col-sm-10">
+                            <input required class="form-control"  type="text" name="fax" ng-model="newOfficeForm.fax"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="email" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input required class="form-control"  type="text" name="email" ng-model="newOfficeForm.email"/>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="address" class="col-sm-2 control-label">Address</label>
+                        <div class="col-sm-10">
+                            <textarea required class="form-control"  name="address" ng-model="newOfficeForm.address">
+                            </textarea>
+                        </div>
+                        <span class="help-inline"></span>
+                    </div>
+                </fieldset>
+                <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+            </form>
+        </div>
+    </div>
