@@ -1,6 +1,6 @@
-var app = angular.module('app', ['ui.router', 'ngTable']);
+angular.module('app', ['ui.router', 'ngTable', 'treeGrid']);
 
-app.config(function($stateProvider, $urlRouterProvider) {
+angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('employees', {
@@ -180,15 +180,55 @@ app.config(function($stateProvider, $urlRouterProvider) {
         .state('positions.create', {
             url: '/create',
             templateUrl : '/positions/create',
-            controller: function($scope, PositionService) {
+            resolve: {
+                positionCategoriesData: function (PositionCategoryService) {
+                    return PositionCategoryService.list();
+                }
+            },
+            controller: function ($scope, PositionService, positionCategoriesData) {
+                $scope.position_categories = positionCategoriesData;
+
                 $scope.savePosition = function () {
                     var data = {
                         id: 0,
+                        category_id: $scope.newPositionForm.category_id.id,
                         name: $scope.newPositionForm.name
                     };
 
                     PositionService.save(data);
                     $scope.newPositionForm = {};
+                }
+            }
+        })
+        .state('position_categories', {
+            abstract: true,
+            url: '/position_categories',
+            template: '<div ui-view></div>'
+        })
+        .state('position_categories.list', {
+            url: '/list',
+            templateUrl: '/position_categories/list',
+            resolve: {
+                positionCategoriesData: function (PositionCategoryService) {
+                    return PositionCategoryService.list();
+                }
+            },
+            controller: function ($scope, positionCategoriesData) {
+                $scope.position_categories = positionCategoriesData;
+            }
+        })
+        .state('position_categories.create', {
+            url: '/create',
+            templateUrl: '/position_categories/create',
+            controller: function ($scope, PositionCategoryService) {
+                $scope.savePositionCategory = function () {
+                    var data = {
+                        id: 0,
+                        name: $scope.newPositionCategoryForm.name
+                    };
+
+                    PositionCategoryService.save(data);
+                    $scope.newPositionCategoryForm = {};
                 }
             }
         })
@@ -237,8 +277,18 @@ app.config(function($stateProvider, $urlRouterProvider) {
                     return OfficeService.list();
                 }
             },
-            controller: function($scope, officesData) {
-                $scope.offices = officesData;
+            controller: function($scope, officesData, OfficeService) {
+                $scope.tree_data = OfficeService.getTree(officesData, 'id', 'parent_id');
+                $scope.expanding_property = "name";
+                $scope.officesTree = {};
+                $scope.officesTreeHandler = function (office) {
+                    console.log('you clicked on', office)
+                };
+                $scope.col_defs = [
+                    { field: "email", displayName: "Э-почта"},
+                    { field: "phone", displayName: "Телефон"},
+                    { field: "fax", displayName: "Факс"}
+                ];
             }
         })
         .state('offices.create', {
@@ -254,9 +304,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
             },
             controller: function($scope, OfficeService, office_typesData, officesData) {
                 $scope.saveOffice = function () {
+                    var parentId = null;
+                    if ($scope.newOfficeForm.parent_id)
+                        parentId = $scope.newOfficeForm.parent_id.id;
+
                     var data = {
                         id: 0,
-                        parent_id: $scope.newOfficeForm.parent_id.id,
+                        parent_id: parentId,
                         type_id: $scope.newOfficeForm.type_id.id,
                         name: $scope.newOfficeForm.name,
                         email: $scope.newOfficeForm.email,
@@ -278,7 +332,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $rootScope.$state = $state;
 });
 
-app.service('EmployeeService', function ($http) {
+angular.module('app').service('EmployeeService', function ($http) {
     //employees array to hold list of all employees
     var employees = [];
 
@@ -326,7 +380,7 @@ app.service('EmployeeService', function ($http) {
     }
 });
 
-app.service('RelationshipService', function ($http, EmployeeService) {
+angular.module('app').service('RelationshipService', function ($http, EmployeeService) {
     //to create unique relationship id
     var uid = 1;
 
@@ -371,7 +425,7 @@ app.service('RelationshipService', function ($http, EmployeeService) {
     }
 });
 
-app.service('RelationshipTypeService', function ($http) {
+angular.module('app').service('RelationshipTypeService', function ($http) {
 
     //save method create a new relationship if not already exists
     //else update the existing object
@@ -390,12 +444,12 @@ app.service('RelationshipTypeService', function ($http) {
     }
 });
 
-app.service('PositionService', function ($http) {
+angular.module('app').service('PositionService', function ($http) {
 
     this.save = function (position) {
         $http.post('/positions/save', position)
-            .success(function(position) {
-                console.log(position);
+            .success(function (result) {
+                console.log(result);
             });
     }
 
@@ -407,7 +461,24 @@ app.service('PositionService', function ($http) {
 
 });
 
-app.service('OfficeTypeService', function ($http) {
+angular.module('app').service('PositionCategoryService', function ($http) {
+
+    this.save = function (position_category) {
+        $http.post('/position_categories/save', position_category)
+            .success(function (result) {
+                console.log(result);
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/position_categories/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+});
+
+angular.module('app').service('OfficeTypeService', function ($http) {
 
     this.save = function (office_type) {
         $http.post('/office_types/save', office_type)
@@ -424,7 +495,7 @@ app.service('OfficeTypeService', function ($http) {
 
 });
 
-app.service('OfficeService', function ($http) {
+angular.module('app').service('OfficeService', function ($http) {
 
     this.save = function (office) {
         $http.post('/offices/save', office)
@@ -439,10 +510,52 @@ app.service('OfficeService', function ($http) {
         });
     }
 
+    this.getTree = function(data, primaryIdName, parentIdName){
+        if(!data || data.length==0 || !primaryIdName ||!parentIdName)
+            return [];
+
+        var tree = [],
+            rootIds = [],
+            item = data[0],
+            primaryKey = item[primaryIdName],
+            treeObjs = {},
+            parentId,
+            parent,
+            len = data.length,
+            i = 0;
+
+        while(i<len){
+            item = data[i++];
+            primaryKey = item[primaryIdName];
+            treeObjs[primaryKey] = item;
+            parentId = item[parentIdName];
+
+            if(parentId){
+                parent = treeObjs[parentId];
+
+                if(parent.children){
+                    parent.children.push(item);
+                }
+                else{
+                    parent.children = [item];
+                }
+            }
+            else{
+                rootIds.push(primaryKey);
+            }
+        }
+
+        for (var i = 0; i < rootIds.length; i++) {
+            tree.push(treeObjs[rootIds[i]]);
+        };
+
+        return tree;
+    }
+
 });
 
 
-app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
+angular.module('app').controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
 
     $scope.delete = function (id) {
         EmployeeService.delete(id);

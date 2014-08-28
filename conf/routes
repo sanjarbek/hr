@@ -3,52 +3,57 @@
 # ~~~~
 
 # Home page
-GET         /                                    controllers.Application.test
+GET         /                                     controllers.Application.test
 
 # Состояния работоспособности сервера
-GET         /connection/status                   controllers.Application.serverStatus()
+GET         /connection/status                    controllers.Application.serverStatus()
 
 # Сотрудники
-GET         /employees/template                  controllers.Employees.template
-GET         /employees/list                      controllers.Employees.list
-GET         /employees/json/list                 controllers.Employees.jsonList
-GET         /employees/json/get                  controllers.Employees.jsonGet(id: Long)
-GET         /employees/create                    controllers.Employees.newEmployee
-GET         /employees/show                      controllers.Employees.show
-POST        /employees/save                      controllers.Employees.save
-GET         /employees/json/family               controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
+GET         /employees/template                   controllers.Employees.template
+GET         /employees/list                       controllers.Employees.list
+GET         /employees/json/list                  controllers.Employees.jsonList
+GET         /employees/json/get                   controllers.Employees.jsonGet(id: Long)
+GET         /employees/create                     controllers.Employees.newEmployee
+GET         /employees/show                       controllers.Employees.show
+POST        /employees/save                       controllers.Employees.save
+GET         /employees/json/family                controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
 
 # Состав семьи
-GET         /relationships/list                  controllers.Relationships.list
-GET         /relationships/create                controllers.Relationships.create
-GET         /relationships/show                  controllers.Relationships.show
-POST        /relationships/save                  controllers.Relationships.save
-GET         /relationships/json/list             controllers.Relationships.jsonList
+GET         /relationships/list                   controllers.Relationships.list
+GET         /relationships/create                 controllers.Relationships.create
+GET         /relationships/show                   controllers.Relationships.show
+POST        /relationships/save                   controllers.Relationships.save
+GET         /relationships/json/list              controllers.Relationships.jsonList
 
-GET         /relationship_types/create           controllers.RelationshipTypes.create
-GET         /relationship_types/list             controllers.RelationshipTypes.list
-GET         /relationship_types/json/list        controllers.RelationshipTypes.jsonList
-POST        /relationship_types/save             controllers.RelationshipTypes.save
+GET         /relationship_types/create            controllers.RelationshipTypes.create
+GET         /relationship_types/list              controllers.RelationshipTypes.list
+GET         /relationship_types/json/list         controllers.RelationshipTypes.jsonList
+POST        /relationship_types/save              controllers.RelationshipTypes.save
 
-GET         /positions/create                    controllers.Positions.create
-GET         /positions/list                      controllers.Positions.list
-GET         /positions/json/list                 controllers.Positions.jsonList
-POST        /positions/save                      controllers.Positions.save
+GET         /positions/create                     controllers.Positions.create
+GET         /positions/list                       controllers.Positions.list
+GET         /positions/json/list                  controllers.Positions.jsonList
+POST        /positions/save                       controllers.Positions.save
 
-GET         /office_types/create                 controllers.OfficeTypes.create
-GET         /office_types/list                   controllers.OfficeTypes.list
-GET         /office_types/json/list              controllers.OfficeTypes.jsonList
-POST        /office_types/save                   controllers.OfficeTypes.save
+GET         /position_categories/create           controllers.PositionCategories.create
+GET         /position_categories/list             controllers.PositionCategories.list
+GET         /position_categories/json/list        controllers.PositionCategories.jsonList
+POST        /position_categories/save             controllers.PositionCategories.save
 
-GET         /offices/create                      controllers.Offices.create
-GET         /offices/list                        controllers.Offices.list
-GET         /offices/json/list                   controllers.Offices.jsonList
-POST        /offices/save                        controllers.Offices.save
+GET         /office_types/create                  controllers.OfficeTypes.create
+GET         /office_types/list                    controllers.OfficeTypes.list
+GET         /office_types/json/list               controllers.OfficeTypes.jsonList
+POST        /office_types/save                    controllers.OfficeTypes.save
+
+GET         /offices/create                       controllers.Offices.create
+GET         /offices/list                         controllers.Offices.list
+GET         /offices/json/list                    controllers.Offices.jsonList
+POST        /offices/save                         controllers.Offices.save
 
 # Webjar plugin included.
-GET         /webjars/*file                       controllers.WebJarAssets.at(file)
+GET         /webjars/*file                        controllers.WebJarAssets.at(file)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                        controllers.Assets.at(path="/public", file)
+GET         /assets/*file                         controllers.Assets.at(path="/public", file)
 
     

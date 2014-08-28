@@ -10,28 +10,40 @@ object Database extends Schema {
   val positionTable: Table[Position] = table[Position]("positions")
   val officeTypeTable: Table[OfficeType] = table[OfficeType]("office_types")
   val officeTable: Table[Office] = table[Office]("offices")
+  val positionCategoryTable: Table[PositionCategory] = table[PositionCategory]("position_categories")
 
   on(employeeTable) { emp => declare {
-    emp.id is(autoIncremented("employees_id_seq"))
-  }}
+    emp.id is (autoIncremented("employees_id_seq"))
+  }
+  }
 
   on(relationshipTable) { fam => declare {
-    fam.id is(autoIncremented("relationships_id_seq"))
-  }}
+    fam.id is (autoIncremented("relationships_id_seq"))
+  }
+  }
 
   on(relationshipTypeTable) { rel_type => declare {
-    rel_type.id is(autoIncremented("relationship_types_id_seq"))
-  }}
+    rel_type.id is (autoIncremented("relationship_types_id_seq"))
+  }
+  }
 
   on(positionTable) { pos => declare {
-    pos.id is(autoIncremented("positions_id_seq"))
-  }}
+    pos.id is (autoIncremented("positions_id_seq"))
+  }
+  }
 
   on(officeTypeTable) { office_type => declare {
-    office_type.id is(autoIncremented("office_types_id_seq"))
-  }}
+    office_type.id is (autoIncremented("office_types_id_seq"))
+  }
+  }
 
   on(officeTable) { office => declare {
-    office.id is(autoIncremented("offices_id_seq"))
-  }}
+    office.id is (autoIncremented("offices_id_seq"))
+  }
+  }
+
+  on(positionCategoryTable) { pos_category => declare {
+    pos_category.id is (autoIncremented("position_categories_id_seq"))
+  }
+  }
 }

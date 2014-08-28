@@ -3,18 +3,16 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a ui-sref="offices.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
-                    Список состава семьи
+                    <a ui-sref="employees.detail.relationship.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                Список состава семьи
                 </div>
-                <table class="table table-bordered table-condensed" ng-table="officesTableParams">
-                    <tr ng-repeat="office in offices">
-                        <td data-title="'Parent office'">{{ office.parent_id }}</td>
-                        <td data-title="'Type'">{{ office.type_id }}</td>
-                        <td data-title="'Name'">{{ office.name }}</td>
-                        <td data-title="'Email'">{{ office.email }}</td>
-                        <td data-title="'Phone'">{{ office.phone }}</td>
-                        <td data-title="'Fax'">{{ office.fax }}</td>
-                        <td data-title="'Address'">{{ office.address }}</td>
+                <table class="table table-bordered table-condensed" ng-table="relationshipTableParams">
+                    <tr ng-repeat="relationship in relationships">
+                        <td data-title="'Фамилия'">{{ relationship.surname }}</td>
+                        <td data-title="'Имя'">{{ relationship.firstname }}</td>
+                        <td data-title="'Отчество'">{{ relationship.lastname }}</td>
+                        <td data-title="'Дата рождения'">{{ relationship.birthday }}</td>
+                        <td data-title="'Степень родства'">{{ relationship.degree }}</td>
                     </tr>
                 </table>
             </div>

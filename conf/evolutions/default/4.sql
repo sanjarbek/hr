@@ -2,6 +2,7 @@
 
 CREATE TABLE positions (
   id SERIAL,
+  category_id INTEGER,
   name varchar(30)
 );
 

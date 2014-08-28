@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 
-<html  ng-app="app">
+<html ng-app="app">
     <head>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.css"))'>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.min.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/main.css"))'>
+        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/treeGrid.css"))'>
         @*<link rel='stylesheet' href='@routes.Assets.at(("stylesheets/animate.css"))'>*@
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
@@ -12,6 +13,7 @@
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-ui-router.min.js"))'></script>
         @*<script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-animate.min.js"))'></script>*@
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.min.js"))'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/tree-grid-directive.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/app.js")'></script>
     </head>
     <body>
@@ -35,9 +37,9 @@
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li  ng-class="{active: $state.includes('employees')}"><a ui-sref="employees.list">Сотрудники</a></li>
-                            <li  ui-sref-active="active"><a ui-sref="employees.create">Отчеты</a></li>
-                            <li  ui-sref-active="active"><a ui-sref="employees">Штатное расписание</a></li>
+                            <li ng-class="{active: $state.includes('employees')}"><a ui-sref="employees.list">Сотрудники</a></li>
+                            <li><a href="#">Отчеты</a></li>
+                            <li><a href="#">Штатное расписание</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
@@ -45,6 +47,7 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a ui-sref="relationship_types.list">Виды родства</a></li>
                                     <li><a ui-sref="positions.list">Должности</a></li>
+                                    <li><a ui-sref="position_categories.list">Категории должностей</a></li>
                                     <li><a ui-sref="office_types.list">Виды офисов</a></li>
                                     <li><a ui-sref="offices.list">Офисов</a></li>
                                 </ul>

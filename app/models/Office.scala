@@ -14,7 +14,7 @@ import collection.Iterable
 
 case class Office(
                          id: Int,
-                         parent_id: Int,
+                         parent_id: Option[Int],
                          type_id: Int,
                          name: String,
                          phone: String,
@@ -28,7 +28,7 @@ object Office {
 
   implicit val officeWrites: Writes[Office] = (
     (JsPath \ "id").write[Int] and
-      (JsPath \ "parent_id").write[Int] and
+      (JsPath \ "parent_id").write[Option[Int]] and
       (JsPath \ "type_id").write[Int] and
       (JsPath \ "name").write[String] and
       (JsPath \ "phone").write[String] and
@@ -39,7 +39,7 @@ object Office {
 
   implicit val officeReads: Reads[Office] = (
     (JsPath \ "id").read[Int] and
-      (JsPath \ "parent_id").read[Int] and
+      (JsPath \ "parent_id").read[Option[Int]] and
       (JsPath \ "type_id").read[Int] and
       (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](20)) and
       (JsPath \ "phone").read[String] and
