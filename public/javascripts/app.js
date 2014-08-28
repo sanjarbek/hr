@@ -192,6 +192,38 @@ app.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('office_types', {
+            abstract: true,
+            url: '/office_types',
+            template : '<div ui-view></div>'
+        })
+        .state('office_types.list', {
+            url: '/list',
+            templateUrl : '/office_types/list',
+            resolve: {
+                office_typesData: function(OfficeTypeService) {
+                    return OfficeTypeService.list();
+                }
+            },
+            controller: function($scope, office_typesData) {
+                $scope.office_types = office_typesData;
+            }
+        })
+        .state('office_types.create', {
+            url: '/create',
+            templateUrl : '/office_types/create',
+            controller: function($scope, OfficeTypeService) {
+                $scope.saveOfficeType = function () {
+                    var data = {
+                        id: 0,
+                        name: $scope.newOfficeTypeForm.name
+                    };
+
+                    OfficeTypeService.save(data);
+                    $scope.newOfficeTypeForm = {};
+                }
+            }
+        })
 
     ;
 }).run(function($rootScope, $state) {
@@ -327,52 +359,24 @@ app.service('PositionService', function ($http) {
 
 });
 
+app.service('OfficeTypeService', function ($http) {
+
+    this.save = function (office_type) {
+        $http.post('/office_types/save', office_type)
+            .success(function(result) {
+                console.log(result);
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/office_types/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+});
+
 app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
-
-//    $scope.relationship_types = [
-//        {id: 1, name: "Отец"},
-//        {id: 2, name: "Дедушка"},
-//        {id: 3, name: "Мама"},
-//        {id: 4, name: "Брат"},
-//        {id: 5, name: "Бабушка"},
-//        {id: 6, name: "Сестра"}
-//    ];
-
-//    $scope.saveEmployee = function () {
-//        var data = {
-//            id: 0,
-//            surname: $scope.newEmployeeForm.surname,
-//            firstname: $scope.newEmployeeForm.firstname,
-//            lastname: $scope.newEmployeeForm.lastname,
-//            birthday: $scope.newEmployeeForm.birthday,
-//            citizenship: $scope.newEmployeeForm.citizenship,
-//            insurance_number: $scope.newEmployeeForm.insurance_number,
-//            tax_number: $scope.newEmployeeForm.tax_number,
-//            home_phone: $scope.newEmployeeForm.home_phone,
-//            mobile_phone: $scope.newEmployeeForm.mobile_phone,
-//            email: $scope.newEmployeeForm.email
-//        };
-//
-//        EmployeeService.save(data);
-//        $scope.newEmployeeForm = {};
-//        employees=[];
-//        employees = $scope.getList();
-//    }
-//
-//    $scope.saveRelationship = function () {
-//        var data = {
-//            id: 0,
-//            employee_id: $scope.activeEmployee.id,
-//            degree: $scope.newRelationshipForm.degree.id,
-//            surname: $scope.newRelationshipForm.surname,
-//            firstname: $scope.newRelationshipForm.firstname,
-//            lastname: $scope.newRelationshipForm.lastname,
-//            birthday: $scope.newRelationshipForm.birthday
-//        };
-//
-//        RelationshipService.save(data);
-//        $scope.newRelationshipForm = {};
-//    }
 
     $scope.delete = function (id) {
         EmployeeService.delete(id);
@@ -382,4 +386,5 @@ app.controller('EmployeeController', function ($scope, EmployeeService, Relation
     $scope.edit = function (id) {
         $scope.newEmployee = angular.copy(EmployeeService.get(id));
     }
+
 })
