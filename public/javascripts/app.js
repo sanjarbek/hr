@@ -160,6 +160,38 @@ app.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('positions', {
+            abstract: true,
+            url: '/positions',
+            template : '<div ui-view></div>'
+        })
+        .state('positions.list', {
+            url: '/list',
+            templateUrl : '/positions/list',
+            resolve: {
+                positionsData: function(PositionService) {
+                    return PositionService.list();
+                }
+            },
+            controller: function($scope, positionsData) {
+                $scope.positions = positionsData;
+            }
+        })
+        .state('positions.create', {
+            url: '/create',
+            templateUrl : '/positions/create',
+            controller: function($scope, PositionService) {
+                $scope.savePosition = function () {
+                    var data = {
+                        id: 0,
+                        name: $scope.newPositionForm.name
+                    };
+
+                    PositionService.save(data);
+                    $scope.newPositionForm = {};
+                }
+            }
+        })
 
     ;
 }).run(function($rootScope, $state) {
@@ -276,6 +308,23 @@ app.service('RelationshipTypeService', function ($http) {
             return result.data;
         });
     }
+});
+
+app.service('PositionService', function ($http) {
+
+    this.save = function (position) {
+        $http.post('/positions/save', position)
+            .success(function(position) {
+                console.log(position);
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/positions/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
 });
 
 app.controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {

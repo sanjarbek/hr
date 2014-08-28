@@ -30,6 +30,11 @@ GET         /relationship_types/list             controllers.RelationshipTypes.l
 GET         /relationship_types/json/list        controllers.RelationshipTypes.jsonList
 POST        /relationship_types/save             controllers.RelationshipTypes.save
 
+GET         /positions/create           controllers.Positions.create
+GET         /positions/list             controllers.Positions.list
+GET         /positions/json/list        controllers.Positions.jsonList
+POST        /positions/save             controllers.Positions.save
+
 # Webjar plugin included.
 GET         /webjars/*file                       controllers.WebJarAssets.at(file)
 
