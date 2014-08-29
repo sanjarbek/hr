@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @Messages("Создать новую организационную структуру")
+    <div class="pull-right">
+        <a ui-sref="departments.list"><span class="glyphicon glyphicon-list"></span></a>
+    </div>
+    </div>
+    <div class="panel-body">
+        <form ng-submit="saveDepartment()" class="form-horizontal">
+            <fieldset>
+                <div class="form-group form-group-sm">
+                    <label for="parent_id" class="col-sm-2 control-label">Вышестоящая структура</label>
+                    <div class="col-sm-10">
+                        <select required class="form-control" name="parent_id" ng-model="newDepartmentForm.parent_id"
+                        ng-options="department.name for department in departments"></select>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="office_id" class="col-sm-2 control-label">Офис</label>
+                    <div class="col-sm-10">
+                        <select required class="form-control" name="office_id" ng-model="newDepartmentForm.type_id"
+                        ng-options="office.name for office in offices"></select>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input required class="form-control" type="text" name="name" ng-model="newDepartmentForm.name"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+            </fieldset>
+            <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+        </form>
+    </div>
+</div>

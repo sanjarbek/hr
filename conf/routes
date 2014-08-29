@@ -50,6 +50,11 @@ GET         /offices/list                         controllers.Offices.list
 GET         /offices/json/list                    controllers.Offices.jsonList
 POST        /offices/save                         controllers.Offices.save
 
+GET         /departments/create           controllers.Departments.create
+GET         /departments/list             controllers.Departments.list
+GET         /departments/json/list        controllers.Departments.jsonList
+POST        /departments/save             controllers.Departments.save
+
 # Webjar plugin included.
 GET         /webjars/*file                        controllers.WebJarAssets.at(file)
 

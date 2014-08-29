@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a ui-sref="departments.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                Структура организации
+            </div>
+            <tree-grid
+            tree-data="departments_data"
+            col-defs="col_defs"
+            expand-on="expanding_property"
+            tree-control="departmentsTree"
+            on-select="departmentsTreeHandler(test)"
+            >
+                </tree-grid>
+        </div>
+    </div>
+    <div class="col-sm-4">
+
+        </div>
+</div>
+

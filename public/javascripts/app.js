@@ -32,18 +32,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('employees.detail', {
-            url: '/{:employeeId}',
-            templateUrl : '/employees/show',
-            resolve: {
-                activeEmployeeData: function(EmployeeService, $stateParams) {
-                    return EmployeeService.get($stateParams.employeeId);
-                }
-            },
-            controller: function($scope, activeEmployeeData) {
-                $scope.activeEmployee = activeEmployeeData;
-            }
-        })
         .state('employees.list', {
             url: '/list',
             templateUrl : '/employees/list',
@@ -63,6 +51,18 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                         $defer.resolve($scope.employees.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }
                 });
+            }
+        })
+        .state('employees.detail', {
+            url: '/{employeeId:[0-9]{1,6}}',
+            templateUrl: '/employees/show',
+            resolve: {
+                activeEmployeeData: function (EmployeeService, $stateParams) {
+                    return EmployeeService.get($stateParams.employeeId);
+                }
+            },
+            controller: function ($scope, activeEmployeeData) {
+                $scope.activeEmployee = activeEmployeeData;
             }
         })
         .state('employees.detail.relationship', {
@@ -277,8 +277,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                     return OfficeService.list();
                 }
             },
-            controller: function($scope, officesData, OfficeService) {
-                $scope.tree_data = OfficeService.getTree(officesData, 'id', 'parent_id');
+            controller: function ($scope, officesData, OfficeService, FunctionsService) {
+                $scope.tree_data = FunctionsService.getTree(officesData, 'id', 'parent_id');
                 $scope.expanding_property = "name";
                 $scope.officesTree = {};
                 $scope.officesTreeHandler = function (office) {
@@ -323,6 +323,64 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                     $scope.newOfficeForm = {};
                 }
                 $scope.office_types = office_typesData;
+                $scope.offices = officesData;
+            }
+        })
+        .state('departments', {
+            abstract: true,
+            url: '/departments',
+            template: '<div ui-view></div>'
+        })
+        .state('departments.list', {
+            url: '/list',
+            templateUrl: '/departments/list',
+            resolve: {
+                departmentsData: function (DepartmentService) {
+                    return DepartmentService.list();
+                }
+            },
+            controller: function ($scope, departmentsData, DepartmentService, FunctionsService) {
+                $scope.departments_data = FunctionsService.getTree(departmentsData, 'id', 'parent_id');
+                $scope.expanding_property = "name";
+                $scope.departmentsTree = {};
+                $scope.departmentsTreeHandler = function (test) {
+                    console.log('you clicked on', test)
+                };
+                $scope.col_defs = [
+                    { field: "office_id", displayName: "Office"},
+                    { field: "parent_id", displayName: "Up"},
+                    { field: "name", displayName: "Name"}
+                ];
+            }
+        })
+        .state('departments.create', {
+            url: '/create',
+            templateUrl: '/departments/create',
+            resolve: {
+                departmentsData: function (DepartmentService) {
+                    return DepartmentService.list();
+                },
+                officesData: function (OfficeService) {
+                    return OfficeService.list();
+                }
+            },
+            controller: function ($scope, DepartmentService, departmentsData, officesData) {
+                $scope.saveDepartment = function () {
+                    var parentId = null;
+                    if ($scope.newDepartmentForm.parent_id)
+                        parentId = $scope.newDepartmentForm.parent_id.id;
+
+                    var data = {
+                        id: 0,
+                        parent_id: parentId,
+                        office_id: $scope.newDepartmentForm.type_id.id,
+                        name: $scope.newDepartmentForm.name
+                    };
+
+                    DepartmentService.save(data);
+                    $scope.newDepartmentForm = {};
+                }
+                $scope.departments = departmentsData;
                 $scope.offices = officesData;
             }
         })
@@ -510,8 +568,29 @@ angular.module('app').service('OfficeService', function ($http) {
         });
     }
 
-    this.getTree = function(data, primaryIdName, parentIdName){
-        if(!data || data.length==0 || !primaryIdName ||!parentIdName)
+});
+
+angular.module('app').service('DepartmentService', function ($http) {
+
+    this.save = function (department) {
+        $http.post('/departments/save', department)
+            .success(function (result) {
+                console.log(result);
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/departments/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+});
+
+angular.module('app').service('FunctionsService', function () {
+
+    this.getTree = function (data, primaryIdName, parentIdName) {
+        if (!data || data.length == 0 || !primaryIdName || !parentIdName)
             return [];
 
         var tree = [],
@@ -524,30 +603,31 @@ angular.module('app').service('OfficeService', function ($http) {
             len = data.length,
             i = 0;
 
-        while(i<len){
+        while (i < len) {
             item = data[i++];
             primaryKey = item[primaryIdName];
             treeObjs[primaryKey] = item;
             parentId = item[parentIdName];
 
-            if(parentId){
+            if (parentId) {
                 parent = treeObjs[parentId];
 
-                if(parent.children){
+                if (parent.children) {
                     parent.children.push(item);
                 }
-                else{
+                else {
                     parent.children = [item];
                 }
             }
-            else{
+            else {
                 rootIds.push(primaryKey);
             }
         }
 
         for (var i = 0; i < rootIds.length; i++) {
             tree.push(treeObjs[rootIds[i]]);
-        };
+        }
+        ;
 
         return tree;
     }
