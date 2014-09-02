@@ -1,22 +1,25 @@
-<div class="row">
-    <div class="col-sm-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                        Поиск сотрудников
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseOne" class="panel-collapse collapse in">
-                <div class="panel-body">
-                    Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
-                    nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@*<div class="row">*@
+@*<div class="col-sm-12">*@
+@*<div class="panel panel-default">*@
+@*<div class="panel-heading">*@
+@*<h4 class="panel-title">*@
+@*<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">*@
+@*Поиск сотрудников*@
+@*</a>*@
+@*</h4>*@
+@*</div>*@
+@*<div id="collapseOne" class="panel-collapse collapse in">*@
+@*<div class="panel-body">*@
+@*<div class="col-sm-12">*@
+@*<form class="form-inline">*@
+
+@*</form>*@
+@*</div>*@
+@*</div>*@
+@*</div>*@
+@*</div>*@
+@*</div>*@
+@*</div>*@
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-default">
@@ -24,14 +27,14 @@
                 <a ui-sref="employees.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
                 <strong>Список сотрудников</strong>
             </div>
-            <table class="table table-bordered table-condensed" ng-table="employeeTableParams">
-                <tr ng-repeat="employee in employees">
-                    <td data-title="'Surname'">{{ employee.surname }}</td>
-                    <td data-title="'Firstname'">{{ employee.firstname }}</td>
-                    <td data-title="'Lastname'">{{ employee.lastname }}</td>
-                    <td data-title="'Date'">{{ employee.birthday }}</td>
-                    <td data-title="'Email'">{{ employee.email }}</td>
-                    <td><a ui-sref="employees.detail({employeeId: employee.id})"><span class="glyphicon glyphicon-eye-open"></span> Show</a></td>
+            <input ng-model="surname" type="text" placeholder="Поиск ..." autofocus class="form-control" />
+            <table class="table table-condensed" ng-table="employeeTableParams">
+                <tr ng-repeat="employee in employees | filter: surname">
+                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.surname }} {{employee.firstname}}</a></td>
+                    @*<td data-title="'Firstname'">{{ employee.firstname }}</td>*@
+                    @*<td data-title="'Lastname'">{{ employee.lastname }}</td>*@
+                    @*<td data-title="'Date'">{{ employee.birthday | date: 'dd.MM.yyyy' }}</td>*@
+                    @*<td data-title="'Email'">{{ employee.email }}</td>*@
                 </tr>
             </table>
         </div>

@@ -6,7 +6,7 @@
 GET         /                                     controllers.Application.test
 
 # Состояния работоспособности сервера
-GET         /connection/status                    controllers.Application.serverStatus()
+GET        /connection/status        controllers.Application.serverStatus
 
 # Сотрудники
 GET         /employees/template                   controllers.Employees.template

@@ -10,7 +10,7 @@
             <form ng-submit="saveRelationship()" class="form-horizontal">
                 <fieldset>
                     <div class="form-group form-group-sm">
-                        <label for="degree" class="col-sm-2 control-label">Degree</label>
+                        <label for="degree" class="col-sm-2 control-label">Степерь родства</label>
                         <div class="col-sm-10">
                             <select required class="form-control" name="degree" ng-model="newRelationshipForm.degree"
                                 ng-options="type.name for type in relationship_types"
@@ -20,28 +20,28 @@
                         <span class="help-inline"></span>
                     </div>
                     <div class="form-group form-group-sm">
-                        <label for="surname" class="col-sm-2 control-label">Surname</label>
+                        <label for="surname" class="col-sm-2 control-label">Фамилия</label>
                         <div class="col-sm-10">
                             <input required class="form-control"  type="text" name="surname" ng-model="newRelationshipForm.surname"/>
                         </div>
                         <span class="help-inline"></span>
                     </div>
                     <div class="form-group form-group-sm">
-                        <label for="firstname" class="col-sm-2 control-label">Firstname</label>
+                        <label for="firstname" class="col-sm-2 control-label">Имя</label>
                         <div class="col-sm-10">
                             <input required class="form-control"  type="text" name="firstname" ng-model="newRelationshipForm.firstname"/>
                         </div>
                         <span class="help-inline"></span>
                     </div>
                     <div class="form-group form-group-sm">
-                        <label for="lastname" class="col-sm-2 control-label">Lastname</label>
+                        <label for="lastname" class="col-sm-2 control-label">Отчество</label>
                         <div class="col-sm-10">
                             <input required class="form-control"  type="text" name="lastname" ng-model="newRelationshipForm.lastname"/>
                         </div>
                         <span class="help-inline"></span>
                     </div>
                     <div class="form-group form-group-sm">
-                        <label for="birthday" class="col-sm-2 control-label">Birthday</label>
+                        <label for="birthday" class="col-sm-2 control-label">Дата рождения</label>
                         <div class="col-sm-10">
                             <input required class="form-control"  type="date" name="birthday" ng-model="newRelationshipForm.birthday" class="input-sm form-control"/>
                         </div>

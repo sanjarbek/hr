@@ -42,8 +42,9 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
             },
             controller  : function($scope, ngTableParams, employeesData) {
                 $scope.employees = employeesData;
+
                 $scope.employeeTableParams = new ngTableParams({
-                    page: 2,            // show first page
+                    page: 1,            // show first page
                     count: 10           // count per page
                 }, {
                     total: $scope.employees.length, // length of data
@@ -76,10 +77,14 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
             resolve: {
                 relationshipsData: function(activeEmployeeData, RelationshipService) {
                     return RelationshipService.list(activeEmployeeData.id);
+                },
+                relationshipTypesData: function (RelationshipTypeService) {
+                    return RelationshipTypeService.list();
                 }
             },
-            controller  : function($scope, relationshipsData, ngTableParams){
+            controller: function ($scope, relationshipsData, ngTableParams, relationshipTypesData) {
                 $scope.relationships = relationshipsData;
+                $scope.types = relationshipTypesData;
                 $scope.relationshipTableParams = new ngTableParams({
                     page: 2,            // show first page
                     count: 10           // count per page
@@ -390,7 +395,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
     $rootScope.$state = $state;
 });
 
-angular.module('app').service('EmployeeService', function ($http) {
+angular.module('app').service('EmployeeService', function ($http, $state) {
     //employees array to hold list of all employees
     var employees = [];
 
@@ -401,19 +406,12 @@ angular.module('app').service('EmployeeService', function ($http) {
     this.save = function (employee) {
         $http.post('/employees/save', employee)
             .success(function(employee) {
-                console.log(employee);
+                console.log(employee)
+                $state.go("employees.detail", {employeeId: employee.id});
             });
-
     }
 
-    //simply search employees list for given id
-    //and returns the employee object if found
     this.get = function (id) {
-//        for (i in employees) {
-//            if (employees[i].id == id) {
-//                return employees[i];
-//            }
-//        }
         return $http.get('/employees/json/get', { params : {'id' : id}}).then(function(result) {
             return result.data;
         })
@@ -450,7 +448,63 @@ angular.module('app').service('RelationshipService', function ($http, EmployeeSe
     this.save = function (relationship) {
         $http.post('/relationships/save', relationship)
             .success(function(relationship) {
+                PNotify.desktop.permission();
+                (new PNotify({
+                    title: 'Статус сохранения',
+                    text: 'Успешно сохранен.',
+                    desktop: {
+                        desktop: true
+                    }
+                })).get().click(function (e) {
+                        if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                        alert('Hey! You clicked the desktop notification!');
+                    });
                 console.log(relationship);
+                dyn_notice();
+                function dyn_notice() {
+                    var percent = 0;
+                    var notice = new PNotify({
+                        title: "Please Wait",
+                        type: 'info',
+                        icon: 'glyphicon glyphicon-eye-open',
+                        hide: false,
+                        buttons: {
+                            closer: false,
+                            sticker: false
+                        },
+                        opacity: .75,
+                        shadow: false
+//                        width: "270px"
+                    });
+
+                    setTimeout(function () {
+                        notice.update({
+                            title: false
+                        });
+                        var interval = setInterval(function () {
+                            percent += 2;
+                            var options = {
+                                text: percent + "% complete."
+                            };
+                            if (percent == 80) options.title = "Almost There";
+                            if (percent >= 100) {
+                                window.clearInterval(interval);
+                                options.title = "Done!";
+                                options.type = "success";
+                                options.hide = true;
+                                options.buttons = {
+                                    closer: true,
+                                    sticker: true
+                                };
+                                options.icon = 'picon picon-task-complete';
+                                options.opacity = 1;
+                                options.shadow = true;
+                                options.width = PNotify.prototype.options.width;
+                            }
+                            notice.update(options);
+                        }, 120);
+                    }, 2000);
+                }
             });
     }
 
@@ -633,7 +687,6 @@ angular.module('app').service('FunctionsService', function () {
     }
 
 });
-
 
 angular.module('app').controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
 

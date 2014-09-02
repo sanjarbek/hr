@@ -2,7 +2,17 @@
     <div class="col-sm-3 col-md-2">
         <div class="row">
             <div class="col-sm-12">
-                <a href="#" class="thumbnail">
+                <div class="well">
+                    <strong>
+                        {{ activeEmployee.surname }} <br />
+                        {{ activeEmployee.firstname }}
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+            <a href="#" class="thumbnail">
                     <img ng-src="@routes.Assets.at("images/mario.jpg")" alt="Тест">
                 </a>
             </div>
@@ -12,14 +22,19 @@
                 <div class="list-group">
                     <a href="#" class="list-group-item" ui-sref-active="active">Личные данные</a>
                     <a href="#" class="list-group-item" ui-sref-active="active">Контактные данные</a>
-                    <a href="#" class="list-group-item" ui-sref-active="active">Паспортные данные</a>
-                    <a href="#" class="list-group-item" ui-sref-active="active">Воинская обязанность</a>
+
                     <a ui-sref="employees.detail.relationship.list" class="list-group-item" ng-class="{active: $state.includes('employees.detail.relationship')}">Состав семьи</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Паспортные данные</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Образование</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Сертификаты</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Договора</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Штатный табель</a>
+                    <a href="#" class="list-group-item" ui-sref-active="active">Приказы</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-sm-9  col-md-10">
-        <div ui-view>{{ activeEmployee }}</div>
+        <div ui-view>Сводная информация о сотруднике {{ activeEmployee }}</div>
     </div>
 </div>

@@ -4,17 +4,13 @@
     <head>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.css"))'>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.min.css"))'>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.core.css"))'>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.buttons.css"))'>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.history.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/main.css"))'>
+        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/custom_bootstrap.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/treeGrid.css"))'>
         @*<link rel='stylesheet' href='@routes.Assets.at(("stylesheets/animate.css"))'>*@
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("angular.min.js"))'></script>
-        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-ui-router.min.js"))'></script>
-        @*<script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-animate.min.js"))'></script>*@
-        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.min.js"))'></script>
-        <script type='text/javascript' src='@routes.Assets.at("javascripts/tree-grid-directive.js")'></script>
-        <script type='text/javascript' src='@routes.Assets.at("javascripts/app.js")'></script>
     </head>
     <body>
         <header>
@@ -66,7 +62,44 @@
                     <div ui-view ng-animate="'view'"></div>
                 </div>
             </div>
+
+            <footer>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h6>Статус соединения к серверу: <span id="server-status"></span></h6>
+                    </div>
+                </div>
+            </footer>
         </div>
+
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.core.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.desktop.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.history.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.tooltip.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.buttons.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("angular.min.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-ui-router.min.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.min.js"))'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/reconnecting-websocket.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/tree-grid-directive.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/app.js")'></script>
+
+        <script type="text/javascript">
+        $ ( function ( ) {
+            @*var ws = new WebSocket("@routes.Application.serverStatus.webSocketURL()");*@
+        var ws = new ReconnectingWebSocket ( "ws://localhost:9001/connection/status" ) ;
+        ws.onmessage = function ( msg ) {
+        $ ( '#server-status' ).text ( msg.data ) ;
+        $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;
+        }
+        ws.onclose = function ( msg ) {
+        $ ( '#server-status' ).text ( 'closed' ) ;
+        $ ( '#server-status' ).addClass ( 'label-warning' ).removeClass ( 'label-success' ) ;
+        }
+        } )
+        </script>
 
     </body>
 </html>
