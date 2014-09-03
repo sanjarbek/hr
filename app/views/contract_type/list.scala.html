@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a ui-sref="contract_types.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                Виды договоров
+            </div>
+            <table class="table table-bordered table-condensed" ng-table="contractTypeTableParams">
+                <tr ng-repeat="contract_type in contract_types">
+                    <td data-title="'Номер'">{{ contract_type.id}}</td>
+                    <td data-title="'Название'">{{ contract_type.name}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

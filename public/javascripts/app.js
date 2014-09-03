@@ -389,6 +389,38 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                 $scope.offices = officesData;
             }
         })
+        .state('contract_types', {
+            abstract: true,
+            url: '/contract_types',
+            template: '<div ui-view></div>'
+        })
+        .state('contract_types.list', {
+            url: '/list',
+            templateUrl: '/contract_types/list',
+            resolve: {
+                contract_typesData: function (ContractTypeService) {
+                    return ContractTypeService.list();
+                }
+            },
+            controller: function ($scope, contract_typesData) {
+                $scope.contract_types = contract_typesData;
+            }
+        })
+        .state('contract_types.create', {
+            url: '/create',
+            templateUrl: '/contract_types/create',
+            controller: function ($scope, ContractTypeService) {
+                $scope.saveContractType = function () {
+                    var data = {
+                        id: 0,
+                        name: $scope.newContractTypeForm.name
+                    };
+
+                    ContractTypeService.save(data);
+                    $scope.newContractTypeForm = {};
+                }
+            }
+        })
 
     ;
 }).run(function($rootScope, $state) {
@@ -684,6 +716,23 @@ angular.module('app').service('FunctionsService', function () {
         ;
 
         return tree;
+    }
+
+});
+
+angular.module('app').service('ContractTypeService', function ($http) {
+
+    this.save = function (contract_type) {
+        $http.post('/contract_types/save', contract_type)
+            .success(function (result) {
+                console.log(result);
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/contract_types/json/list').then(function (result) {
+            return result.data;
+        });
     }
 
 });

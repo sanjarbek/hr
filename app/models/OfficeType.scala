@@ -13,11 +13,12 @@ import play.api.libs.json.Reads._
 import collection.Iterable
 
 case class OfficeType(
-                             id: Int,
-                             name: String
-                             ) extends KeyedEntity[Int]
+                       id: Int,
+                       name: String
+                       ) extends KeyedEntity[Int]
 
 object OfficeType {
+
   import Database.{officeTypeTable}
 
   implicit val officeTypeWrites: Writes[OfficeType] = (
@@ -27,28 +28,30 @@ object OfficeType {
 
   implicit val officeTypeReads: Reads[OfficeType] = (
     (JsPath \ "id").read[Int] and
-      (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](20))
+      (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](50))
     )(OfficeType.apply _)
 
   def allQ: Query[OfficeType] = from(officeTypeTable) {
     officeType => select(officeType)
   }
 
-  def findAll: Iterable[OfficeType] = inTransaction{
+  def findAll: Iterable[OfficeType] = inTransaction {
     allQ.toList
   }
 
-  def findById(id: Long) = inTransaction{
+  def findById(id: Long) = inTransaction {
     from(officeTypeTable) {
-      officeType => where(officeType.id === id) select(officeType)
+      officeType => where(officeType.id === id) select (officeType)
     }.headOption
   }
 
-  def insert(officeType: OfficeType): OfficeType = inTransaction{
+  def insert(officeType: OfficeType): OfficeType = inTransaction {
     officeTypeTable.insert(officeType)
   }
 
   def update(officeType: OfficeType) {
-    inTransaction{ officeTypeTable.update(officeType)}
+    inTransaction {
+      officeTypeTable.update(officeType)
+    }
   }
 }
