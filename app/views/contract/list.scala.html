@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a ui-sref="employees.detail.contract.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                Список контрактов
+            </div>
+            <table class="table table-condensed">
+                <tr>
+                    <td><strong>Офис</strong></td>
+                    <td><strong>Отдел</strong></td>
+                    <td><strong>Должность</strong></td>
+                    <td><strong>Дата начала</strong></td>
+                    <td><strong>Дата окончания</strong></td>
+                    <td><strong>Статус</strong></td>
+                </tr>
+                <tr ng-repeat="contract in contracts">
+                    <td data-title="'Офис'">{{ getOfficeName(contract.position_id) }}</td>
+                    <td data-title="'Отдел'">{{ getDepartmentName(contract.position_id) }}</td>
+                    <td data-title="'Должность'">{{ getPositionName(contract.position_id) }}</td>
+                    <td data-title="'Дата начала'">{{ contract.open_date  | date: 'dd.MM.yyyy' }}</td>
+                    <td data-title="'Дата окончания'">{{ contract.end_date |  date: 'dd.MM.yyyy' }}</td>
+                    <td><span class="label">asdf</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

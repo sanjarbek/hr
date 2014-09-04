@@ -13,6 +13,7 @@ object Database extends Schema {
   val positionCategoryTable: Table[PositionCategory] = table[PositionCategory]("position_categories")
   val departmentTable: Table[Department] = table[Department]("departments")
   val contractTypeTable: Table[ContractType] = table[ContractType]("contract_types")
+  val contractTable: Table[Contract] = table[Contract]("contracts")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -58,4 +59,10 @@ object Database extends Schema {
     contract_type.id is (autoIncremented("contract_types_id_seq"))
   }
   }
+
+  on(contractTable) { contract => declare {
+    contract.id is (autoIncremented("contracts_id_seq"))
+  }
+  }
+
 }

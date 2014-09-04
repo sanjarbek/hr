@@ -15,3 +15,19 @@ angular.module('app').service('ContractTypeService', function ($http) {
 
 });
 
+angular.module('app').service('ContractService', function ($http) {
+
+    this.save = function (contract) {
+        $http.post('/contracts/save', contract)
+            .success(function (result) {
+                console.log(result);
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/contracts/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+});

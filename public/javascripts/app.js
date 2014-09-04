@@ -165,6 +165,114 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('employees.detail.contract', {
+            absract: true,
+            url: '/contract',
+            template: '<div ui-view></div>'
+        })
+        .state('employees.detail.contract.list', {
+            url: '/list',
+            templateUrl: '/contracts/list',
+            resolve: {
+                departmentsData: function (DepartmentService) {
+                    return DepartmentService.list();
+                },
+                contractTypeData: function (ContractTypeService) {
+                    return ContractTypeService.list();
+                },
+                officesData: function (OfficeService) {
+                    return OfficeService.list();
+                },
+                contractsData: function (ContractService) {
+                    return ContractService.list();
+                }
+            },
+            controller: function ($scope, contractsData, departmentsData, contractTypeData, officesData) {
+                $scope.contracts = contractsData;
+                $scope.offices = officesData;
+                $scope.contract_types = contractTypeData;
+                $scope.departments = departmentsData;
+
+                $scope.getOfficeName = function (positionId) {
+                    var name = "Не найден офис.";
+                    $scope.departments.forEach(function (department) {
+                        if (department.id == positionId) {
+                            $scope.offices.forEach(function (office) {
+                                if (office.id == department.office_id) {
+                                    name = office.name;
+                                }
+                            });
+                        }
+                    });
+                    return name;
+                }
+
+                $scope.getDepartmentName = function (positionId) {
+                    var name = "Не найден отдел.";
+                    $scope.departments.forEach(function (position) {
+                        if (position.id == positionId) {
+                            $scope.departments.forEach(function (department) {
+                                if (department.id == position.parent_id) {
+                                    name = department.name;
+                                }
+                            });
+                        }
+                    });
+                    return name;
+                }
+
+                $scope.getPositionName = function (positionId) {
+                    var name = "Не найдена должность.";
+                    $scope.departments.forEach(function (position) {
+                        if (position.id == positionId) {
+                            name = position.name;
+                        }
+                    });
+                    return name;
+                }
+
+                $scope.getStatusText = function (status) {
+                    return status == 1 ? "<span class='label label-success'>Активен</span>" : "<span class='label label-warning'>Окончен</span>";
+                }
+            }
+        })
+        .state('employees.detail.contract.create', {
+            url: '/create',
+            templateUrl: '/contracts/create',
+            resolve: {
+                departmentsData: function (DepartmentService) {
+                    return DepartmentService.list();
+                },
+                contractTypeData: function (ContractTypeService) {
+                    return ContractTypeService.list();
+                },
+                officesData: function (OfficeService) {
+                    return OfficeService.list();
+                }
+            },
+            controller: function ($scope, departmentsData, contractTypeData, officesData, ContractService) {
+
+                $scope.contract_types = contractTypeData;
+                $scope.departments = departmentsData;
+                $scope.offices = officesData;
+
+                $scope.saveContract = function () {
+                    var data = {
+                        id: 0,
+                        employee_id: $scope.activeEmployee.id,
+                        position_id: $scope.newContractForm.position.id,
+                        open_date: $scope.newContractForm.openDate,
+                        end_date: $scope.newContractForm.endDate,
+                        close_date: null,
+                        status: $scope.newContractForm.status ? 1 : 0,
+                        contract_type: $scope.newContractForm.contract_type.id
+                    };
+
+                    ContractService.save(data);
+                    $scope.newContractForm = {};
+                }
+            }
+        })
         .state('positions', {
             abstract: true,
             url: '/positions',

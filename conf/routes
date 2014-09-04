@@ -60,6 +60,11 @@ GET         /contract_types/list             controllers.ContractTypes.list
 GET         /contract_types/json/list        controllers.ContractTypes.jsonList
 POST        /contract_types/save             controllers.ContractTypes.save
 
+GET         /contracts/create           controllers.Contracts.create
+GET         /contracts/list             controllers.Contracts.list
+GET         /contracts/json/list        controllers.Contracts.jsonList
+POST        /contracts/save             controllers.Contracts.save
+
 # Webjar plugin included.
 GET         /webjars/*file                        controllers.WebJarAssets.at(file)
 

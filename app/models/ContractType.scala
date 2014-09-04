@@ -32,7 +32,7 @@ object ContractType {
     )(ContractType.apply _)
 
   def allQ: Query[ContractType] = from(contractTypeTable) {
-    officeType => select(officeType)
+    contractType => select(contractType)
   }
 
   def findAll: Iterable[ContractType] = inTransaction {
