@@ -4,7 +4,8 @@ CREATE TABLE departments (
   id        SERIAL,
   parent_id INTEGER,
   office_id INTEGER,
-  name      VARCHAR(50)
+  name      VARCHAR(50),
+  category  SMALLINT
 );
 
 # -- !Downs

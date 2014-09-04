@@ -342,20 +342,52 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
             resolve: {
                 departmentsData: function (DepartmentService) {
                     return DepartmentService.list();
+                },
+                officesData: function (OfficeService) {
+                    return OfficeService.list();
                 }
             },
-            controller: function ($scope, departmentsData, DepartmentService, FunctionsService) {
+            controller: function ($scope, departmentsData, DepartmentService, FunctionsService, officesData) {
+                $scope.departmentsTemp = departmentsData;
                 $scope.departments_data = FunctionsService.getTree(departmentsData, 'id', 'parent_id');
                 $scope.expanding_property = "name";
                 $scope.departmentsTree = {};
-                $scope.departmentsTreeHandler = function (test) {
-                    console.log('you clicked on', test)
+                $scope.departmentsTreeHandler = function (branch) {
+                    console.log("You clicked " + branch);
+                    $scope.current_department = branch;
                 };
                 $scope.col_defs = [
-                    { field: "office_id", displayName: "Office"},
-                    { field: "parent_id", displayName: "Up"},
-                    { field: "name", displayName: "Name"}
+//                    { field: "office_id", displayName: "Office"},
+//                    { field: "parent_id", displayName: "Up"},
+//                    { field: "name", displayName: "Name"}
                 ];
+                $scope.saveDepartment = function () {
+                    var parentId = null;
+                    if ($scope.current_department)
+                        parentId = $scope.current_department.id;
+
+                    var data = {
+                        id: 0,
+                        parent_id: parentId,
+                        office_id: $scope.newDepartmentForm.office.id,
+                        name: $scope.newDepartmentForm.name,
+                        category: $scope.newDepartmentForm.category.id
+                    };
+
+                    var success = DepartmentService.save(data);
+                    $scope.departmentsTemp.push(success);
+//                    $scope.departments_data = [];
+//                    $scope.departments_data = FunctionsService.getTree($scope.departmentsTemp, 'id', 'parent_id');
+                    $scope.newDepartmentForm = {};
+                }
+                $scope.categories = [
+                    { id: 1, name: "Должность" },
+                    { id: 2, name: "Структура" }
+                ];
+                $scope.departments = departmentsData;
+                $scope.offices = officesData;
+                $scope.current_department = null;
+                $scope.current_office = null;
             }
         })
         .state('departments.create', {
@@ -378,13 +410,18 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                     var data = {
                         id: 0,
                         parent_id: parentId,
-                        office_id: $scope.newDepartmentForm.type_id.id,
-                        name: $scope.newDepartmentForm.name
+                        office_id: $scope.newDepartmentForm.office.id,
+                        name: $scope.newDepartmentForm.name,
+                        category: $scope.newDepartmentForm.category.id
                     };
 
                     DepartmentService.save(data);
                     $scope.newDepartmentForm = {};
                 }
+                $scope.categories = [
+                    { id: 1, name: "Должность" },
+                    { id: 2, name: "Структура" }
+                ];
                 $scope.departments = departmentsData;
                 $scope.offices = officesData;
             }
@@ -662,6 +699,7 @@ angular.module('app').service('DepartmentService', function ($http) {
         $http.post('/departments/save', department)
             .success(function (result) {
                 console.log(result);
+                return result;
             });
     }
 

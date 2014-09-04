@@ -7,4 +7,4 @@ CREATE TABLE contract_types (
 
 # -- !Downs
 DROP TABLE IF EXISTS contract_types;
-DROP SEQUENCE IF EXISTS contract_types _id_seq;
+DROP SEQUENCE IF EXISTS contract_types_id_seq;

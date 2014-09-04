@@ -23,8 +23,7 @@ object Departments extends Controller {
     val departmentJson = request.body
     departmentJson.validate[Department].fold(
       valid = { department =>
-        Department.insert(department)
-        Ok("Saved")
+        Ok(Json.toJson(Department.insert(department)))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))

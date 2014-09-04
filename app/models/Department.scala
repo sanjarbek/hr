@@ -16,7 +16,8 @@ case class Department(
                        id: Int,
                        parent_id: Option[Int],
                        office_id: Int,
-                       name: String
+                       name: String,
+                       category: Int
                        ) extends KeyedEntity[Int]
 
 object Department {
@@ -27,14 +28,16 @@ object Department {
     (JsPath \ "id").write[Int] and
       (JsPath \ "parent_id").write[Option[Int]] and
       (JsPath \ "office_id").write[Int] and
-      (JsPath \ "name").write[String]
+      (JsPath \ "name").write[String] and
+      (JsPath \ "category").write[Int]
     )(unlift(Department.unapply))
 
   implicit val officeReads: Reads[Department] = (
     (JsPath \ "id").read[Int] and
       (JsPath \ "parent_id").read[Option[Int]] and
       (JsPath \ "office_id").read[Int] and
-      (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](50))
+      (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](50)) and
+      (JsPath \ "category").read[Int]
     )(Department.apply _)
 
 
