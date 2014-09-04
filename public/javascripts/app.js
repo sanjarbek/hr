@@ -10,8 +10,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('employees.create', {
             url: '/create',
-            templateUrl : '/employees/create',
-            controller: function($scope, EmployeeService){
+            templateUrl: '/employees/create',
+            controller: function ($scope, EmployeeService) {
                 $scope.saveEmployee = function () {
                     var data = {
                         id: 0,
@@ -34,13 +34,13 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('employees.list', {
             url: '/list',
-            templateUrl : '/employees/list',
+            templateUrl: '/employees/list',
             resolve: {
-                employeesData: function(EmployeeService) {
+                employeesData: function (EmployeeService) {
                     return EmployeeService.list();
                 }
             },
-            controller  : function($scope, ngTableParams, employeesData) {
+            controller: function ($scope, ngTableParams, employeesData) {
                 $scope.employees = employeesData;
 
                 $scope.employeeTableParams = new ngTableParams({
@@ -48,7 +48,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                     count: 10           // count per page
                 }, {
                     total: $scope.employees.length, // length of data
-                    getData: function($defer, params) {
+                    getData: function ($defer, params) {
                         $defer.resolve($scope.employees.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }
                 });
@@ -69,13 +69,13 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         .state('employees.detail.relationship', {
             absract: true,
             url: '/relationship',
-            template : '<div ui-view></div>'
+            template: '<div ui-view></div>'
         })
         .state('employees.detail.relationship.list', {
             url: '/list',
-            templateUrl : '/relationships/list',
+            templateUrl: '/relationships/list',
             resolve: {
-                relationshipsData: function(activeEmployeeData, RelationshipService) {
+                relationshipsData: function (activeEmployeeData, RelationshipService) {
                     return RelationshipService.list(activeEmployeeData.id);
                 },
                 relationshipTypesData: function (RelationshipTypeService) {
@@ -90,7 +90,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                     count: 10           // count per page
                 }, {
                     total: $scope.relationships.length, // length of data
-                    getData: function($defer, params) {
+                    getData: function ($defer, params) {
                         $defer.resolve($scope.relationships.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }
                 });
@@ -98,13 +98,13 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('employees.detail.relationship.create', {
             url: '/create',
-            templateUrl : '/relationships/create',
+            templateUrl: '/relationships/create',
             resolve: {
-                relationshipTypesData : function(RelationshipTypeService) {
+                relationshipTypesData: function (RelationshipTypeService) {
                     return RelationshipTypeService.list();
                 }
             },
-            controller : function ($scope, RelationshipService, relationshipTypesData) {
+            controller: function ($scope, RelationshipService, relationshipTypesData) {
 
                 $scope.relationship_types = relationshipTypesData;
 
@@ -127,33 +127,33 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         .state('employees.detail.relationship.type', {
             abstract: true,
             url: '/create',
-            template : '<div ui-view></div>'
+            template: '<div ui-view></div>'
         })
         .state('employees.detail.relationship.type.create', {
             url: '/create',
-            templateUrl : '/relationship_types/create'
+            templateUrl: '/relationship_types/create'
         })
         .state('relationship_types', {
             abstract: true,
             url: '/relationship_types',
-            template : '<div ui-view></div>'
+            template: '<div ui-view></div>'
         })
         .state('relationship_types.list', {
             url: '/list',
-            templateUrl : '/relationship_types/list',
+            templateUrl: '/relationship_types/list',
             resolve: {
-                relationshipTypesData: function(RelationshipTypeService) {
+                relationshipTypesData: function (RelationshipTypeService) {
                     return RelationshipTypeService.list();
                 }
             },
-            controller: function($scope, relationshipTypesData) {
+            controller: function ($scope, relationshipTypesData) {
                 $scope.relationship_types = relationshipTypesData;
             }
         })
         .state('relationship_types.create', {
             url: '/create',
-            templateUrl : '/relationship_types/create',
-            controller: function($scope, RelationshipTypeService) {
+            templateUrl: '/relationship_types/create',
+            controller: function ($scope, RelationshipTypeService) {
                 $scope.saveRelationshipType = function () {
                     var data = {
                         id: 0,
@@ -168,23 +168,23 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         .state('positions', {
             abstract: true,
             url: '/positions',
-            template : '<div ui-view></div>'
+            template: '<div ui-view></div>'
         })
         .state('positions.list', {
             url: '/list',
-            templateUrl : '/positions/list',
+            templateUrl: '/positions/list',
             resolve: {
-                positionsData: function(PositionService) {
+                positionsData: function (PositionService) {
                     return PositionService.list();
                 }
             },
-            controller: function($scope, positionsData) {
+            controller: function ($scope, positionsData) {
                 $scope.positions = positionsData;
             }
         })
         .state('positions.create', {
             url: '/create',
-            templateUrl : '/positions/create',
+            templateUrl: '/positions/create',
             resolve: {
                 positionCategoriesData: function (PositionCategoryService) {
                     return PositionCategoryService.list();
@@ -240,24 +240,24 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         .state('office_types', {
             abstract: true,
             url: '/office_types',
-            template : '<div ui-view></div>'
+            template: '<div ui-view></div>'
         })
         .state('office_types.list', {
             url: '/list',
-            templateUrl : '/office_types/list',
+            templateUrl: '/office_types/list',
             resolve: {
-                office_typesData: function(OfficeTypeService) {
+                office_typesData: function (OfficeTypeService) {
                     return OfficeTypeService.list();
                 }
             },
-            controller: function($scope, office_typesData) {
+            controller: function ($scope, office_typesData) {
                 $scope.office_types = office_typesData;
             }
         })
         .state('office_types.create', {
             url: '/create',
-            templateUrl : '/office_types/create',
-            controller: function($scope, OfficeTypeService) {
+            templateUrl: '/office_types/create',
+            controller: function ($scope, OfficeTypeService) {
                 $scope.saveOfficeType = function () {
                     var data = {
                         id: 0,
@@ -272,13 +272,13 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         .state('offices', {
             abstract: true,
             url: '/offices',
-            template : '<div ui-view></div>'
+            template: '<div ui-view></div>'
         })
         .state('offices.list', {
             url: '/list',
-            templateUrl : '/offices/list',
+            templateUrl: '/offices/list',
             resolve: {
-                officesData: function(OfficeService) {
+                officesData: function (OfficeService) {
                     return OfficeService.list();
                 }
             },
@@ -298,16 +298,16 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('offices.create', {
             url: '/create',
-            templateUrl : '/offices/create',
+            templateUrl: '/offices/create',
             resolve: {
-                office_typesData: function(OfficeTypeService){
+                office_typesData: function (OfficeTypeService) {
                     return OfficeTypeService.list();
                 },
-                officesData: function(OfficeService) {
+                officesData: function (OfficeService) {
                     return OfficeService.list();
                 }
             },
-            controller: function($scope, OfficeService, office_typesData, officesData) {
+            controller: function ($scope, OfficeService, office_typesData, officesData) {
                 $scope.saveOffice = function () {
                     var parentId = null;
                     if ($scope.newOfficeForm.parent_id)
@@ -460,330 +460,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         })
 
     ;
-}).run(function($rootScope, $state) {
+}).run(function ($rootScope, $state) {
     $rootScope.$state = $state;
 });
-
-angular.module('app').service('EmployeeService', function ($http, $state) {
-    //employees array to hold list of all employees
-    var employees = [];
-
-    var activeEmployee = {};
-
-    //save method create a new employee if not already exists
-    //else update the existing object
-    this.save = function (employee) {
-        $http.post('/employees/save', employee)
-            .success(function(employee) {
-                console.log(employee)
-                $state.go("employees.detail", {employeeId: employee.id});
-            });
-    }
-
-    this.get = function (id) {
-        return $http.get('/employees/json/get', { params : {'id' : id}}).then(function(result) {
-            return result.data;
-        })
-
-    }
-
-    //iterate through employees list and delete
-    //contact if found
-    this.delete = function (id) {
-        for (i in employees) {
-            if (employees[i].id == id) {
-                employees.splice(i, 1);
-            }
-        }
-    }
-
-    //simply returns the employees list
-    this.list = function () {
-        return $http.get('/employees/json/list' ).then(function (result) {
-            return result.data;
-        });
-    }
-});
-
-angular.module('app').service('RelationshipService', function ($http, EmployeeService) {
-    //to create unique relationship id
-    var uid = 1;
-
-    //relationships array to hold list of all relationships
-    var relationships = [];
-
-    //save method create a new relationship if not already exists
-    //else update the existing object
-    this.save = function (relationship) {
-        $http.post('/relationships/save', relationship)
-            .success(function(relationship) {
-                PNotify.desktop.permission();
-                (new PNotify({
-                    title: 'Статус сохранения',
-                    text: 'Успешно сохранен.',
-                    desktop: {
-                        desktop: true
-                    }
-                })).get().click(function (e) {
-                        if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
-                        alert('Hey! You clicked the desktop notification!');
-                    });
-                console.log(relationship);
-                dyn_notice();
-                function dyn_notice() {
-                    var percent = 0;
-                    var notice = new PNotify({
-                        title: "Please Wait",
-                        type: 'info',
-                        icon: 'glyphicon glyphicon-eye-open',
-                        hide: false,
-                        buttons: {
-                            closer: false,
-                            sticker: false
-                        },
-                        opacity: .75,
-                        shadow: false
-//                        width: "270px"
-                    });
-
-                    setTimeout(function () {
-                        notice.update({
-                            title: false
-                        });
-                        var interval = setInterval(function () {
-                            percent += 2;
-                            var options = {
-                                text: percent + "% complete."
-                            };
-                            if (percent == 80) options.title = "Almost There";
-                            if (percent >= 100) {
-                                window.clearInterval(interval);
-                                options.title = "Done!";
-                                options.type = "success";
-                                options.hide = true;
-                                options.buttons = {
-                                    closer: true,
-                                    sticker: true
-                                };
-                                options.icon = 'picon picon-task-complete';
-                                options.opacity = 1;
-                                options.shadow = true;
-                                options.width = PNotify.prototype.options.width;
-                            }
-                            notice.update(options);
-                        }, 120);
-                    }, 2000);
-                }
-            });
-    }
-
-    //simply search contacts list for given id
-    //and returns the relationship object if found
-    this.get = function (id) {
-        for (i in relationships) {
-            if (relationships[i].id == id) {
-                return relationships[i];
-            }
-        }
-
-    }
-
-    //iterate through relationships list and delete
-    //contact if found
-    this.delete = function (id) {
-        for (i in relationships) {
-            if (relationships[i].id == id) {
-                relationships.splice(i, 1);
-            }
-        }
-    }
-
-    //simply returns the relationships list
-    this.list = function (id) {
-        return $http.get('/employees/json/family', { params : {'employeeId' : id}} ).then(function (result) {
-            return result.data;
-        });
-    }
-});
-
-angular.module('app').service('RelationshipTypeService', function ($http) {
-
-    //save method create a new relationship if not already exists
-    //else update the existing object
-    this.save = function (relationship_type) {
-        $http.post('/relationship_types/save', relationship_type)
-            .success(function(relationship_type) {
-                console.log(relationship_type);
-            });
-    }
-
-    //simply returns the relationship_types list
-    this.list = function () {
-        return $http.get('/relationship_types/json/list').then(function (result) {
-            return result.data;
-        });
-    }
-});
-
-angular.module('app').service('PositionService', function ($http) {
-
-    this.save = function (position) {
-        $http.post('/positions/save', position)
-            .success(function (result) {
-                console.log(result);
-            });
-    }
-
-    this.list = function () {
-        return $http.get('/positions/json/list').then(function (result) {
-            return result.data;
-        });
-    }
-
-});
-
-angular.module('app').service('PositionCategoryService', function ($http) {
-
-    this.save = function (position_category) {
-        $http.post('/position_categories/save', position_category)
-            .success(function (result) {
-                console.log(result);
-            });
-    }
-
-    this.list = function () {
-        return $http.get('/position_categories/json/list').then(function (result) {
-            return result.data;
-        });
-    }
-
-});
-
-angular.module('app').service('OfficeTypeService', function ($http) {
-
-    this.save = function (office_type) {
-        $http.post('/office_types/save', office_type)
-            .success(function(result) {
-                console.log(result);
-            });
-    }
-
-    this.list = function () {
-        return $http.get('/office_types/json/list').then(function (result) {
-            return result.data;
-        });
-    }
-
-});
-
-angular.module('app').service('OfficeService', function ($http) {
-
-    this.save = function (office) {
-        $http.post('/offices/save', office)
-            .success(function(result) {
-                console.log(result);
-            });
-    }
-
-    this.list = function () {
-        return $http.get('/offices/json/list').then(function (result) {
-            return result.data;
-        });
-    }
-
-});
-
-angular.module('app').service('DepartmentService', function ($http) {
-
-    this.save = function (department) {
-        $http.post('/departments/save', department)
-            .success(function (result) {
-                console.log(result);
-                return result;
-            });
-    }
-
-    this.list = function () {
-        return $http.get('/departments/json/list').then(function (result) {
-            return result.data;
-        });
-    }
-
-});
-
-angular.module('app').service('FunctionsService', function () {
-
-    this.getTree = function (data, primaryIdName, parentIdName) {
-        if (!data || data.length == 0 || !primaryIdName || !parentIdName)
-            return [];
-
-        var tree = [],
-            rootIds = [],
-            item = data[0],
-            primaryKey = item[primaryIdName],
-            treeObjs = {},
-            parentId,
-            parent,
-            len = data.length,
-            i = 0;
-
-        while (i < len) {
-            item = data[i++];
-            primaryKey = item[primaryIdName];
-            treeObjs[primaryKey] = item;
-            parentId = item[parentIdName];
-
-            if (parentId) {
-                parent = treeObjs[parentId];
-
-                if (parent.children) {
-                    parent.children.push(item);
-                }
-                else {
-                    parent.children = [item];
-                }
-            }
-            else {
-                rootIds.push(primaryKey);
-            }
-        }
-
-        for (var i = 0; i < rootIds.length; i++) {
-            tree.push(treeObjs[rootIds[i]]);
-        }
-        ;
-
-        return tree;
-    }
-
-});
-
-angular.module('app').service('ContractTypeService', function ($http) {
-
-    this.save = function (contract_type) {
-        $http.post('/contract_types/save', contract_type)
-            .success(function (result) {
-                console.log(result);
-            });
-    }
-
-    this.list = function () {
-        return $http.get('/contract_types/json/list').then(function (result) {
-            return result.data;
-        });
-    }
-
-});
-
-angular.module('app').controller('EmployeeController', function ($scope, EmployeeService, RelationshipService) {
-
-    $scope.delete = function (id) {
-        EmployeeService.delete(id);
-        if ($scope.newEmployee.id == id) $scope.newEmployee = {};
-    }
-
-    $scope.edit = function (id) {
-        $scope.newEmployee = angular.copy(EmployeeService.get(id));
-    }
-
-})
