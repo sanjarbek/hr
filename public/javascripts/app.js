@@ -599,6 +599,75 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('employees.detail.educations', {
+            absract: true,
+            url: '/educations',
+            template: '<div ui-view></div>'
+        })
+        .state('employees.detail.educations.list', {
+            url: '/list',
+            templateUrl: '/educations/list',
+            resolve: {
+                institutionsData: function (InstitutionService) {
+                    return InstitutionService.list();
+                },
+                educationsData: function (activeEmployeeData, EducationService) {
+                    return EducationService.list(activeEmployeeData.id);
+                }
+            },
+            controller: function ($scope, educationsData, institutionsData, EducationService) {
+                $scope.educations = educationsData;
+                $scope.institutions = institutionsData;
+
+                $scope.saveEducation = function () {
+                    var data = {
+                        id: 0,
+                        employee_id: $scope.activeEmployee.id,
+                        institution_id: $scope.newEducationForm.institution.id,
+                        qualification: $scope.newEducationForm.qualification,
+                        speciality: $scope.newEducationForm.speciality,
+                        start_date: $scope.newEducationForm.start_date,
+                        end_date: $scope.newEducationForm.end_date,
+                        serialnumber: $scope.newEducationForm.serialnumber
+                    };
+
+                    var education = EducationService.save(data);
+                    console.log(education);
+                    $scope.educations.push(education);
+//                    $scope.$apply();
+                    $scope.newEducationForm = {};
+                }
+            }
+        })
+//        .state('employees.detail.educations.create', {
+//            url: '/create',
+//            templateUrl: '/educations/create',
+//            resolve: {
+//                institutionsData: function (InstitutionService) {
+//                    return InstitutionService.list();
+//                }
+//            },
+//            controller: function ($scope, EducationService, institutionsData) {
+//
+//                $scope.institutions = institutionsData;
+//
+//                $scope.saveEducation = function () {
+//                    var data = {
+//                        id: 0,
+//                        employee_id: $scope.activeEmployee.id,
+//                        institution_id: $scope.newEducationForm.institution.id,
+//                        qualification: $scope.newEducationForm.qualification,
+//                        speciality: $scope.newEducationForm.speciality,
+//                        start_date: $scope.newEducationForm.start_date,
+//                        end_date: $scope.newEducationForm.end_date,
+//                        serialnumber: $scope.newEducationForm.serialnumber
+//                    };
+//
+//                    EducationService.save(data);
+//                    $scope.newEducationForm = {};
+//                }
+//            }
+//        })
 
     ;
 }).run(function ($rootScope, $state) {

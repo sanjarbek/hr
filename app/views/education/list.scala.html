@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @*<a ui-sref="employees.detail.educations.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>*@
+                Список учебных заведений
+            </div>
+            <table class="table table-condensed">
+                <tr>
+                    <td><strong>Учебное заведение</strong></td>
+                    <td><strong>Номер/серия диплома</strong></td>
+                    <td><strong>Специальность</strong></td>
+                    <td><strong>Квалификация</strong></td>
+                    <td><strong>Дата поступления</strong></td>
+                    <td><strong>Дата окончания</strong></td>
+                </tr>
+                <tr ng-repeat="education in educations">
+                    <td>{{ (institutions | filter: {id: education.institution_id })[0].shortname }}</td>
+                    <td>{{ education.serialnumber }}</td>
+                    <td>{{ education.speciality }}</td>
+                    <td>{{ education.qualification }}</td>
+                    <td>{{ education.start_date  | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ education.end_date |  date: 'dd.MM.yyyy' }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Messages("Создать новый учебу")
+            <div class="pull-right">
+                @*<a ui-sref="employees.detail.educations.list"><span class="glyphicon glyphicon-list"></span></a>*@
+            </div>
+            </div>
+            <div class="panel-body">
+                <form ng-submit="saveEducation()" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group form-group-sm">
+                            <label for="institution" class="col-sm-2 control-label">Учебное заведение</label>
+                            <div class="col-sm-2">
+                                <select required class="form-control" name="institution" ng-model="newEducationForm.institution"
+                                ng-options="institution.longname for institution in institutions"></select>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="serialnumber" class="col-sm-2 control-label">Номер/серия диплома</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="text" name="startDate" ng-model="newEducationForm.serialnumber"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="speciality" class="col-sm-2 control-label">Специальность</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="text" name="speciality" ng-model="newEducationForm.speciality"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="qualification" class="col-sm-2 control-label">Квалификация по диплому</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="text" name="qualification" ng-model="newEducationForm.qualification"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="startDate" class="col-sm-2 control-label">Дата поступления</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="date" name="startDate" ng-model="newEducationForm.start_date"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="endDate" class="col-sm-2 control-label">Дата окончания</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="date" name="endDate" ng-model="newEducationForm.end_date"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                    </fieldset>
+                    <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

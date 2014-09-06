@@ -70,6 +70,11 @@ GET         /institutions/list                    controllers.Institutions.list
 GET         /institutions/json/list               controllers.Institutions.jsonList
 POST        /institutions/save                    controllers.Institutions.save
 
+GET         /educations/create           controllers.Educations.create
+GET         /educations/list             controllers.Educations.list
+GET         /educations/json/list        controllers.Educations.jsonList
+POST        /educations/save             controllers.Educations.save
+
 # Webjar plugin included.
 GET         /webjars/*file                        controllers.WebJarAssets.at(file)
 
