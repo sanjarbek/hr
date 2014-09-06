@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @Messages("Добавить новое учебное заведение")
+    <div class="pull-right">
+        <a ui-sref="institutions.list"><span class="glyphicon glyphicon-list"></span></a>
+    </div>
+    </div>
+    <div class="panel-body">
+        <form ng-submit="saveInstitution()" class="form-horizontal">
+            <fieldset>
+                <div class="form-group form-group-sm">
+                    <label for="longname" class="col-sm-2 control-label">Полное название</label>
+                    <div class="col-sm-10">
+                        <input required class="form-control" type="text" name="longname" ng-model="newInstitutionForm.longname"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="shortname" class="col-sm-2 control-label">Краткое название</label>
+                    <div class="col-sm-10">
+                        <input required class="form-control" type="text" name="shortname" ng-model="newInstitutionForm.shortname"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+            </fieldset>
+            <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+        </form>
+    </div>
+</div>

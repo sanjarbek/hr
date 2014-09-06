@@ -566,6 +566,39 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('institutions', {
+            abstract: true,
+            url: '/institutions',
+            template: '<div ui-view></div>'
+        })
+        .state('institutions.list', {
+            url: '/list',
+            templateUrl: '/institutions/list',
+            resolve: {
+                institutionsData: function (InstitutionService) {
+                    return InstitutionService.list();
+                }
+            },
+            controller: function ($scope, institutionsData) {
+                $scope.institutions = institutionsData;
+            }
+        })
+        .state('institutions.create', {
+            url: '/create',
+            templateUrl: '/institutions/create',
+            controller: function ($scope, InstitutionService) {
+                $scope.saveInstitution = function () {
+                    var data = {
+                        id: 0,
+                        shortname: $scope.newInstitutionForm.shortname,
+                        longname: $scope.newInstitutionForm.longname
+                    };
+
+                    InstitutionService.save(data);
+                    $scope.newInstitutionForm = {};
+                }
+            }
+        })
 
     ;
 }).run(function ($rootScope, $state) {
