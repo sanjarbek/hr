@@ -1,6 +1,8 @@
 angular.module('app', ['ui.router', 'ngTable', 'treeGrid']);
 
-angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
+angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider) {
+
+//    $parseProvider.unwrapPromises(true);
 
     $stateProvider
         .state('employees', {
@@ -11,7 +13,26 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
         .state('employees.create', {
             url: '/create',
             templateUrl: '/employees/create',
-            controller: 'EmployeeController'
+            controller: function($scope, EmployeeService){
+                $scope.saveEmployee = function () {
+                    var data = {
+                        id: 0,
+                        surname: $scope.newEmployeeForm.surname,
+                        firstname: $scope.newEmployeeForm.firstname,
+                        lastname: $scope.newEmployeeForm.lastname,
+                        birthday: $scope.newEmployeeForm.birthday,
+                        citizenship: $scope.newEmployeeForm.citizenship,
+                        insurance_number: $scope.newEmployeeForm.insurance_number,
+                        tax_number: $scope.newEmployeeForm.tax_number,
+                        home_phone: $scope.newEmployeeForm.home_phone,
+                        mobile_phone: $scope.newEmployeeForm.mobile_phone,
+                        email: $scope.newEmployeeForm.email
+                    };
+
+                    EmployeeService.save(data);
+                    $scope.newEmployeeForm = {};
+                }
+            }
         })
         .state('employees.list', {
             url: '/list',
@@ -51,7 +72,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                     return RelationshipTypeService.list();
                 }
             },
-            controller: function ($scope, relationshipsData, ngTableParams, relationshipTypesData) {
+            controller: function ($scope, relationshipsData, ngTableParams, relationshipTypesData, RelationshipService) {
                 $scope.relationships = relationshipsData;
                 $scope.types = relationshipTypesData;
                 $scope.relationshipTableParams = new ngTableParams({
@@ -63,19 +84,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                         $defer.resolve($scope.relationships.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }
                 });
-            }
-        })
-        .state('employees.detail.relationship.create', {
-            url: '/create',
-            templateUrl: '/relationships/create',
-            resolve: {
-                relationshipTypesData: function (RelationshipTypeService) {
-                    return RelationshipTypeService.list();
-                }
-            },
-            controller: function ($scope, RelationshipService, relationshipTypesData) {
-
-                $scope.relationship_types = relationshipTypesData;
 
                 $scope.saveRelationship = function () {
                     var data = {
@@ -88,11 +96,57 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider) {
                         birthday: $scope.newRelationshipForm.birthday
                     };
 
-                    RelationshipService.save(data);
+                    RelationshipService.save(data).then(function(result){
+                        console.log(result.data);
+                        $scope.addNewRelationship(result.data);
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус сохранения',
+                            text: 'Успешно сохранен.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                                alert('Hey! You clicked the desktop notification!');
+                            });
+                    });
                     $scope.newRelationshipForm = {};
+                }
+
+                $scope.addNewRelationship = function(relationship) {
+                    $scope.relationships.push(relationship);
                 }
             }
         })
+//        .state('employees.detail.relationship.create', {
+//            url: '/create',
+//            templateUrl: '/relationships/create',
+//            resolve: {
+//                relationshipTypesData: function (RelationshipTypeService) {
+//                    return RelationshipTypeService.list();
+//                }
+//            },
+//            controller: function ($scope, RelationshipService, relationshipTypesData) {
+//
+//                $scope.relationship_types = relationshipTypesData;
+//
+//                $scope.saveRelationship = function () {
+//                    var data = {
+//                        id: 0,
+//                        employee_id: $scope.activeEmployee.id,
+//                        degree: $scope.newRelationshipForm.degree.id,
+//                        surname: $scope.newRelationshipForm.surname,
+//                        firstname: $scope.newRelationshipForm.firstname,
+//                        lastname: $scope.newRelationshipForm.lastname,
+//                        birthday: $scope.newRelationshipForm.birthday
+//                    };
+//
+//                    RelationshipService.save(data);
+//                    $scope.newRelationshipForm = {};
+//                }
+//            }
+//        })
         .state('employees.detail.relationship.type', {
             abstract: true,
             url: '/create',

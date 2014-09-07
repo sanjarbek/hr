@@ -1,23 +1,6 @@
 angular.module('app').controller('EmployeeController', function ($scope, EmployeeService, ngTableParams, employeesData) {
 
-    $scope.saveEmployee = function () {
-        var data = {
-            id: 0,
-            surname: $scope.newEmployeeForm.surname,
-            firstname: $scope.newEmployeeForm.firstname,
-            lastname: $scope.newEmployeeForm.lastname,
-            birthday: $scope.newEmployeeForm.birthday,
-            citizenship: $scope.newEmployeeForm.citizenship,
-            insurance_number: $scope.newEmployeeForm.insurance_number,
-            tax_number: $scope.newEmployeeForm.tax_number,
-            home_phone: $scope.newEmployeeForm.home_phone,
-            mobile_phone: $scope.newEmployeeForm.mobile_phone,
-            email: $scope.newEmployeeForm.email
-        };
 
-        EmployeeService.save(data);
-        $scope.newEmployeeForm = {};
-    }
 
     $scope.employees = employeesData;
 
