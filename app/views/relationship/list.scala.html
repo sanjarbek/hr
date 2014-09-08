@@ -22,8 +22,8 @@
                         <td>{{ relationship.birthday  | date: 'dd.MM.yyyy'  }}</td>
                         <td>{{ (types | filter: relationship.degree)[0].name }}</td>
                         <td>
-                            <a class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 </table>
@@ -68,8 +68,11 @@
                                     >
                                     </select>
                                 </div>
+                                <div class="col-sm-1  add-control">
+                                    <a class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-plus"></span></a>
+                                </div>
                                 <span class="help-inline"></span>
-                                <label for="birthday" class="col-sm-2 control-label">Дата рождения</label>
+                                <label for="birthday" class="col-sm-1 control-label">Дата рождения</label>
                                 <div class="col-sm-2">
                                     <input required class="form-control" type="date" name="birthday" ng-model="newRelationshipForm.birthday" class="input-sm form-control"/>
                                 </div>
@@ -83,4 +86,29 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div ng-controller="ModalDemoCtrl">
+        <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+        <h3 class="modal-title">I'm a modal!</h3>
+        </div>
+        <div class="modal-body">
+        <ul>
+        <li ng-repeat="item in items">
+        <a ng-click="selected.item = item">{{ item }}</a>
+        </li>
+        </ul>
+        Selected: <b>{{ selected.item }}</b>
+        </div>
+        <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+        </script>
+
+        <button class="btn btn-default" ng-click="open()">Open me!</button>
+        <button class="btn btn-default" ng-click="open('lg')">Large modal</button>
+        <button class="btn btn-default" ng-click="open('sm')">Small modal</button>
+        <div ng-show="selected">Selection from a modal: {{ selected }}</div>
     </div>
