@@ -8,6 +8,10 @@ body {
     /*background: #34323a;*/
 }
 
+.add-control {
+    padding-left: 0px;
+}
+
 a {
     color: #3c8dbc;
 }

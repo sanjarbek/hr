@@ -1,6 +1,4 @@
 angular.module('app').service('RelationshipService', function ($http, EmployeeService) {
-    //to create unique relationship id
-    var uid = 1;
 
     //relationships array to hold list of all relationships
     var relationships = [];
@@ -8,65 +6,54 @@ angular.module('app').service('RelationshipService', function ($http, EmployeeSe
     //save method create a new relationship if not already exists
     //else update the existing object
     this.save = function (relationship) {
-        $http.post('/relationships/save', relationship)
-            .success(function (relationship) {
-                PNotify.desktop.permission();
-                (new PNotify({
-                    title: 'Статус сохранения',
-                    text: 'Успешно сохранен.',
-                    desktop: {
-                        desktop: true
-                    }
-                })).get().click(function (e) {
-                        if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
-                        alert('Hey! You clicked the desktop notification!');
-                    });
-                console.log(relationship);
-                dyn_notice();
-                function dyn_notice() {
-                    var percent = 0;
-                    var notice = new PNotify({
-                        title: "Please Wait",
-                        type: 'info',
-                        icon: 'glyphicon glyphicon-eye-open',
-                        hide: false,
-                        buttons: {
-                            closer: false,
-                            sticker: false
-                        },
-                        opacity: .75,
-                        shadow: false
-//                        width: "270px"
-                    });
-
-                    setTimeout(function () {
-                        notice.update({
-                            title: false
-                        });
-                        var interval = setInterval(function () {
-                            percent += 2;
-                            var options = {
-                                text: percent + "% complete."
-                            };
-                            if (percent == 80) options.title = "Almost There";
-                            if (percent >= 100) {
-                                window.clearInterval(interval);
-                                options.title = "Done!";
-                                options.type = "success";
-                                options.hide = true;
-                                options.buttons = {
-                                    closer: true,
-                                    sticker: true
-                                };
-                                options.icon = 'picon picon-task-complete';
-                                options.opacity = 1;
-                                options.shadow = true;
-                                options.width = PNotify.prototype.options.width;
-                            }
-                            notice.update(options);
-                        }, 120);
-                    }, 2000);
-                }
+        return $http.post('/relationships/save', relationship)
+            .success(function (result) {
+                return relationship;
+//                dyn_notice();
+//                function dyn_notice() {
+//                    var percent = 0;
+//                    var notice = new PNotify({
+//                        title: "Please Wait",
+//                        type: 'info',
+//                        icon: 'glyphicon glyphicon-eye-open',
+//                        hide: false,
+//                        buttons: {
+//                            closer: false,
+//                            sticker: false
+//                        },
+//                        opacity: .75,
+//                        shadow: false
+////                        width: "270px"
+//                    });
+//
+//                    setTimeout(function () {
+//                        notice.update({
+//                            title: false
+//                        });
+//                        var interval = setInterval(function () {
+//                            percent += 2;
+//                            var options = {
+//                                text: percent + "% complete."
+//                            };
+//                            if (percent == 80) options.title = "Almost There";
+//                            if (percent >= 100) {
+//                                window.clearInterval(interval);
+//                                options.title = "Done!";
+//                                options.type = "success";
+//                                options.hide = true;
+//                                options.buttons = {
+//                                    closer: true,
+//                                    sticker: true
+//                                };
+//                                options.icon = 'picon picon-task-complete';
+//                                options.opacity = 1;
+//                                options.shadow = true;
+//                                options.width = PNotify.prototype.options.width;
+//                            }
+//                            notice.update(options);
+//                        }, 120);
+//                    }, 2000);
+//                }
             });
     }
 

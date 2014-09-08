@@ -46,8 +46,8 @@ object Relationships extends Controller {
     val relationshipJson = request.body
     relationshipJson.validate[Relationship].fold(
       valid = { relationship =>
-        Relationship.insert(relationship)
-        Ok("Saved")
+        val newRelationship = Relationship.insert(relationship)
+        Ok(Json.toJson(newRelationship))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))
