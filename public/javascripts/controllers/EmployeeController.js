@@ -1,7 +1,5 @@
 angular.module('app').controller('EmployeeController', function ($scope, EmployeeService, ngTableParams, employeesData) {
 
-
-
     $scope.employees = employeesData;
 
     $scope.employeeTableParams = new ngTableParams({

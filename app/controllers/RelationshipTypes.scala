@@ -23,8 +23,8 @@ object RelationshipTypes extends Controller {
     val relationshipTypeJson = request.body
     relationshipTypeJson.validate[RelationshipType].fold(
       valid = { relationship_type =>
-        RelationshipType.insert(relationship_type)
-        Ok("Saved")
+        val ret = RelationshipType.insert(relationship_type)
+        Ok(Json.toJson(ret))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))

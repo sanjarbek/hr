@@ -8,7 +8,7 @@ angular.module('app').service('RelationshipService', function ($http, EmployeeSe
     this.save = function (relationship) {
         return $http.post('/relationships/save', relationship)
             .success(function (result) {
-                return relationship;
+                return result;
 //                dyn_notice();
 //                function dyn_notice() {
 //                    var percent = 0;
@@ -88,16 +88,13 @@ angular.module('app').service('RelationshipService', function ($http, EmployeeSe
 
 angular.module('app').service('RelationshipTypeService', function ($http) {
 
-    //save method create a new relationship if not already exists
-    //else update the existing object
     this.save = function (relationship_type) {
-        $http.post('/relationship_types/save', relationship_type)
-            .success(function (relationship_type) {
-                console.log(relationship_type);
+        return $http.post('/relationship_types/save', relationship_type)
+            .success(function (result) {
+                return result;
             });
     }
 
-    //simply returns the relationship_types list
     this.list = function () {
         return $http.get('/relationship_types/json/list').then(function (result) {
             return result.data;

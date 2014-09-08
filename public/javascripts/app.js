@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'ngTable', 'treeGrid']);
+angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap']);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider) {
 
@@ -72,7 +72,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return RelationshipTypeService.list();
                 }
             },
-            controller: function ($scope, relationshipsData, ngTableParams, relationshipTypesData, RelationshipService) {
+            controller: function ($scope, $filter, relationshipsData, ngTableParams, relationshipTypesData, RelationshipService, $modal, $log) {
+
                 $scope.relationships = relationshipsData;
                 $scope.types = relationshipTypesData;
                 $scope.relationshipTableParams = new ngTableParams({
@@ -85,7 +86,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     }
                 });
 
-                $scope.saveRelationship = function () {
+                $scope.saveRelationship = function (action) {
+
                     var data = {
                         id: 0,
                         employee_id: $scope.activeEmployee.id,
@@ -97,8 +99,68 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     };
 
                     RelationshipService.save(data).then(function(result){
-                        console.log(result.data);
-                        $scope.addNewRelationship(result.data);
+                        $scope.relationships.push(result.data);
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус сохранения',
+                            text: 'Успешно сохранен.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                                alert('Hey! You clicked the desktop notification!');
+                            });
+                    });
+                    $scope.newRelationshipForm = {};
+                };
+
+                $scope.isCollapsed = true;
+
+                $scope.newRelationshipForm = {
+                    degree: null,
+                    surname: null,
+                    firstname: null,
+                    lastname: null,
+                    birthday: null
+                };
+
+                $scope.selectedItem = {};
+
+                $scope.createItem = function () {
+                    $scope.isCollapsed = false;
+                    $scope.newRelationshipForm = {
+                        degree: null,
+                        surname: null,
+                        firstname: null,
+                        lastname: null,
+                        birthday: null
+                    };
+                };
+
+                $scope.selectItem = function (relationship) {
+                    $scope.isCollapsed = false;
+                    $scope.newRelationshipForm.degree = relationship.degree;
+                    $scope.newRelationshipForm.surname = relationship.surname;
+                    $scope.newRelationshipForm.firstname = relationship.firstname;
+                    $scope.newRelationshipForm.lastname = relationship.lastname;
+                    $scope.newRelationshipForm.birthday = $filter("date")(relationship.birthday, 'yyyy-MM-dd');
+                };
+
+                $scope.updateRelationship = function () {
+
+                    var data = {
+                        id: 0,
+                        employee_id: $scope.activeEmployee.id,
+                        degree: $scope.newRelationshipForm.degree.id,
+                        surname: $scope.newRelationshipForm.surname,
+                        firstname: $scope.newRelationshipForm.firstname,
+                        lastname: $scope.newRelationshipForm.lastname,
+                        birthday: $scope.newRelationshipForm.birthday
+                    };
+
+                    RelationshipService.save(data).then(function (result) {
+                        $scope.relationships.push(result.data);
                         PNotify.desktop.permission();
                         (new PNotify({
                             title: 'Статус сохранения',
@@ -114,39 +176,27 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     $scope.newRelationshipForm = {};
                 }
 
-                $scope.addNewRelationship = function(relationship) {
-                    $scope.relationships.push(relationship);
-                }
+                // Modal window testing
+                $scope.items = ['item1', 'item2', 'item3'];
+
+                $scope.open = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'myModalContent.html',
+                        controller: 'ModalRelationshipTypeController',
+                        size: size
+                    });
+
+                    modalInstance.result.then(function (result) {
+                        console.log(result.data);
+                        $scope.types.push(result.data);
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+
             }
         })
-//        .state('employees.detail.relationship.create', {
-//            url: '/create',
-//            templateUrl: '/relationships/create',
-//            resolve: {
-//                relationshipTypesData: function (RelationshipTypeService) {
-//                    return RelationshipTypeService.list();
-//                }
-//            },
-//            controller: function ($scope, RelationshipService, relationshipTypesData) {
-//
-//                $scope.relationship_types = relationshipTypesData;
-//
-//                $scope.saveRelationship = function () {
-//                    var data = {
-//                        id: 0,
-//                        employee_id: $scope.activeEmployee.id,
-//                        degree: $scope.newRelationshipForm.degree.id,
-//                        surname: $scope.newRelationshipForm.surname,
-//                        firstname: $scope.newRelationshipForm.firstname,
-//                        lastname: $scope.newRelationshipForm.lastname,
-//                        birthday: $scope.newRelationshipForm.birthday
-//                    };
-//
-//                    RelationshipService.save(data);
-//                    $scope.newRelationshipForm = {};
-//                }
-//            }
-//        })
         .state('employees.detail.relationship.type', {
             abstract: true,
             url: '/create',
@@ -654,10 +704,9 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                         serialnumber: $scope.newEducationForm.serialnumber
                     };
 
-                    var education = EducationService.save(data);
-                    console.log(education);
-                    $scope.educations.push(education);
-//                    $scope.$apply();
+                    EducationService.save(data).then(function (result) {
+                        $scope.educations.push(result.data);
+                    });
                     $scope.newEducationForm = {};
                 }
             }
@@ -696,3 +745,33 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 }).run(function ($rootScope, $state) {
     $rootScope.$state = $state;
 });
+
+
+//angular.module('app').controller('ModalDemoCtrl', '$scope', '$modal', '$log', function ($scope, $modal, $log) {
+//
+//    $scope.items = ['item1', 'item2', 'item3'];
+//
+//    $scope.open = function (size) {
+//
+//        var modalInstance = $modal.open({
+//            templateUrl: 'myModalContent.html',
+//            controller: ModalInstanceCtrl,
+//            size: size,
+//            resolve: {
+//                items: function () {
+//                    return $scope.items;
+//                }
+//            }
+//        });
+//
+//        modalInstance.result.then(function (selectedItem) {
+//            $scope.selected = selectedItem;
+//        }, function () {
+//            $log.info('Modal dismissed at: ' + new Date());
+//        });
+//    };
+//});
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+

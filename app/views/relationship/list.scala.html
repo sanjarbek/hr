@@ -3,8 +3,10 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a ui-sref="employees.detail.relationship.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
-                Список состава семьи
+                    Список состава семьи
+                    <a ng-click="createItem()" class="pull-right btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus-sign"></span>
+                        Добавить</a>
+                    <div class="clearfix"></div>
                 </div>
                 <table class="table table-condensed table-striped">
                     <tr>
@@ -22,23 +24,19 @@
                         <td>{{ relationship.birthday  | date: 'dd.MM.yyyy'  }}</td>
                         <td>{{ (types | filter: relationship.degree)[0].name }}</td>
                         <td>
-                            <a class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="btn btn-xs btn-primary" ng-click="selectItem(relationship)"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" collapse="isCollapsed">
         <div class="col-sm-12">
-
             <div class="panel panel-default">
                 <div class="panel-heading">
                     @Messages("Новый член семьи")
-                <div class="pull-right">
-                    <a ui-sref="employees.detail.relationship.list"><span class="glyphicon glyphicon-list"></span></a>
-                </div>
                 </div>
                 <div class="panel-body">
                     <form ng-submit="saveRelationship()" class="form-horizontal">
@@ -61,15 +59,15 @@
                                 <span class="help-inline"></span>
                             </div>
                             <div class="form-group form-group-sm">
-                                <label for="degree" class="col-sm-2 control-label">Степерь родства</label>
+                                <label for="degree" class="col-sm-2 control-label">Степень родства</label>
                                 <div class="col-sm-2">
                                     <select required class="form-control" name="degree" ng-model="newRelationshipForm.degree"
-                                    ng-options="type.name for type in types"
+                                    ng-options="type.id as type.name for type in types"
                                     >
                                     </select>
                                 </div>
                                 <div class="col-sm-1  add-control">
-                                    <a class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-plus"></span></a>
+                                    <a class="btn btn-xs btn-primary" ng-click="open()"><span class="glyphicon glyphicon-plus-sign"></span></a>
                                 </div>
                                 <span class="help-inline"></span>
                                 <label for="birthday" class="col-sm-1 control-label">Дата рождения</label>
@@ -79,36 +77,38 @@
                                 <span class="help-inline"></span>
                             </div>
                         </fieldset>
-                        <p><input type="submit" class="btn btn-primary pull-right"
-                        value='@Messages("Сохранить")'>
-                        </p>
                     </form>
+                </div>
+                <div class="panel-footer">
+                    <div class="pull-right">
+                        <input type="button" class="btn btn-primary" value='@Messages("Сохранить")' ng-click="saveRelationship()">
+                        <input type="button" class="btn btn-warning" value='@Messages("Отменить")' ng-click="isCollapsed=true">
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div ng-controller="ModalDemoCtrl">
+    <div>
         <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
-        <h3 class="modal-title">I'm a modal!</h3>
+        <h4 class="modal-title"> @Messages("Новая степень родства") </h4>
         </div>
         <div class="modal-body">
-        <ul>
-        <li ng-repeat="item in items">
-        <a ng-click="selected.item = item">{{ item }}</a>
-        </li>
-        </ul>
-        Selected: <b>{{ selected.item }}</b>
+        <form ng-submit="saveRelationshipType()" class="form-horizontal">
+        <div class="form-group form-group-sm">
+        <label for="name" class="col-sm-2 control-label">Название</label>
+        <div class="col-sm-10">
+        <input required class="form-control" type="text" name="name" ng-model="newRelationshipTypeForm.name"/>
+        </div>
+        <span class="help-inline"></span>
+        </div>
         </div>
         <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" ng-click="saveRelationshipType()">Создать</button>
+        <button class="btn btn-warning" ng-click="cancel()">Отменить</button>
         </div>
         </script>
-
-        <button class="btn btn-default" ng-click="open()">Open me!</button>
-        <button class="btn btn-default" ng-click="open('lg')">Large modal</button>
-        <button class="btn btn-default" ng-click="open('sm')">Small modal</button>
         <div ng-show="selected">Selection from a modal: {{ selected }}</div>
     </div>
