@@ -565,58 +565,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return EducationService.list(activeEmployeeData.id);
                 }
             },
-            controller: function ($scope, educationsData, institutionsData, EducationService) {
-                $scope.educations = educationsData;
-                $scope.institutions = institutionsData;
-
-                $scope.saveEducation = function () {
-                    var data = {
-                        id: 0,
-                        employee_id: $scope.activeEmployee.id,
-                        institution_id: $scope.newEducationForm.institution.id,
-                        qualification: $scope.newEducationForm.qualification,
-                        speciality: $scope.newEducationForm.speciality,
-                        start_date: $scope.newEducationForm.start_date,
-                        end_date: $scope.newEducationForm.end_date,
-                        serialnumber: $scope.newEducationForm.serialnumber
-                    };
-
-                    EducationService.save(data).then(function (result) {
-                        $scope.educations.push(result.data);
-                    });
-                    $scope.newEducationForm = {};
-                }
-            }
+            controller: 'EducationController'
         })
-//        .state('employees.detail.educations.create', {
-//            url: '/create',
-//            templateUrl: '/educations/create',
-//            resolve: {
-//                institutionsData: function (InstitutionService) {
-//                    return InstitutionService.list();
-//                }
-//            },
-//            controller: function ($scope, EducationService, institutionsData) {
-//
-//                $scope.institutions = institutionsData;
-//
-//                $scope.saveEducation = function () {
-//                    var data = {
-//                        id: 0,
-//                        employee_id: $scope.activeEmployee.id,
-//                        institution_id: $scope.newEducationForm.institution.id,
-//                        qualification: $scope.newEducationForm.qualification,
-//                        speciality: $scope.newEducationForm.speciality,
-//                        start_date: $scope.newEducationForm.start_date,
-//                        end_date: $scope.newEducationForm.end_date,
-//                        serialnumber: $scope.newEducationForm.serialnumber
-//                    };
-//
-//                    EducationService.save(data);
-//                    $scope.newEducationForm = {};
-//                }
-//            }
-//        })
 
     ;
 }).run(function ($rootScope, $state) {

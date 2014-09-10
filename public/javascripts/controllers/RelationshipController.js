@@ -81,8 +81,6 @@ angular.module('app').controller('RelationshipController', function ($scope, $fi
                     alert('Hey! You clicked the desktop notification!');
                 });
         });
-
-        $scope.newRelationshipForm = {};
     }
 
     $scope.deleteRelationship = function (relationship) {

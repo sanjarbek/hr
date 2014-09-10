@@ -75,6 +75,8 @@ GET           /educations/create                    controllers.Educations.creat
 GET           /educations/list                      controllers.Educations.list
 GET           /educations/json/list                 controllers.Educations.jsonList
 POST          /educations/save                      controllers.Educations.save
+PUT           /educations/update        controllers.Educations.update
+DELETE        /educations/delete        controllers.Educations.delete(id: Long)
 
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)
