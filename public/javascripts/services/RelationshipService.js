@@ -57,25 +57,19 @@ angular.module('app').service('RelationshipService', function ($http, EmployeeSe
             });
     }
 
-    //simply search contacts list for given id
-    //and returns the relationship object if found
-    this.get = function (id) {
-        for (i in relationships) {
-            if (relationships[i].id == id) {
-                return relationships[i];
-            }
-        }
-
+    this.update = function (relationship) {
+        return $http.put('/relationships/update', relationship)
+            .success(function (result) {
+                return result;
+            })
     }
 
-    //iterate through relationships list and delete
-    //contact if found
-    this.delete = function (id) {
-        for (i in relationships) {
-            if (relationships[i].id == id) {
-                relationships.splice(i, 1);
-            }
-        }
+    this.delete = function (relationship) {
+        console.log(relationship);
+        return $http.delete('/relationships/delete', {params: {id: relationship.id}})
+            .success(function (result) {
+                return result;
+            })
     }
 
     //simply returns the relationships list

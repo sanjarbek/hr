@@ -1,3 +1,4 @@
+@(title: String)(implicit request: RequestHeader)
 <!DOCTYPE html>
 
 <html ng-app="app">
@@ -10,7 +11,6 @@
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/main.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/custom_bootstrap.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/treeGrid.css"))'>
-        @*<link rel='stylesheet' href='@routes.Assets.at(("stylesheets/animate.css"))'>*@
     </head>
     <body>
         <header>
@@ -98,12 +98,14 @@
         <script type='text/javascript' src='@routes.Assets.at("javascripts/services/PositionService.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/services/InstitutionService.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/EmployeeController.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/RelationshipController.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/ModalRelationshipTypeController.js")'></script>
 
         <script type="text/javascript">
         $ ( function ( ) {
-            @*var ws = new WebSocket("@routes.Application.serverStatus.webSocketURL()");*@
-        var ws = new ReconnectingWebSocket ( "ws://localhost:9001/connection/status" ) ;
+        var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");
+            @*var ws = new ReconnectingWebSocket ( "ws://192.168.0.128:9001/connection/status" ) ;*@
+            @*var ws = new ReconnectingWebSocket ( "@routes.Application.serverStatus.webSocketURL()" );*@
         ws.onmessage = function ( msg ) {
         $ ( '#server-status' ).text ( msg.data ) ;
         $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;

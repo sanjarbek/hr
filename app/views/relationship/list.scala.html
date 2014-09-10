@@ -4,7 +4,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Список состава семьи
-                    <a ng-click="createItem()" class="pull-right btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus-sign"></span>
+                        <a ng-click="resetRelationship()" class="pull-right btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>
                         Добавить</a>
                     <div class="clearfix"></div>
                 </div>
@@ -24,8 +24,10 @@
                         <td>{{ relationship.birthday  | date: 'dd.MM.yyyy'  }}</td>
                         <td>{{ (types | filter: relationship.degree)[0].name }}</td>
                         <td>
-                            <a class="btn btn-xs btn-primary" ng-click="selectItem(relationship)"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="btn btn-xs btn-primary" ng-click="selectRelationship(relationship)">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                            <a class="btn btn-xs btn-danger" ng-click="deleteRelationship(relationship)"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 </table>
@@ -39,29 +41,29 @@
                     @Messages("Новый член семьи")
                 </div>
                 <div class="panel-body">
-                    <form ng-submit="saveRelationship()" class="form-horizontal">
+                    <form ng-submit="selectAction()" class="form-horizontal" name="relationshipForm">
                         <fieldset>
                             <div class="form-group form-group-sm">
                                 <label for="surname" class="col-sm-2 control-label">Фамилия</label>
                                 <div class="col-sm-2">
-                                    <input required class="form-control" type="text" name="surname" ng-model="newRelationshipForm.surname"/>
+                                    <input required class="form-control" type="text" name="surname" ng-model="relationshipForm.surname"/>
                                 </div>
                                 <span class="help-inline"></span>
                                 <label for="firstname" class="col-sm-2 control-label">Имя</label>
                                 <div class="col-sm-2">
-                                    <input required class="form-control" type="text" name="firstname" ng-model="newRelationshipForm.firstname"/>
+                                    <input required class="form-control" type="text" name="firstname" ng-model="relationshipForm.firstname"/>
                                 </div>
                                 <span class="help-inline"></span>
                                 <label for="lastname" class="col-sm-2 control-label">Отчество</label>
                                 <div class="col-sm-2">
-                                    <input required class="form-control" type="text" name="lastname" ng-model="newRelationshipForm.lastname"/>
+                                    <input required class="form-control" type="text" name="lastname" ng-model="relationshipForm.lastname"/>
                                 </div>
                                 <span class="help-inline"></span>
                             </div>
                             <div class="form-group form-group-sm">
                                 <label for="degree" class="col-sm-2 control-label">Степень родства</label>
                                 <div class="col-sm-2">
-                                    <select required class="form-control" name="degree" ng-model="newRelationshipForm.degree"
+                                    <select required class="form-control" name="degree" ng-model="relationshipForm.degree"
                                     ng-options="type.id as type.name for type in types"
                                     >
                                     </select>
@@ -72,7 +74,7 @@
                                 <span class="help-inline"></span>
                                 <label for="birthday" class="col-sm-1 control-label">Дата рождения</label>
                                 <div class="col-sm-2">
-                                    <input required class="form-control" type="date" name="birthday" ng-model="newRelationshipForm.birthday" class="input-sm form-control"/>
+                                    <input required class="form-control" type="date" name="birthday" ng-model="relationshipForm.birthday" class="input-sm form-control"/>
                                 </div>
                                 <span class="help-inline"></span>
                             </div>
@@ -81,8 +83,9 @@
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <input type="button" class="btn btn-primary" value='@Messages("Сохранить")' ng-click="saveRelationship()">
-                        <input type="button" class="btn btn-warning" value='@Messages("Отменить")' ng-click="isCollapsed=true">
+                        <a class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
+                            Сохранить</a>
+                        <input name="resetForm" type="button" class="btn btn-warning" value='@Messages("Отменить")' ng-click="isCollapsed=true">
                     </div>
                     <div class="clearfix"></div>
                 </div>

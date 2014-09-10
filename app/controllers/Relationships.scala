@@ -55,6 +55,24 @@ object Relationships extends Controller {
     )
   }
 
+  def update = Action(parse.json) { implicit request =>
+    val relationshipJson = request.body
+    relationshipJson.validate[Relationship].fold(
+      valid = { relationship =>
+        Relationship.update(relationship)
+        Ok(Json.toJson("Updated"))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def delete(id: Long) = Action { implicit request =>
+    Relationship.delete(id)
+    Ok(Json.toJson("Removed"))
+  }
+
   def show = Action {
     Ok(views.html.relationship.show())
   }

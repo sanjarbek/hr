@@ -70,7 +70,11 @@ object Relationship {
     relationshipTable.insert(relationship)
   }
 
-  def update(relationship: Relationship) {
-    inTransaction{ relationshipTable.update(relationship)}
+  def update(relationship: Relationship) = inTransaction {
+    relationshipTable.update(relationship)
+  }
+
+  def delete(id: Long) = inTransaction {
+    relationshipTable.deleteWhere(rel => rel.id === id)
   }
 }
