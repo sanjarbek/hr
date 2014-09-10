@@ -57,4 +57,8 @@ object Institution {
       institutionTable.update(institution)
     }
   }
+
+  def delete(id: Long) = inTransaction {
+    institutionTable.deleteWhere(institution => institution.id === id)
+  }
 }

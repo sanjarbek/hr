@@ -54,4 +54,8 @@ object ContractType {
       contractTypeTable.update(contractType)
     }
   }
+
+  def delete(id: Long) = inTransaction {
+    contractTypeTable.deleteWhere(contractType => contractType.id === id)
+  }
 }

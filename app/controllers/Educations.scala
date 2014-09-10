@@ -41,6 +41,11 @@ object Educations extends Controller {
     )
   }
 
+  def delete(id: Long) = Action { implicit request =>
+    Education.delete(id)
+    Ok(Json.toJson("Removed"))
+  }
+
   def show = Action {
     Ok(views.html.education.show())
   }

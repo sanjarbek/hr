@@ -6,7 +6,7 @@ import play.api.libs.json._
 
 object Positions extends Controller {
 
-  def list = Action { implicit  request =>
+  def list = Action { implicit request =>
     Ok(views.html.position.list())
   }
 
@@ -30,6 +30,11 @@ object Positions extends Controller {
         BadRequest(JsError.toFlatJson(errors))
       }
     )
+  }
+
+  def delete(id: Long) = Action { implicit request =>
+    Position.delete(id)
+    Ok(Json.toJson("Removed"))
   }
 
   def show = Action {

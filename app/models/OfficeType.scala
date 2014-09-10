@@ -54,4 +54,8 @@ object OfficeType {
       officeTypeTable.update(officeType)
     }
   }
+
+  def delete(id: Long) = inTransaction {
+    officeTypeTable.deleteWhere(officeType => officeType.id === id)
+  }
 }

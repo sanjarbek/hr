@@ -57,4 +57,8 @@ object Position {
       positionTable.update(position)
     }
   }
+
+  def delete(id: Long) = inTransaction {
+    positionTable.deleteWhere(position => position.id === id)
+  }
 }

@@ -13,17 +13,18 @@ import play.api.libs.json.Reads._
 import collection.Iterable
 
 case class Office(
-                         id: Int,
-                         parent_id: Option[Int],
-                         type_id: Int,
-                         name: String,
-                         phone: String,
-                         email: String,
-                         fax: String,
-                         address: String
-                         ) extends KeyedEntity[Int]
+                   id: Int,
+                   parent_id: Option[Int],
+                   type_id: Int,
+                   name: String,
+                   phone: String,
+                   email: String,
+                   fax: String,
+                   address: String
+                   ) extends KeyedEntity[Int]
 
 object Office {
+
   import Database.{officeTable}
 
   implicit val officeWrites: Writes[Office] = (
@@ -53,21 +54,27 @@ object Office {
     office => select(office)
   }
 
-  def findAll: Iterable[Office] = inTransaction{
+  def findAll: Iterable[Office] = inTransaction {
     allQ.toList
   }
 
-  def findById(id: Long) = inTransaction{
+  def findById(id: Long) = inTransaction {
     from(officeTable) {
-      office => where(office.id === id) select(office)
+      office => where(office.id === id) select (office)
     }.headOption
   }
 
-  def insert(office: Office): Office = inTransaction{
+  def insert(office: Office): Office = inTransaction {
     officeTable.insert(office)
   }
 
   def update(office: Office) {
-    inTransaction{ officeTable.update(office)}
+    inTransaction {
+      officeTable.update(office)
+    }
+  }
+
+  def delete(id: Long) = inTransaction {
+    officeTable.deleteWhere(office => office.id === id)
   }
 }

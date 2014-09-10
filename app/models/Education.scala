@@ -80,4 +80,8 @@ object Education {
       educationTable.update(education)
     }
   }
+
+  def delete(id: Long) = inTransaction {
+    educationTable.deleteWhere(education => education.id === id)
+  }
 }

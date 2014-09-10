@@ -32,6 +32,11 @@ object Contracts extends Controller {
     )
   }
 
+  def delete(id: Long) = Action { implicit request =>
+    Contract.delete(id)
+    Ok(Json.toJson("Removed"))
+  }
+
   def show = Action {
     Ok(views.html.contract.show())
   }

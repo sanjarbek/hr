@@ -72,4 +72,8 @@ object Contract {
       contractTable.update(contract)
     }
   }
+
+  def delete(id: Long) = inTransaction {
+    contractTable.deleteWhere(contract => contract.id === id)
+  }
 }

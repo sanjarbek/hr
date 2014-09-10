@@ -32,6 +32,11 @@ object PositionCategories extends Controller {
     )
   }
 
+  def delete(id: Long) = Action { implicit request =>
+    PositionCategory.delete(id)
+    Ok(Json.toJson("Removed"))
+  }
+
   def show = Action {
     Ok(views.html.position_category.show())
   }

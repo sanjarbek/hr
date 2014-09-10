@@ -13,11 +13,12 @@ import play.api.libs.json.Reads._
 import collection.Iterable
 
 case class RelationshipType(
-                         id: Int,
-                         name: String
-                         ) extends KeyedEntity[Int]
+                             id: Int,
+                             name: String
+                             ) extends KeyedEntity[Int]
 
 object RelationshipType {
+
   import Database.{relationshipTypeTable}
 
   implicit val relationshipTypeWrites: Writes[RelationshipType] = (
@@ -34,21 +35,27 @@ object RelationshipType {
     relationshipType => select(relationshipType)
   }
 
-  def findAll: Iterable[RelationshipType] = inTransaction{
+  def findAll: Iterable[RelationshipType] = inTransaction {
     allQ.toList
   }
 
-  def findById(id: Long) = inTransaction{
+  def findById(id: Long) = inTransaction {
     from(relationshipTypeTable) {
-      relationshipType => where(relationshipType.id === id) select(relationshipType)
+      relationshipType => where(relationshipType.id === id) select (relationshipType)
     }.headOption
   }
 
-  def insert(relationshipType: RelationshipType): RelationshipType = inTransaction{
+  def insert(relationshipType: RelationshipType): RelationshipType = inTransaction {
     relationshipTypeTable.insert(relationshipType)
   }
 
   def update(relationshipType: RelationshipType) {
-    inTransaction{ relationshipTypeTable.update(relationshipType)}
+    inTransaction {
+      relationshipTypeTable.update(relationshipType)
+    }
+  }
+
+  def delete(id: Long) = inTransaction {
+    relationshipTypeTable.deleteWhere(relationshipType => relationshipType.id === id)
   }
 }

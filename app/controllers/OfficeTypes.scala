@@ -6,7 +6,7 @@ import play.api.libs.json._
 
 object OfficeTypes extends Controller {
 
-  def list = Action { implicit  request =>
+  def list = Action { implicit request =>
     Ok(views.html.office_type.list())
   }
 
@@ -30,6 +30,11 @@ object OfficeTypes extends Controller {
         BadRequest(JsError.toFlatJson(errors))
       }
     )
+  }
+
+  def delete(id: Long) = Action { implicit request =>
+    OfficeType.delete(id)
+    Ok(Json.toJson("Removed"))
   }
 
   def show = Action {

@@ -31,6 +31,11 @@ object Departments extends Controller {
     )
   }
 
+  def delete(id: Long) = Action { implicit request =>
+    Department.delete(id)
+    Ok(Json.toJson("Removed"))
+  }
+
   def show = Action {
     Ok(views.html.departments.show())
   }

@@ -20,7 +20,6 @@ GET           /employees/json/family                controllers.Relationships.js
 
 # Состав семьи
 GET           /relationships/list                   controllers.Relationships.list
-GET           /relationships/create                 controllers.Relationships.create
 GET           /relationships/show                   controllers.Relationships.show
 POST          /relationships/save                   controllers.Relationships.save
 PUT           /relationships/update                 controllers.Relationships.update

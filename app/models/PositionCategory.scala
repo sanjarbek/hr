@@ -54,4 +54,8 @@ object PositionCategory {
       positionCategoryTable.update(positionCategory)
     }
   }
+
+  def delete(id: Long) = inTransaction {
+    positionCategoryTable.deleteWhere(positionCategory => positionCategory.id === id)
+  }
 }
