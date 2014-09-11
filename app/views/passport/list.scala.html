@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                    Список паспортов
+                <a ng-click="resetPassport()" class="pull-right btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>
+                    Добавить</a>
+                <div class="clearfix"></div>
+            </div>
+            <table class="table table-condensed table-striped">
+                <tr>
+                    <th>Серия</th>
+                    <th>Номер</th>
+                    <th>Орган выдавший документ</th>
+                    <th>Дата выдачи</th>
+                    <th>Дата окончания</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="passport in passports">
+                    <td>{{ passport.serial }}</td>
+                    <td>{{ passport.number }}</td>
+                    <td>{{ passport.organ }}</td>
+                    <td>{{ passport.open_date  | date: 'dd.MM.yyyy'  }}</td>
+                    <td>{{ passport.end_date  | date: 'dd.MM.yyyy'  }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-primary" ng-click="selectPassport(passport)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a class="btn btn-xs btn-danger" ng-click="deletePassport(passport)"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row" collapse="isCollapsed">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            @Messages("Новый паспорт")
+            </div>
+            <div class="panel-body">
+                <form ng-submit="selectAction()" class="form-horizontal" name="passportForm">
+                    <fieldset>
+                        <div class="form-group form-group-sm">
+                            <label for="serial" class="col-sm-2 control-label">Серия</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="text" name="serial" ng-model="passportForm.serial"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="number" class="col-sm-2 control-label">Номер</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="text" name="number" ng-model="passportForm.number"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="organ" class="col-sm-2 control-label">Орган выдавший документ</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="text" name="organ" ng-model="passportForm.organ"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="open_date" class="col-sm-2 control-label">Дата выдачи</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="date" name="open_date" ng-model="passportForm.open_date" class="input-sm form-control"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="end_date" class="col-sm-2 control-label">Дата окончания</label>
+                            <div class="col-sm-2">
+                                <input required class="form-control" type="date" name="end_date" ng-model="passportForm.end_date" class="input-sm form-control"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <div class="pull-right">
+                    <a class="btn btn-info" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
+                        Сохранить</a>
+                    <input type="button" class="btn btn-warning" value='@Messages("Отменить")' ng-click="isCollapsed=true">
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

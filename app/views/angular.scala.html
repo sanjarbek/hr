@@ -97,16 +97,18 @@
         <script type='text/javascript' src='@routes.Assets.at("javascripts/services/RelationshipService.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/services/PositionService.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/services/InstitutionService.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/services/PassportService.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/EmployeeController.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/RelationshipController.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/EducationController.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/PassportController.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/ModalRelationshipTypeController.js")'></script>
 
         <script type="text/javascript">
         $ ( function ( ) {
-        var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");
+            @*var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");*@
             @*var ws = new ReconnectingWebSocket ( "ws://192.168.0.128:9001/connection/status" ) ;*@
-            @*var ws = new ReconnectingWebSocket ( "@routes.Application.serverStatus.webSocketURL()" );*@
+        var ws = new ReconnectingWebSocket ( "  @routes.Application.serverStatus.webSocketURL() " );
         ws.onmessage = function ( msg ) {
         $ ( '#server-status' ).text ( msg.data ) ;
         $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;

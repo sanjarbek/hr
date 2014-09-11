@@ -567,6 +567,21 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'EducationController'
         })
+        .state('employees.detail.passports', {
+            absract: true,
+            url: '/passports',
+            template: '<div ui-view></div>'
+        })
+        .state('employees.detail.passports.list', {
+            url: '/list',
+            templateUrl: '/passports/list',
+            resolve: {
+                passportsData: function (PassportService, activeEmployeeData) {
+                    return PassportService.list(activeEmployeeData.id);
+                }
+            },
+            controller: 'PassportController'
+        })
 
     ;
 }).run(function ($rootScope, $state) {
