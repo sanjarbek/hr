@@ -1,0 +1,104 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                    Список воинских учетов
+                <a ng-click="resetMilitary()" class="pull-right btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>
+                    Добавить</a>
+                <div class="clearfix"></div>
+            </div>
+            <table class="table table-condensed table-striped">
+                <tr>
+                    <th>Категория запаса</th>
+                    <th>Воинское звание</th>
+                    <th>Состав (профиль)</th>
+                    <th>Полное кодовое обозначение</th>
+                    <th>Категория годности</th>
+                    <th>Наименование военного комиссариата</th>
+                    <th>Отметка о снятии с воинского учета</th>
+                </tr>
+                <tr ng-repeat="military in militaries">
+                    <td>{{ military.category }}</td>
+                    <td>{{ military.military_rank }}</td>
+                    <td>{{ military.structure }}</td>
+                    <td>{{ military.full_code }}</td>
+                    <td>{{ military.validity_category }}</td>
+                    <td>{{ military.commissariat }}</td>
+                    <td>{{ military.removal_mark }}</td>
+                    <td>
+                        <a class="btn btn-xs btn-primary" ng-click="selectMilitary(military)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a class="btn btn-xs btn-danger" ng-click="deleteMilitary(military)"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row" collapse="isCollapsed">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            @Messages("Новый воинский учет")
+            </div>
+            <div class="panel-body">
+                <form ng-submit="selectAction()" class="form-horizontal" name="militaryForm">
+                    <fieldset>
+                        <div class="form-group form-group-sm">
+                            <label for="category" class="col-sm-3 control-label">Категория запаса</label>
+                            <div class="col-sm-3">
+                                <input required class="form-control" type="text" name="category" ng-model="militaryForm.category"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="military_rank" class="col-sm-3 control-label">Воинское звание</label>
+                            <div class="col-sm-3">
+                                <input required class="form-control" type="text" name="military_rank" ng-model="militaryForm.military_rank"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="structure" class="col-sm-3 control-label">Состав (профиль)</label>
+                            <div class="col-sm-3">
+                                <input required class="form-control" type="text" name="structure" ng-model="militaryForm.structure"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="full_code" class="col-sm-3 control-label">Полное кодовое обозначение</label>
+                            <div class="col-sm-3">
+                                <input required class="form-control" type="text" name="full_code" ng-model="militaryForm.full_code"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="validity_category" class="col-sm-3 control-label">Категория годности</label>
+                            <div class="col-sm-3">
+                                <input required class="form-control" type="text" name="validity_category" ng-model="militaryForm.validity_category"/>
+                            </div>
+                            <span class="help-inline"></span>
+                            <label for="commissariat" class="col-sm-3 control-label">Наименование военного комиссариата</label>
+                            <div class="col-sm-3">
+                                <input required class="form-control" type="text" name="commissariat" ng-model="militaryForm.commissariat"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="removal_mark" class="col-sm-3 control-label">Отметка о снятии с воинского учета</label>
+                            <div class="col-sm-3">
+                                <input required class="form-control" type="text" name="removal_mark" ng-model="militaryForm.removal_mark"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <div class="pull-right">
+                    <a class="btn btn-info" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
+                        Сохранить</a>
+                    <input type="button" class="btn btn-warning" value='@Messages("Отменить")' ng-click="isCollapsed=true">
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

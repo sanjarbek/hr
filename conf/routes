@@ -16,8 +16,10 @@ GET           /employees/json/get                   controllers.Employees.jsonGe
 GET           /employees/create                     controllers.Employees.newEmployee
 GET           /employees/show                       controllers.Employees.show
 POST          /employees/save                       controllers.Employees.save
+
 GET           /employees/json/family                controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
-GET           /employees/json/passports        controllers.Passports.jsonEmployeePassport(employeeId: Long)
+GET           /employees/json/passports             controllers.Passports.jsonEmployeePassport(employeeId: Long)
+GET           /employees/json/military              controllers.Militaries.jsonEmployeeMilitary(employeeId: Long)
 
 # Состав семьи
 GET           /relationships/list                   controllers.Relationships.list
@@ -76,14 +78,20 @@ GET           /educations/create                    controllers.Educations.creat
 GET           /educations/list                      controllers.Educations.list
 GET           /educations/json/list                 controllers.Educations.jsonList
 POST          /educations/save                      controllers.Educations.save
-PUT           /educations/update               controllers.Educations.update
-DELETE        /educations/delete               controllers.Educations.delete(id: Long)
+PUT           /educations/update                    controllers.Educations.update
+DELETE        /educations/delete                    controllers.Educations.delete(id: Long)
 
-GET           /passports/list                  controllers.Passports.list
-GET           /passports/json/list             controllers.Passports.jsonList
-POST          /passports/save                  controllers.Passports.save
-PUT           /passports/update                controllers.Passports.update
-DELETE        /passports/delete                controllers.Passports.delete(id: Long)
+GET           /passports/list                       controllers.Passports.list
+GET           /passports/json/list                  controllers.Passports.jsonList
+POST          /passports/save                       controllers.Passports.save
+PUT           /passports/update                     controllers.Passports.update
+DELETE        /passports/delete                     controllers.Passports.delete(id: Long)
+
+GET           /militaries/list                      controllers.Militaries.list
+GET           /militaries/json/list                 controllers.Militaries.jsonList
+POST          /militaries/save                      controllers.Militaries.save
+PUT           /militaries/update                    controllers.Militaries.update
+DELETE        /militaries/delete                    controllers.Militaries.delete(id: Long)
 
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)

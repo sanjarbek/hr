@@ -582,6 +582,21 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'PassportController'
         })
+        .state('employees.detail.military', {
+            absract: true,
+            url: '/militaries',
+            template: '<div ui-view></div>'
+        })
+        .state('employees.detail.military.list', {
+            url: '/list',
+            templateUrl: '/militaries/list',
+            resolve: {
+                militariesData: function (MilitaryService, activeEmployeeData) {
+                    return MilitaryService.list(activeEmployeeData.id);
+                }
+            },
+            controller: 'MilitaryController'
+        })
 
     ;
 }).run(function ($rootScope, $state) {

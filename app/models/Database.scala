@@ -17,6 +17,7 @@ object Database extends Schema {
   val institutionTable: Table[Institution] = table[Institution]("institutions")
   val educationTable: Table[Education] = table[Education]("educations")
   val passportTable: Table[Passport] = table[Passport]("passports")
+  val militaryTable: Table[Military] = table[Military]("military_infos")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -80,6 +81,11 @@ object Database extends Schema {
 
   on(passportTable) { passport => declare {
     passport.id is (autoIncremented("passports_id_seq"))
+  }
+  }
+
+  on(militaryTable) { military => declare {
+    military.id is (autoIncremented("military_infos_id_seq"))
   }
   }
 }
