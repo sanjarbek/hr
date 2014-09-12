@@ -9,7 +9,9 @@ CREATE TABLE military_infos (
   full_code         VARCHAR,
   validity_category VARCHAR,
   commissariat      VARCHAR,
-  removal_mark      VARCHAR
+  removal_mark      VARCHAR,
+  created           TIMESTAMP DEFAULT localtimestamp,
+  updated           TIMESTAMP DEFAULT localtimestamp
 );
 
 # -- !Downs

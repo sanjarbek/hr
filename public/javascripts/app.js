@@ -1,8 +1,6 @@
-angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap']);
+angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap', 'ngAnimate', 'anim-in-out']);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider) {
-
-//    $parseProvider.unwrapPromises(true);
 
     $stateProvider
         .state('employees', {
@@ -226,7 +224,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('positions', {
             abstract: true,
             url: '/positions',
-            template: '<div ui-view></div>'
+            template: '<div ui-view  class="anim-in-out"></div>'
         })
         .state('positions.list', {
             url: '/list',
