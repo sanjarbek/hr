@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap', 'ngAnimate', 'anim-in-out']);
+angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap']);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider) {
 
@@ -11,7 +11,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('employees.create', {
             url: '/create',
             templateUrl: '/employees/create',
-            controller: function($scope, EmployeeService){
+            controller: function ($scope, EmployeeService) {
                 $scope.saveEmployee = function () {
                     var data = {
                         id: 0,
@@ -204,17 +204,29 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.departments = departmentsData;
                 $scope.offices = officesData;
 
+
+                $scope.working_time_types = [
+                    {id: 1, name: "Понедельник-Пятница"},
+                    {id: 2, name: "Понедельник-Суббота"}
+                ];
+
                 $scope.saveContract = function () {
                     var data = {
                         id: 0,
                         employee_id: $scope.activeEmployee.id,
                         position_id: $scope.newContractForm.position.id,
+                        trial_period_open: $scope.newContractForm.trial_period_open,
+                        trial_period_end: $scope.newContractForm.trial_period_end,
+                        salary: $scope.newContractForm.salary,
+                        working_time_type: $scope.newContractForm.working_time_type.id,
                         open_date: $scope.newContractForm.openDate,
                         end_date: $scope.newContractForm.endDate,
                         close_date: null,
                         status: $scope.newContractForm.status ? 1 : 0,
                         contract_type: $scope.newContractForm.contract_type.id
                     };
+
+                    console.log(data);
 
                     ContractService.save(data);
                     $scope.newContractForm = {};

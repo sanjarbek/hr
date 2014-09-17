@@ -20,7 +20,7 @@
                     <td data-title="'Должность'">{{ getPositionName(contract.position_id) }}</td>
                     <td data-title="'Дата начала'">{{ contract.open_date  | date: 'dd.MM.yyyy' }}</td>
                     <td data-title="'Дата окончания'">{{ contract.end_date |  date: 'dd.MM.yyyy' }}</td>
-                    <td><span class="label">asdf</span></td>
+                    <td><a href="@routes.Application.generatepoi()" target="_blank">Договор</a></td>
                 </tr>
             </table>
         </div>

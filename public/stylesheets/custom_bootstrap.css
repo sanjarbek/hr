@@ -8,3 +8,7 @@
 .form-horizontal .control-label, .form-horizontal .radio, .form-horizontal .checkbox, .form-horizontal .radio-inline, .form-horizontal .checkbox-inline {
     padding-top: 0px;
 }
+
+.input-group-addon {
+    padding: 4px 12px;
+}
