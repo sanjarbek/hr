@@ -4,10 +4,13 @@
 
 # Home page
 GET           /                                     controllers.Application.angular
+POST        /upload                        controllers.Application.upload
+GET         /upload                        controllers.Application.uploadForm
 
 # Состояния работоспособности сервера
 GET           /connection/status                    controllers.Application.serverStatus
-GET        /generatepoi        controllers.Application.generatepoi
+GET         /generatepoi                   controllers.Application.generatepoi
+
 
 # Сотрудники
 GET           /employees/template                   controllers.Employees.template
@@ -64,11 +67,13 @@ GET           /contract_types/create                controllers.ContractTypes.cr
 GET           /contract_types/list                  controllers.ContractTypes.list
 GET           /contract_types/json/list             controllers.ContractTypes.jsonList
 POST          /contract_types/save                  controllers.ContractTypes.save
+POST        /contract_types/upload         controllers.ContractTypes.upload
 
 GET           /contracts/create                     controllers.Contracts.create
 GET           /contracts/list                       controllers.Contracts.list
 GET           /contracts/json/list                  controllers.Contracts.jsonList
 POST          /contracts/save                       controllers.Contracts.save
+GET         /contracts/:id/download        controllers.Contracts.download(id: Long)
 
 GET           /institutions/create                  controllers.Institutions.create
 GET           /institutions/list                    controllers.Institutions.list

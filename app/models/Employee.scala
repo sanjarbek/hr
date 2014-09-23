@@ -82,4 +82,9 @@ object Employee {
       family => where(family.employee_id===employee.id).compute(count)
     }.toLong
   }
+
+  def passport(id: Long) = {
+    val passports = Passport.findEmployeePassport(id)(0)
+    passports
+  }
 }

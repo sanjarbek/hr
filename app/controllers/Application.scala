@@ -2,6 +2,7 @@ package controllers
 
 import java.io.{FileOutputStream, FileInputStream, File}
 import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
 import java.util
 import java.util.{Locale, Calendar}
 import java.util.Collections._
@@ -11,6 +12,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem
 import org.apache.poi.hwpf.HWPFDocument
 import play.api._
 import play.api.mvc._
+import play.api.libs.json._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.concurrent.Promise
@@ -28,7 +30,7 @@ object Application extends Controller {
     (in, out)
   }
 
-  def getConnectionStatus = Calendar.getInstance().getTime.toLocaleString()
+  def getConnectionStatus = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Calendar.getInstance().getTime).toString
 
   def angular = Action { implicit request =>
     Ok(views.html.angular("Отдел по работе с сотрудниками"))
@@ -69,16 +71,17 @@ object Application extends Controller {
   //  }
 
   def generatepoi = Action {
-    val filePath = "C:\\Users\\samatov\\IdeaProjects\\playbasics\\PlayBasics\\hr\\documents\\contract_stajer.doc"
+    val fileName = "contract_stajer.doc"
+    val filePath = s"./documents/$fileName"
     val fs = new POIFSFileSystem(new FileInputStream(filePath))
     var doc = new HWPFDocument(fs)
 
     var begin_date = Calendar.getInstance().getTime
 
     val keywords = Map(
-      "$СОТРУДНИК_ИМЯ" -> "Санжарбек",
-      "$СОТРУДНИК_ФАМИЛИЯ" -> "Аматов",
-      "$СОТРУДНИК_АДРЕС_ПРОЖИВАНИЯ" -> "г. Бишкек, пр. Чуй 57/12",
+      "$СОТРУДНИК.ИМЯ" -> "Санжарбек",
+      "$СОТРУДНИК.ФАМИЛИЯ" -> "Аматов",
+      "$СОТРУДНИК.АДРЕС.ПРОЖИВАНИЯ" -> "г. Бишкек, пр. Чуй 57/12",
       "$ПАСПОРТ_СЕРИЯ" -> "AN233223",
       "$ПАСПОРТ_ВЫДАН" -> "12.05.2010",
       "$ПАСПОРТ_ОКОНЧАНИЯ" -> "12.05.2020",
@@ -101,4 +104,24 @@ object Application extends Controller {
     doc.write(out)
     out.close()
   }
+
+  def uploadForm = Action { request =>
+    Ok(views.html.application.index())
+  }
+
+  def upload = Action(parse.multipartFormData) { request =>
+    val id = request.body.dataParts("id")(0).toString
+    Logger.info(id)
+    request.body.file("file").map { picture =>
+      import java.io.File
+      val filename = picture.filename
+      val contentType = picture.contentType
+      picture.ref.moveTo(new File(s"./uploaded/documents/$filename"), true)
+      //      val file =
+      Ok(s"File '$filename' uploaded.")
+    }.getOrElse {
+      NotAcceptable
+    }
+  }
+
 }

@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <a ui-sref="employees.detail.contract.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
-                Список контрактов
+                Список договоров
             </div>
             <table class="table table-condensed">
                 <tr>
@@ -20,7 +20,7 @@
                     <td data-title="'Должность'">{{ getPositionName(contract.position_id) }}</td>
                     <td data-title="'Дата начала'">{{ contract.open_date  | date: 'dd.MM.yyyy' }}</td>
                     <td data-title="'Дата окончания'">{{ contract.end_date |  date: 'dd.MM.yyyy' }}</td>
-                    <td><a href="@routes.Application.generatepoi()" target="_blank">Договор</a></td>
+                    <td><a href="/contracts/{{contract.id}}/download" target="_blank">Договор</a></td>
                 </tr>
             </table>
         </div>

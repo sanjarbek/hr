@@ -5,10 +5,17 @@
                 <a ui-sref="contract_types.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
                 Виды договоров
             </div>
-            <table class="table table-bordered table-condensed" ng-table="contractTypeTableParams">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <th>Название</th>
+                    <th>Шаблон</th>
+                </tr>
                 <tr ng-repeat="contract_type in contract_types">
-                    <td data-title="'Номер'">{{ contract_type.id}}</td>
-                    <td data-title="'Название'">{{ contract_type.name}}</td>
+                    <td>{{ contract_type.name}}</td>
+                    <td>{{ contract_type.file_path}}</td>
+                    <td>
+                        <input type="file" ng-file-select="onFileSelect($files, contract_type)" />
+                    </td>
                 </tr>
             </table>
         </div>

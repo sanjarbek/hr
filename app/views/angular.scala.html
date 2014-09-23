@@ -82,7 +82,9 @@
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.history.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.tooltip.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.buttons.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-file-upload-shim.min.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("angular.min.js"))'></script>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-file-upload.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-ui-router.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ui-bootstrap.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ui-bootstrap-tpls.min.js"))'></script>
@@ -112,7 +114,7 @@
         $ ( function ( ) {
             @*var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");*@
             @*var ws = new ReconnectingWebSocket ( "ws://192.168.0.128:9001/connection/status" ) ;*@
-        var ws = new ReconnectingWebSocket ( "  @routes.Application.serverStatus.webSocketURL() " );
+        var ws = new ReconnectingWebSocket ( "   @routes.Application.serverStatus.webSocketURL() " );
         ws.onmessage = function ( msg ) {
         $ ( '#server-status' ).text ( msg.data ) ;
         $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;

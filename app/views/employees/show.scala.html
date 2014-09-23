@@ -9,6 +9,11 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
+                <input type="file" ng-file-select="onFileSelect($files)">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
                 <div style="text-align : center ;">
                     {{ activeEmployee.surname }} <br />
                     {{ activeEmployee.firstname }}

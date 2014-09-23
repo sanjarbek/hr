@@ -1,8 +1,9 @@
 # --- !Ups
 
 CREATE TABLE contract_types (
-  id   SERIAL,
-  name VARCHAR(50)
+  id        SERIAL,
+  name      VARCHAR(50),
+  file_path VARCHAR(500)
 );
 
 # -- !Downs

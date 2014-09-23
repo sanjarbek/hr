@@ -1,5 +1,10 @@
 package controllers
 
+import java.io.{FileOutputStream, File, FileInputStream}
+import java.util.Calendar
+
+import org.apache.poi.hwpf.HWPFDocument
+import org.apache.poi.poifs.filesystem.POIFSFileSystem
 import play.api.mvc._
 import models.{ContractType}
 import play.api.libs.json._
@@ -37,8 +42,22 @@ object ContractTypes extends Controller {
     Ok(Json.toJson("Removed"))
   }
 
-  def show = Action {
-    Ok(views.html.contract_type.show())
+  def upload = Action(parse.multipartFormData) { request =>
+    val id = request.body.dataParts("id")(0).toLong
+    ContractType.findById(id).map { contract_type =>
+      request.body.file("file").map { picture =>
+        import java.io.File
+        val filename = picture.filename
+        ContractType.update(ContractType(contract_type.id, contract_type.name, Option(filename)))
+        val contentType = picture.contentType
+        picture.ref.moveTo(new File(s"./uploaded/documents/$filename"), true)
+        Ok(s"File '$filename' uploaded.")
+      }.getOrElse {
+        NotAcceptable
+      }
+    }.getOrElse {
+      NotFound
+    }
   }
 
 }
