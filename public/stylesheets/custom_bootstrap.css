@@ -12,3 +12,7 @@
 .input-group-addon {
     padding: 4px 12px;
 }
+
+input[type=radio], input[type=checkbox] {
+    height: 16px;
+}

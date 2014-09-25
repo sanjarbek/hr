@@ -5,7 +5,8 @@ CREATE TABLE departments (
   parent_id INTEGER,
   office_id INTEGER,
   name      VARCHAR(50),
-  category  SMALLINT
+  is_position   BOOL,
+  position_type INT
 );
 
 # -- !Downs

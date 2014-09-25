@@ -5,8 +5,8 @@
                 <div class="form-group form-group-sm">
                     <label for="office_id" class="col-sm-2 control-label">Офис</label>
                     <div class="col-sm-10">
-                        <select required class="form-control" name="office_id" ng-model="newDepartmentForm.office"
-                        ng-options="office.name for office in offices"></select>
+                        <select required class="form-control" name="office_id" ng-model="newDepartmentForm.office_id"
+                        ng-options="office.id as office.name for office in offices"></select>
                     </div>
                     <span class="help-inline"></span>
                 </div>
@@ -38,24 +38,32 @@
                 <form ng-submit="saveDepartment()" class="form-horizontal">
                     <fieldset>
                         <div class="form-group form-group-sm">
-                            <label for="parent_id" class="col-sm-2 control-label">Вышестоящая структура</label>
-                            <div class="col-sm-10">
-                                <input type="text" value="{{ current_department.name }}" required class="form-control" readonly />
+                            <label for="parent_id" class="col-sm-6 control-label">Вышестоящая структура</label>
+                            <div class="col-sm-6">
+                            <input type="text" value="{{ current_department.name }}" required class="form-control" readonly />
                             </div>
                             <span class="help-inline"></span>
                         </div>
                         <div class="form-group form-group-sm">
-                            <label for="category" class="col-sm-2 control-label">Вид</label>
-                            <div class="col-sm-10">
-                                <select required class="form-control" name="category" ng-model="newDepartmentForm.category"
-                                ng-options="category.name for category in categories"></select>
-                            </div>
-                            <span class="help-inline"></span>
-                        </div>
-                        <div class="form-group form-group-sm">
-                            <label for="name" class="col-sm-2 control-label">Name</label>
-                            <div class="col-sm-10">
+                            <label for="name" class="col-sm-6 control-label">Название</label>
+                            <div class="col-sm-6">
                                 <input required class="form-control" type="text" name="name" ng-model="newDepartmentForm.name"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="is_position" class="col-sm-6 control-label">Является ли должностью</label>
+                            <div class="col-sm-1">
+                                <input class="form-control" type="checkbox" name="name" ng-model="newDepartmentForm.is_position"
+                                ng-true-value="true" ng-false-value="" ng-init="" />
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm" ng-show="newDepartmentForm.is_position">
+                            <label for="position_type" class="col-sm-6 control-label">Категория должностей</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="category" ng-model="newDepartmentForm.position_type"
+                                ng-options="position.id as position.name for position in position_types"></select>
                             </div>
                             <span class="help-inline"></span>
                         </div>

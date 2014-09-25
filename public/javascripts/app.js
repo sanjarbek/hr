@@ -446,9 +446,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 },
                 officesData: function (OfficeService) {
                     return OfficeService.list();
+                },
+                positionTypesData: function (PositionCategoryService) {
+                    return PositionCategoryService.list();
                 }
             },
-            controller: function ($scope, departmentsData, DepartmentService, FunctionsService, officesData) {
+            controller: function ($scope, departmentsData, DepartmentService, FunctionsService, officesData, positionTypesData) {
                 $scope.departmentsTemp = departmentsData;
                 $scope.departments_data = FunctionsService.getTree(departmentsData, 'id', 'parent_id');
                 $scope.expanding_property = "name";
@@ -462,6 +465,10 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //                    { field: "parent_id", displayName: "Up"},
 //                    { field: "name", displayName: "Name"}
                 ];
+
+                positionTypesData.push({id: null, name: "Выберите..."});
+                $scope.position_types = positionTypesData;
+
                 $scope.saveDepartment = function () {
                     var parentId = null;
                     if ($scope.current_department)
@@ -470,10 +477,13 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     var data = {
                         id: 0,
                         parent_id: parentId,
-                        office_id: $scope.newDepartmentForm.office.id,
+                        office_id: $scope.newDepartmentForm.office_id,
                         name: $scope.newDepartmentForm.name,
-                        category: $scope.newDepartmentForm.category.id
+                        is_position: Boolean($scope.newDepartmentForm.is_position),
+                        position_type: $scope.newDepartmentForm.position_type
                     };
+
+                    console.log(data);
 
                     var success = DepartmentService.save(data);
                     $scope.departmentsTemp.push(success);
@@ -481,10 +491,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //                    $scope.departments_data = FunctionsService.getTree($scope.departmentsTemp, 'id', 'parent_id');
                     $scope.newDepartmentForm = {};
                 }
-                $scope.categories = [
-                    { id: 1, name: "Должность" },
-                    { id: 2, name: "Структура" }
-                ];
                 $scope.departments = departmentsData;
                 $scope.offices = officesData;
                 $scope.current_department = null;

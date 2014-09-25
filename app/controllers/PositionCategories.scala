@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc._
-import models.{PositionCategory}
+import models.{PositionType}
 import play.api.libs.json._
 
 object PositionCategories extends Controller {
@@ -11,7 +11,7 @@ object PositionCategories extends Controller {
   }
 
   def jsonList = Action {
-    val position_categories = PositionCategory.findAll.map { position_categories => Json.toJson(position_categories)}
+    val position_categories = PositionType.findAll.map { position_categories => Json.toJson(position_categories)}
     Ok(Json.toJson(position_categories))
   }
 
@@ -21,9 +21,9 @@ object PositionCategories extends Controller {
 
   def save = Action(parse.json) { implicit request =>
     val positionCategoryJson = request.body
-    positionCategoryJson.validate[PositionCategory].fold(
+    positionCategoryJson.validate[PositionType].fold(
       valid = { positionCategory =>
-        PositionCategory.insert(positionCategory)
+        PositionType.insert(positionCategory)
         Ok("Saved")
       },
       invalid = { errors =>
@@ -33,7 +33,7 @@ object PositionCategories extends Controller {
   }
 
   def delete(id: Long) = Action { implicit request =>
-    PositionCategory.delete(id)
+    PositionType.delete(id)
     Ok(Json.toJson("Removed"))
   }
 

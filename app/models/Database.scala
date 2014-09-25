@@ -10,7 +10,7 @@ object Database extends Schema {
   val positionTable: Table[Position] = table[Position]("positions")
   val officeTypeTable: Table[OfficeType] = table[OfficeType]("office_types")
   val officeTable: Table[Office] = table[Office]("offices")
-  val positionCategoryTable: Table[PositionCategory] = table[PositionCategory]("position_categories")
+  val positionTypeTable: Table[PositionType] = table[PositionType]("position_categories")
   val departmentTable: Table[Department] = table[Department]("departments")
   val contractTypeTable: Table[ContractType] = table[ContractType]("contract_types")
   val contractTable: Table[Contract] = table[Contract]("contracts")
@@ -49,7 +49,7 @@ object Database extends Schema {
   }
   }
 
-  on(positionCategoryTable) { pos_category => declare {
+  on(positionTypeTable) { pos_category => declare {
     pos_category.id is (autoIncremented("position_categories_id_seq"))
   }
   }
