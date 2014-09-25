@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @Messages("Новый вид структур")
+    <div class="pull-right">
+        <a ui-sref="structure_types.list"><span class="glyphicon glyphicon-list"></span></a>
+    </div>
+    </div>
+    <div class="panel-body">
+        <form ng-submit="saveStructureType()" class="form-horizontal">
+            <fieldset>
+                <div class="form-group form-group-sm">
+                    <label for="name" class="col-sm-6 control-label">Название</label>
+                    <div class="col-sm-6">
+                        <input required class="form-control" type="text" name="name" ng-model="newStructureTypeForm.name"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="has_children" class="col-sm-6 control-label">Может ли иметь вложенных структур</label>
+                    <div class="col-sm-1">
+                        <input class="form-control"
+                        type="checkbox"
+                        name="has_children"
+                        ng-init=""
+                        ng-model="newStructureTypeForm.has_children" />
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+            </fieldset>
+            <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+        </form>
+    </div>
+</div>

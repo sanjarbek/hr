@@ -8,7 +8,7 @@ object Database extends Schema {
   val relationshipTable: Table[Relationship] = table[Relationship]("relationships")
   val relationshipTypeTable: Table[RelationshipType] = table[RelationshipType]("relationship_types")
   val positionTable: Table[Position] = table[Position]("positions")
-  val officeTypeTable: Table[OfficeType] = table[OfficeType]("office_types")
+  val structureTypeTable: Table[StructureType] = table[StructureType]("structure_types")
   val officeTable: Table[Office] = table[Office]("offices")
   val positionTypeTable: Table[PositionType] = table[PositionType]("position_categories")
   val departmentTable: Table[Department] = table[Department]("departments")
@@ -18,6 +18,7 @@ object Database extends Schema {
   val educationTable: Table[Education] = table[Education]("educations")
   val passportTable: Table[Passport] = table[Passport]("passports")
   val militaryTable: Table[Military] = table[Military]("military_infos")
+  val structureTable: Table[Structure] = table[Structure]("structures")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -39,8 +40,8 @@ object Database extends Schema {
   }
   }
 
-  on(officeTypeTable) { office_type => declare {
-    office_type.id is (autoIncremented("office_types_id_seq"))
+  on(structureTypeTable) { structure_type => declare {
+    structure_type.id is (autoIncremented("structure_types_id_seq"))
   }
   }
 
@@ -86,6 +87,11 @@ object Database extends Schema {
 
   on(militaryTable) { military => declare {
     military.id is (autoIncremented("military_infos_id_seq"))
+  }
+  }
+
+  on(structureTable) { structure => declare {
+    structure.id is (autoIncremented("structures_id_seq"))
   }
   }
 }

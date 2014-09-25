@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @Messages("Создать новую организационную структуру")
+    <div class="pull-right">
+        <a ui-sref="departments.list"><span class="glyphicon glyphicon-list"></span></a>
+    </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <br/>
+                <treecontrol class="tree-classic"
+                tree-model="dataForTheTree"
+                options="treeOptions"
+                on-selection="showSelected(node)"
+                selected-node="node1"
+                >
+                        employee: {{node.name}} age {{node.age}}
+                    <a ng-click="doIt(node)">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                    </a>
+                </treecontrol>
+            </div>
+        </div>
+    </div>
+</div>
+

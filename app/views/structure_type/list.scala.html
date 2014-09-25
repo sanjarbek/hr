@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a ui-sref="structure_types.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+                Виды офисов
+            </div>
+            <table class="table table-bordered table-condensed" ng-table="officeTableParams">
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Имеет</th>
+                </tr>
+                <tr ng-repeat="structure_type in structure_types">
+                    <td>{{ structure_type.id}}</td>
+                    <td>{{ structure_type.name}}</td>
+                    <td>{{ structure_type.has_children}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

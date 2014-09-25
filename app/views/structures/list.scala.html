@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <br/>
+                            <treecontrol class="tree-classic"
+                            tree-model="dataForTheTree"
+                            options="treeOptions"
+                            >
+                                    {{node.name}}
+                                <div class="pull-right">
+                                    <a ng-click="selectNode(node)" ng-show="hasChildren(node.structure_type)" >
+                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                    </a>
+                                    <a ng-click="doIt(node)" ng-show="!node.is_position" >
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                </div>
+                            </treecontrol>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            @Messages("Создать новую организационную структуру")
+            </div>
+            <div class="panel-body">
+                <form ng-submit="saveStructure()" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group form-group-sm">
+                            <label for="parent_id" class="col-sm-6 control-label">Вышестоящая структура</label>
+                            <div class="col-sm-6">
+                                <input type="text" value="{{ current_structure.name }}" required class="form-control" readonly />
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="name" class="col-sm-6 control-label">Название</label>
+                            <div class="col-sm-6">
+                                <input required class="form-control" type="text" name="name" ng-model="newStructureForm.name"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="structure_type" class="col-sm-6 control-label">Тип</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="structure_type" ng-model="newStructureForm.structure_type"
+                                ng-options="structure_item.id as structure_item.name for structure_item in structure_types"></select>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="position_type" class="col-sm-6 control-label">Категория должности</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="position_type" ng-model="newStructureForm.position_type"
+                                ng-options="position.id as position.name for position in position_types"></select>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm" >
+                            <label for="status" class="col-sm-6 control-label">Статус</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="status" ng-model="newStructureForm.status"
+                                ng-options="status.id as status.name for status in statuses"></select>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                    </fieldset>
+                    <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

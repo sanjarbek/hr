@@ -4,12 +4,12 @@
 
 # Home page
 GET           /                                     controllers.Application.angular
-POST        /upload                        controllers.Application.upload
-GET         /upload                        controllers.Application.uploadForm
+POST          /upload                               controllers.Application.upload
+GET           /upload                               controllers.Application.uploadForm
 
 # Состояния работоспособности сервера
 GET           /connection/status                    controllers.Application.serverStatus
-GET         /generatepoi                   controllers.Application.generatepoi
+GET           /generatepoi                          controllers.Application.generatepoi
 
 
 # Сотрудники
@@ -48,10 +48,10 @@ GET           /position_categories/list             controllers.PositionCategori
 GET           /position_categories/json/list        controllers.PositionCategories.jsonList
 POST          /position_categories/save             controllers.PositionCategories.save
 
-GET           /office_types/create                  controllers.OfficeTypes.create
-GET           /office_types/list                    controllers.OfficeTypes.list
-GET           /office_types/json/list               controllers.OfficeTypes.jsonList
-POST          /office_types/save                    controllers.OfficeTypes.save
+GET           /structure_types/create               controllers.StructureTypes.create
+GET           /structure_types/list                 controllers.StructureTypes.list
+GET           /structure_types/json/list            controllers.StructureTypes.jsonList
+POST          /structure_types/save                 controllers.StructureTypes.save
 
 GET           /offices/create                       controllers.Offices.create
 GET           /offices/list                         controllers.Offices.list
@@ -63,17 +63,21 @@ GET           /departments/list                     controllers.Departments.list
 GET           /departments/json/list                controllers.Departments.jsonList
 POST          /departments/save                     controllers.Departments.save
 
+GET           /structures/list                      controllers.Structures.list
+GET           /structures/json/list                 controllers.Structures.jsonList
+POST          /structures/save                      controllers.Structures.save
+
 GET           /contract_types/create                controllers.ContractTypes.create
 GET           /contract_types/list                  controllers.ContractTypes.list
 GET           /contract_types/json/list             controllers.ContractTypes.jsonList
 POST          /contract_types/save                  controllers.ContractTypes.save
-POST        /contract_types/upload         controllers.ContractTypes.upload
+POST          /contract_types/upload                controllers.ContractTypes.upload
 
 GET           /contracts/create                     controllers.Contracts.create
 GET           /contracts/list                       controllers.Contracts.list
 GET           /contracts/json/list                  controllers.Contracts.jsonList
 POST          /contracts/save                       controllers.Contracts.save
-GET         /contracts/:id/download        controllers.Contracts.download(id: Long)
+GET           /contracts/:id/download               controllers.Contracts.download(id: Long)
 
 GET           /institutions/create                  controllers.Institutions.create
 GET           /institutions/list                    controllers.Institutions.list

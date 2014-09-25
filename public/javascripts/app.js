@@ -338,35 +338,36 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('office_types', {
+        .state('structure_types', {
             abstract: true,
             url: '/office_types',
             template: '<div ui-view></div>'
         })
-        .state('office_types.list', {
+        .state('structure_types.list', {
             url: '/list',
-            templateUrl: '/office_types/list',
+            templateUrl: '/structure_types/list',
             resolve: {
-                office_typesData: function (OfficeTypeService) {
-                    return OfficeTypeService.list();
+                structureTypesData: function (StructureTypeService) {
+                    return StructureTypeService.list();
                 }
             },
-            controller: function ($scope, office_typesData) {
-                $scope.office_types = office_typesData;
+            controller: function ($scope, structureTypesData) {
+                $scope.structure_types = structureTypesData;
             }
         })
-        .state('office_types.create', {
+        .state('structure_types.create', {
             url: '/create',
-            templateUrl: '/office_types/create',
-            controller: function ($scope, OfficeTypeService) {
-                $scope.saveOfficeType = function () {
+            templateUrl: '/structure_types/create',
+            controller: function ($scope, StructureTypeService) {
+                $scope.saveStructureType = function () {
                     var data = {
                         id: 0,
-                        name: $scope.newOfficeTypeForm.name
+                        name: $scope.newStructureTypeForm.name,
+                        has_children: Boolean($scope.newStructureTypeForm.has_children)
                     };
 
-                    OfficeTypeService.save(data);
-                    $scope.newOfficeTypeForm = {};
+                    StructureTypeService.save(data);
+                    $scope.newStructureTypeForm = {};
                 }
             }
         })
@@ -586,6 +587,27 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     alert(node.name);
                 }
             }
+        })
+        .state('structures', {
+            abstract: true,
+            url: '/structures',
+            template: '<div ui-view></div>'
+        })
+        .state('structures.list', {
+            url: '/list',
+            templateUrl: '/structures/list',
+            resolve: {
+                structuresData: function (StructureService) {
+                    return StructureService.list();
+                },
+                structureTypesData: function (StructureTypeService) {
+                    return StructureTypeService.list();
+                },
+                positionTypesData: function (PositionCategoryService) {
+                    return PositionCategoryService.list();
+                }
+            },
+            controller: 'StructureCtrl'
         })
         .state('contract_types', {
             abstract: true,
