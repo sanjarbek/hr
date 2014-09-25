@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap', 'angularFileUpload']);
+angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap', 'angularFileUpload', 'treeControl']);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider) {
 
@@ -452,14 +452,14 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             },
             controller: function ($scope, departmentsData, DepartmentService, FunctionsService, officesData, positionTypesData) {
-                $scope.departmentsTemp = departmentsData;
-                $scope.departments_data = FunctionsService.getTree(departmentsData, 'id', 'parent_id');
-                $scope.expanding_property = "name";
-                $scope.departmentsTree = {};
-                $scope.departmentsTreeHandler = function (branch) {
+                $scope.dataForTheTree = FunctionsService.getTree(departmentsData, 'id', 'parent_id');
+                console.log($scope.dataForTheTree);
+
+                $scope.selectNode = function (branch) {
                     console.log("You clicked " + branch);
                     $scope.current_department = branch;
                 };
+
                 $scope.col_defs = [
 //                    { field: "office_id", displayName: "Office"},
 //                    { field: "parent_id", displayName: "Up"},
@@ -467,6 +467,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 ];
 
                 positionTypesData.push({id: null, name: "Выберите..."});
+
                 $scope.position_types = positionTypesData;
 
                 $scope.saveDepartment = function () {
@@ -480,21 +481,41 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                         office_id: $scope.newDepartmentForm.office_id,
                         name: $scope.newDepartmentForm.name,
                         is_position: Boolean($scope.newDepartmentForm.is_position),
-                        position_type: $scope.newDepartmentForm.position_type
+                        position_type: ($scope.newDepartmentForm.position_type == undefined || Boolean(!$scope.newDepartmentForm.is_position))
+                            ? null
+                            : $scope.newDepartmentForm.position_type
                     };
 
-                    console.log(data);
-
-                    var success = DepartmentService.save(data);
-                    $scope.departmentsTemp.push(success);
-//                    $scope.departments_data = [];
-//                    $scope.departments_data = FunctionsService.getTree($scope.departmentsTemp, 'id', 'parent_id');
+                    DepartmentService.save(data).then(function (result) {
+                        if (!$scope.current_department.hasOwnProperty('children'))
+                            $scope.current_department.children = [];
+                        $scope.current_department.children.push(result.data);
+                    });
                     $scope.newDepartmentForm = {};
                 }
                 $scope.departments = departmentsData;
                 $scope.offices = officesData;
                 $scope.current_department = null;
                 $scope.current_office = null;
+
+                $scope.treeOptions = {
+                    nodeChildren: "children",
+                    dirSelectable: true,
+                    isLeaf: function (node) {
+                        return node.is_position;
+                    },
+                    dirSelectable: false,
+                    injectClasses: {
+                        ul: "a1",
+                        li: "a2",
+                        liSelected: "a7",
+                        iExpanded: "a3",
+                        iCollapsed: "a4",
+                        iLeaf: "a5",
+                        label: "a6",
+                        labelSelected: "a8"
+                    }
+                };
             }
         })
         .state('departments.create', {
@@ -531,6 +552,39 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 ];
                 $scope.departments = departmentsData;
                 $scope.offices = officesData;
+
+                $scope.treeOptions = {
+                    nodeChildren: "children",
+                    dirSelectable: true,
+                    injectClasses: {
+                        ul: "a1",
+                        li: "a2",
+                        liSelected: "a7",
+                        iExpanded: "a3",
+                        iCollapsed: "a4",
+                        iLeaf: "a5",
+                        label: "a6",
+                        labelSelected: "a8"
+                    }
+                };
+                $scope.dataForTheTree = [
+                    { "name": "Joe", "age": "21", "children": [
+                        { "name": "Smith", "age": "42", "children": [] },
+                        { "name": "Gary", "age": "21", "children": [
+                            { "name": "Jenifer", "age": "23", "children": [
+                                { "name": "Dani", "age": "32", "children": [] },
+                                { "name": "Max", "age": "34", "children": [] }
+                            ]}
+                        ]}
+                    ]},
+                    { "name": "Albert", "age": "33", "children": [] },
+                    { "name": "Ron", "age": "29", "children": [] }
+                ];
+
+                $scope.doIt = function (node) {
+                    node.name = "Fuck";
+                    alert(node.name);
+                }
             }
         })
         .state('contract_types', {

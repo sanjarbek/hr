@@ -15,14 +15,30 @@
         <br/>
         <div class="row">
             <div class="col-sm-12">
-                <tree-grid
-                tree-data="departments_data"
-                col-defs="col_defs"
-                expand-on="expanding_property"
-                tree-control="departmentsTree"
-                icon-leaf= "glyphicon glyphicon-user"
-                on-select="departmentsTreeHandler(branch)">
-                </tree-grid>
+                <div class="panel panel-default">
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <br/>
+                            <treecontrol class="tree-classic"
+                            tree-model="dataForTheTree"
+                            options="treeOptions"
+                            on-selection="selectNode(node)"
+                            selected-node="node1"
+                            >
+                                    {{node.name}}
+                                <div class="pull-right">
+                                    <a ng-click="doIt(node)" ng-show="!node.is_position" >
+                                        <span class="glyphicon glyphicon-plus-sign"></span>
+                                    </a>
+                                    <a ng-click="doIt(node)" ng-show="!node.is_position" >
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                </div>
+                            </treecontrol>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -55,7 +71,7 @@
                             <label for="is_position" class="col-sm-6 control-label">Является ли должностью</label>
                             <div class="col-sm-1">
                                 <input class="form-control" type="checkbox" name="name" ng-model="newDepartmentForm.is_position"
-                                ng-true-value="true" ng-false-value="" ng-init="" />
+                                ng-true-value=true ng-false-value=false ng-init=false />
                             </div>
                             <span class="help-inline"></span>
                         </div>
