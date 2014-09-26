@@ -23,7 +23,7 @@ case class Structure(
 
 object Structure {
 
-  import Database.{structureTable}
+  import Database.{structureTable, contractTable}
 
   implicit val structureWrites: Writes[Structure] = (
     (JsPath \ "id").write[Int] and
@@ -50,6 +50,15 @@ object Structure {
 
   def findAll: Iterable[Structure] = inTransaction {
     allQ.toList
+  }
+
+  def findFreePositions = inTransaction {
+    from(structureTable)(structure =>
+      where(structure.id notIn
+        from(contractTable)(contract => select(contract.position_id))
+      )
+        select (structure)
+    ).toList
   }
 
   def findById(id: Long) = inTransaction {

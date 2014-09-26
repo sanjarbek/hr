@@ -149,67 +149,85 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('employees.detail.contract', {
             absract: true,
             url: '/contract',
-            template: '<div ui-view></div>'
+            template: '<div ui-view></div>',
+            resolve: {
+                contractTypeData: function (ContractTypeService) {
+                    return ContractTypeService.list();
+                },
+                structuresData: function (StructureService) {
+                    return StructureService.list();
+                },
+                structureTypesData: function (StructureTypeService) {
+                    return StructureTypeService.list();
+                },
+                positionTypesData: function (PositionCategoryService) {
+                    return PositionCategoryService.list();
+                }
+            }
         })
         .state('employees.detail.contract.list', {
             url: '/list',
             templateUrl: '/contracts/list',
             resolve: {
-                departmentsData: function (DepartmentService) {
-                    return DepartmentService.list();
-                },
-                contractTypeData: function (ContractTypeService) {
-                    return ContractTypeService.list();
-                },
-                officesData: function (OfficeService) {
-                    return OfficeService.list();
-                },
                 contractsData: function (ContractService) {
                     return ContractService.list();
                 }
             },
-            controller: function ($scope, contractsData, departmentsData, contractTypeData, officesData) {
+            controller: function ($scope, contractsData, structuresData, contractTypeData) {
                 $scope.contracts = contractsData;
-                $scope.offices = officesData;
                 $scope.contract_types = contractTypeData;
-                $scope.departments = departmentsData;
 
-                $scope.getOfficeName = function (positionId) {
-                    var name = "Не найден офис.";
-                    $scope.departments.forEach(function (department) {
-                        if (department.id == positionId) {
-                            $scope.offices.forEach(function (office) {
-                                if (office.id == department.office_id) {
-                                    name = office.name;
-                                }
-                            });
+                function getStructureFullPath(parent_id) {
+                    if (parent_id != null) {
+                        for (var i = 0; i < structuresData.length; i++) {
+                            if (structuresData[i].id == parent_id) {
+                                return path = getStructureFullPath(structuresData[i].parent_id)
+                                    + structuresData[i].name + ' > ';
+                                break;
+                            }
                         }
-                    });
-                    return name;
+                    }
+                    return '';
                 }
 
-                $scope.getDepartmentName = function (positionId) {
-                    var name = "Не найден отдел.";
-                    $scope.departments.forEach(function (position) {
-                        if (position.id == positionId) {
-                            $scope.departments.forEach(function (department) {
-                                if (department.id == position.parent_id) {
-                                    name = department.name;
-                                }
-                            });
-                        }
-                    });
-                    return name;
+                $scope.getStructureFullPath = function (parent_id) {
+                    var path = '';
+                    path = getStructureFullPath(parent_id);
+                    console.log(path);
+                    return path.substr(0, path.length - 3);
                 }
 
-                $scope.getPositionName = function (positionId) {
-                    var name = "Не найдена должность.";
-                    $scope.departments.forEach(function (position) {
-                        if (position.id == positionId) {
-                            name = position.name;
+                $scope.getOffice = function (positionId) {
+                    var department = $scope.getDepartment(positionId);
+                    if (department != null) {
+                        for (var i = 0; i < structuresData.length; i++) {
+                            if (structuresData[i].id == department.parent_id) {
+                                return structuresData[i];
+                            }
                         }
-                    });
-                    return name;
+                    }
+                    return null;
+                }
+
+                $scope.getDepartment = function (positionId) {
+                    var position = $scope.getPosition(positionId);
+                    if (position != null) {
+                        for (var i = 0; i < structuresData.length; i++) {
+                            if (structuresData[i].id == position.parent_id) {
+                                return structuresData[i];
+                            }
+                        }
+                    }
+                    return null;
+                }
+
+                $scope.getPosition = function (positionId) {
+                    for (var i = 0; i < structuresData.length; i++) {
+                        if (structuresData[i].id == positionId) {
+                            return structuresData[i];
+                        }
+                    }
+                    return null;
                 }
 
                 $scope.getStatusText = function (status) {
@@ -220,23 +238,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('employees.detail.contract.create', {
             url: '/create',
             templateUrl: '/contracts/create',
-            resolve: {
-                departmentsData: function (DepartmentService) {
-                    return DepartmentService.list();
-                },
-                contractTypeData: function (ContractTypeService) {
-                    return ContractTypeService.list();
-                },
-                officesData: function (OfficeService) {
-                    return OfficeService.list();
-                }
-            },
-            controller: function ($scope, departmentsData, contractTypeData, officesData, ContractService) {
-
+            controller: function ($scope, FunctionsService, structuresData, contractTypeData, ContractService, $modal) {
                 $scope.contract_types = contractTypeData;
-                $scope.departments = departmentsData;
-                $scope.offices = officesData;
-
 
                 $scope.working_time_types = [
                     {id: 1, name: "Понедельник-Пятница"},
@@ -244,25 +247,49 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 ];
 
                 $scope.saveContract = function () {
-                    var data = {
-                        id: 0,
-                        employee_id: $scope.activeEmployee.id,
-                        position_id: $scope.newContractForm.position.id,
-                        trial_period_open: $scope.newContractForm.trial_period_open,
-                        trial_period_end: $scope.newContractForm.trial_period_end,
-                        salary: $scope.newContractForm.salary,
-                        working_time_type: $scope.newContractForm.working_time_type.id,
-                        open_date: $scope.newContractForm.openDate,
-                        end_date: $scope.newContractForm.endDate,
-                        close_date: null,
-                        status: $scope.newContractForm.status ? 1 : 0,
-                        contract_type: $scope.newContractForm.contract_type.id
-                    };
-
-                    console.log(data);
-
-                    ContractService.save(data);
+                    $scope.newContractForm.status = 1;
+                    ContractService.save($scope.newContractForm);
                     $scope.newContractForm = {};
+                }
+
+                $scope.newContractForm = {
+                    id: 0,
+                    employee_id: $scope.activeEmployee.id,
+                    position_id: null,
+                    trial_period_open: null,
+                    trial_period_end: null,
+                    salary: null,
+                    working_time_type: null,
+                    open_date: null,
+                    end_date: null,
+                    close_date: null,
+                    status: 1,
+                    contract_type: null
+                };
+
+                $scope.temp = {
+                    position: 'Выберите должность...'
+                };
+
+                $scope.open = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'myModalContent.html',
+                        resolve: {
+                            structuresData: function (StructureService) {
+                                return StructureService.freepositions();
+                            }
+                        },
+                        controller: 'ModalStructuresCtrl',
+                        size: size
+                    });
+
+                    modalInstance.result.then(function (result) {
+                        $scope.temp.position = result.name;
+                        $scope.newContractForm.position_id = result.id;
+                    }, function () {
+                        console.info('Modal dismissed at: ' + new Date());
+                    });
                 }
             }
         })

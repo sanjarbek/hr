@@ -65,6 +65,7 @@ POST          /departments/save                     controllers.Departments.save
 
 GET           /structures/list                      controllers.Structures.list
 GET           /structures/json/list                 controllers.Structures.jsonList
+GET           /structures/json/freepositions        controllers.Structures.jsonFreePositionsList
 POST          /structures/save                      controllers.Structures.save
 
 GET           /contract_types/create                controllers.ContractTypes.create

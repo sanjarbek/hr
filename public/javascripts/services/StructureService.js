@@ -13,6 +13,12 @@ angular.module('app').service('StructureService', function ($http) {
         });
     }
 
+    this.freepositions = function () {
+        return $http.get('/structures/json/freepositions').then(function (result) {
+            return result.data;
+        });
+    }
+
 });
 
 angular.module('app').service('StructureTypeService', function ($http) {

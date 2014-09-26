@@ -15,6 +15,11 @@ object Structures extends Controller {
     Ok(Json.toJson(structures))
   }
 
+  def jsonFreePositionsList = Action {
+    val structures = Structure.findFreePositions.map { structure => Json.toJson(structure)}
+    Ok(Json.toJson(structures))
+  }
+
   def create = Action { implicit request =>
     Ok(views.html.structures.create())
   }

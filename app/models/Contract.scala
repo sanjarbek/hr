@@ -19,8 +19,8 @@ case class Contract(
                      employee_id: Long,
                      salary: BigDecimal,
                      working_time_type: Int,
-                     trial_period_open: Date,
-                     trial_period_end: Date,
+                     trial_period_open: Option[Date],
+                     trial_period_end: Option[Date],
                      open_date: Date,
                      end_date: Date,
                      close_date: Option[Date],
@@ -38,8 +38,8 @@ object Contract {
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "salary").write[BigDecimal] and
       (JsPath \ "working_time_type").write[Int] and
-      (JsPath \ "trial_period_open").write[Date] and
-      (JsPath \ "trial_period_end").write[Date] and
+      (JsPath \ "trial_period_open").write[Option[Date]] and
+      (JsPath \ "trial_period_end").write[Option[Date]] and
       (JsPath \ "open_date").write[Date] and
       (JsPath \ "end_date").write[Date] and
       (JsPath \ "close_date").write[Option[Date]] and
@@ -53,8 +53,8 @@ object Contract {
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "salary").read[BigDecimal] and
       (JsPath \ "working_time_type").read[Int] and
-      (JsPath \ "trial_period_open").read[Date] and
-      (JsPath \ "trial_period_end").read[Date] and
+      (JsPath \ "trial_period_open").read[Option[Date]] and
+      (JsPath \ "trial_period_end").read[Option[Date]] and
       (JsPath \ "open_date").read[Date] and
       (JsPath \ "end_date").read[Date] and
       (JsPath \ "close_date").read[Option[Date]] and
