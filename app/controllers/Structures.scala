@@ -11,7 +11,7 @@ object Structures extends Controller {
   }
 
   def jsonList = Action {
-    val structures = Structure.findAll.map { structure => Json.toJson(structure)}
+    val structures = Structure.findFreePositions.map { structure => Json.toJson(structure)}
     Ok(Json.toJson(structures))
   }
 

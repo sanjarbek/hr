@@ -9,26 +9,15 @@
         <form ng-submit="saveContract()" class="form-horizontal">
             <fieldset>
                 <div class="form-group form-group-sm">
-                    <label for="office" class="col-sm-4 control-label">Офис</label>
-                    <div class="col-sm-8">
-                        <select required class="form-control" name="office" ng-model="newContractForm.office"
-                        ng-options="office.name for office in offices"></select>
-                    </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="department" class="col-sm-4 control-label">Отдел</label>
-                    <div class="col-sm-8">
-                        <select required class="form-control" name="department" ng-model="newContractForm.department"
-                        ng-options="department.name for department in departments | filter: {office_id: newContractForm.office.id, category: 2}"></select>
-                    </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
                     <label for="position" class="col-sm-4 control-label">Должность</label>
-                    <div class="col-sm-8">
-                        <select required class="form-control" name="position" ng-model="newContractForm.position"
-                        ng-options="department.name for department in departments | filter: {parent_id: newContractForm.department.id, category: 1}"></select>
+                    <div class="col-sm-7">
+                        <input required class="form-control" type="text" name="position" readonly ng-model="temp.position"/>
+                    </div>
+                    <div class="col-sm-1  add-control">
+                        <a class="btn btn-xs btn-primary" ng-click="open()"
+                        data-toggle="tooltip" data-placement="top" title="Нажмите чтобы выберить должность ...">
+                            <span class="glyphicon glyphicon-plus-sign"></span>
+                        </a>
                     </div>
                     <span class="help-inline"></span>
                 </div>
@@ -36,21 +25,21 @@
                     <label for="contract_type" class="col-sm-4 control-label">Вид договора</label>
                     <div class="col-sm-8">
                         <select required class="form-control" name="contract_type" ng-model="newContractForm.contract_type"
-                        ng-options="contract_type.name for contract_type in contract_types"></select>
+                        ng-options="contract_type.id as contract_type.name for contract_type in contract_types"></select>
                     </div>
                     <span class="help-inline"></span>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label for="openDate" class="col-sm-4 control-label">Дата начала</label>
+                    <label for="open_date" class="col-sm-4 control-label">Дата начала</label>
                     <div class="col-sm-8">
-                        <input required class="form-control" type="date" name="openDate" ng-model="newContractForm.openDate"/>
+                        <input required class="form-control" type="date" name="open_date" ng-model="newContractForm.open_date"/>
                     </div>
                     <span class="help-inline"></span>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label for="endDate" class="col-sm-4 control-label">Дата окончания</label>
+                    <label for="end_date" class="col-sm-4 control-label">Дата окончания</label>
                     <div class="col-sm-8">
-                        <input required class="form-control" type="date" name="endDate" ng-model="newContractForm.endDate"/>
+                        <input required class="form-control" type="date" name="end_date" ng-model="newContractForm.end_date"/>
                     </div>
                     <span class="help-inline"></span>
                 </div>
@@ -82,19 +71,42 @@
                     <label for="working_time_type" class="col-sm-4 control-label">Время работы</label>
                     <div class="col-sm-8">
                         <select required class="form-control" name="working_time_type" ng-model="newContractForm.working_time_type"
-                        ng-options="working_time.name for working_time in working_time_types"></select>
+                        ng-options="working_time.id as working_time.name for working_time in working_time_types"></select>
                     </div>
                     <span class="help-inline"></span>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label for="status" class="col-sm-4 control-label">Статус</label>
-                    <div class="col-sm-8">
-                        <input required class="form-control" type="checkbox" name="status" ng-model="newContractForm.status" />
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="status" ng-model="newContractForm.status" > <strong>Статус</strong>
+                            </label>
+                        </div>
                     </div>
-                    <span class="help-inline"></span>
                 </div>
             </fieldset>
             <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
         </form>
     </div>
+</div>
+
+<div>
+    <script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+    <h4 class="modal-title"> @Messages("Выберите должность") </h4>
+    </div>
+    <div class="modal-body">
+    <treecontrol class="tree-classic"
+    tree-model="dataTheTree"
+    options="treeOptions"
+    on-selection="selectNode(node)"
+    >
+    {{node.name}}
+    </treecontrol>
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Выбрать</button>
+    <button class="btn btn-warning" ng-click="cancel()">Отменить</button>
+    </div>
+    </script>
 </div>
