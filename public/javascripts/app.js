@@ -38,6 +38,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             resolve: {
                 employeesData: function (EmployeeService) {
                     return EmployeeService.list();
+                },
+                contractsData: function (ContractService) {
+                    return ContractService.list();
+                },
+                structuresData: function (StructureService) {
+                    return StructureService.list();
                 }
             },
             controller: 'EmployeeController'
@@ -149,7 +155,19 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('employees.detail.contract', {
             absract: true,
             url: '/contract',
-            template: '<div ui-view></div>',
+            template: '<div ui-view></div>'
+//            resolve: {
+//                contractTypeData: function (ContractTypeService, activeEmployeeData) {
+//                    return ContractTypeService.list();
+//                },
+//                structuresData: function (StructureService) {
+//                    return StructureService.list();
+//                }
+//            }
+        })
+        .state('employees.detail.contract.list', {
+            url: '/list',
+            templateUrl: '/contracts/list',
             resolve: {
                 contractTypeData: function (ContractTypeService) {
                     return ContractTypeService.list();
@@ -157,20 +175,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 structuresData: function (StructureService) {
                     return StructureService.list();
                 },
-                structureTypesData: function (StructureTypeService) {
-                    return StructureTypeService.list();
-                },
-                positionTypesData: function (PositionCategoryService) {
-                    return PositionCategoryService.list();
-                }
-            }
-        })
-        .state('employees.detail.contract.list', {
-            url: '/list',
-            templateUrl: '/contracts/list',
-            resolve: {
-                contractsData: function (ContractService) {
-                    return ContractService.list();
+                contractsData: function (ContractService, activeEmployeeData) {
+                    return ContractService.employee_contracts(activeEmployeeData.id);
                 }
             },
             controller: function ($scope, contractsData, structuresData, contractTypeData) {
@@ -193,7 +199,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.getStructureFullPath = function (parent_id) {
                     var path = '';
                     path = getStructureFullPath(parent_id);
-                    console.log(path);
                     return path.substr(0, path.length - 3);
                 }
 
@@ -238,6 +243,14 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('employees.detail.contract.create', {
             url: '/create',
             templateUrl: '/contracts/create',
+            resolve: {
+                contractTypeData: function (ContractTypeService, activeEmployeeData) {
+                    return ContractTypeService.list();
+                },
+                structuresData: function (StructureService) {
+                    return StructureService.list();
+                }
+            },
             controller: function ($scope, FunctionsService, structuresData, contractTypeData, ContractService, $modal) {
                 $scope.contract_types = contractTypeData;
 

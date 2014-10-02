@@ -30,4 +30,10 @@ angular.module('app').service('ContractService', function ($http) {
         });
     }
 
+    this.employee_contracts = function (employee_id) {
+        return $http.get('/contracts/json/ownlist', {params: {id: employee_id}}).then(function (result) {
+            return result.data;
+        });
+    }
+
 });

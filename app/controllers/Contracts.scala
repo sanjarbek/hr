@@ -7,18 +7,24 @@ import java.util.Calendar
 import org.apache.poi.hwpf.HWPFDocument
 import org.apache.poi.poifs.filesystem.POIFSFileSystem
 import play.api.mvc._
-import models.{Department, ContractType, Contract, Employee}
+import models._
 import play.api.libs.json._
 import sun.util.calendar.LocalGregorianCalendar.Date
 
 object Contracts extends Controller {
 
   def list = Action { implicit request =>
+    play.Logger.info("I am here")
     Ok(views.html.contract.list())
   }
 
   def jsonList = Action {
     val contracts = Contract.findAll.map { contract => Json.toJson(contract)}
+    Ok(Json.toJson(contracts))
+  }
+
+  def jsonEmployeeContractsList(id: Long) = Action {
+    val contracts = Contract.findAllByEmployeeId(id).map { contract => Json.toJson(contract)}
     Ok(Json.toJson(contracts))
   }
 
@@ -55,10 +61,13 @@ object Contracts extends Controller {
           val fs = new POIFSFileSystem(new FileInputStream(s"./uploaded/documents/$filePath"))
           val doc = new HWPFDocument(fs)
 
+          play.Logger.info(contract.trial_period_open.toString)
+          play.Logger.info(contract.trial_period_end.toString)
+
           val employee = Employee.findById(contract.employee_id).get
           val passport = Employee.passport(employee.id)
-          val job = Department.findById(contract.position_id).get
-          val department = Department.findById(job.parent_id.get).get
+          val job = Structure.findById(contract.position_id).get
+          val department = Structure.findById(job.parent_id.get).get
 
           val keywords = Map(
             "$СОТРУДНИК.ИМЯ" -> employee.firstname,
@@ -73,8 +82,8 @@ object Contracts extends Controller {
             "$ПАСПОРТ.ДАТА.ОКОНЧАНИЯ" -> new SimpleDateFormat("dd.MM.yyyy").format(passport.end_date).toString,
             "$ДОГОВОР.ДАТА.НАЧАЛА" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.open_date).toString,
             "$ДОГОВОР.ДАТА.ОКОНЧАНИЯ" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.end_date).toString,
-            "$ДОГОВОР.ИСПЫТАТЕЛЬНЫЙ.СРОК.НАЧАЛА" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.trial_period_open).toString,
-            "$ДОГОВОР.ИСПЫТАТЕЛЬНЫЙ.СРОК.ОКОНЧАНИЯ" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.trial_period_end).toString,
+            "$ДОГОВОР.ИСПЫТАТЕЛЬНЫЙ.СРОК.НАЧАЛА" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.trial_period_open.get).toString,
+            "$ДОГОВОР.ИСПЫТАТЕЛЬНЫЙ.СРОК.ОКОНЧАНИЯ" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.trial_period_end.get).toString,
             "$ДОГОВОР.ОКЛАД" -> contract.salary.toString(),
             "$РУКОВОДИТЕЛЬ.ДОЛЖНОСТЬ" -> "и.о Председатель Правления",
             "$РУКОВОДИТЕЛЬ.ФИО" -> "Бапа уулу Кубанычбек"

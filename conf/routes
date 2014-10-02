@@ -78,6 +78,7 @@ GET           /contracts/create                     controllers.Contracts.create
 GET           /contracts/list                       controllers.Contracts.list
 GET           /contracts/json/list                  controllers.Contracts.jsonList
 POST          /contracts/save                       controllers.Contracts.save
+GET           /contracts/json/ownlist               controllers.Contracts.jsonEmployeeContractsList(id: Long)
 GET           /contracts/:id/download               controllers.Contracts.download(id: Long)
 
 GET           /institutions/create                  controllers.Institutions.create

@@ -2,17 +2,53 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a ui-sref="employees.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
                 <strong>Список сотрудников</strong>
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" ng-click="showSearch()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                        <a ui-sref="employees.create" >
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <input ng-model="surname" type="text" placeholder="Поиск ..." autofocus class="form-control" />
-            <table class="table table-condensed" ng-table="employeeTableParams">
-                <tr ng-repeat="employee in employees | filter: surname">
-                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.surname }} {{employee.firstname}}</a></td>
-                    @*<td data-title="'Firstname'">{{ employee.firstname }}</td>*@
-                    @*<td data-title="'Lastname'">{{ employee.lastname }}</td>*@
-                    @*<td data-title="'Date'">{{ employee.birthday | date: 'dd.MM.yyyy' }}</td>*@
-                    @*<td data-title="'Email'">{{ employee.email }}</td>*@
+            <div class="panel-body" ng-show="search">
+                <div class="col-sm-2">
+                    <input ng-model="surname" type="text" placeholder="Фамилия ..." autofocus class="form-control" />
+                </div>
+                <div class="col-sm-2">
+                    <input ng-model="firstname" type="text" placeholder="Имя ..." autofocus class="form-control" />
+                </div>
+                <div class="col-sm-2">
+                    <input ng-model="lastname" type="text" placeholder="Отчество ..." autofocus class="form-control" />
+                </div>
+                <div class="col-sm-2">
+                    <input string-to-timestamp ng-model="birthday" type="date" placeholder="Дата рождения ..." autofocus class="form-control" />
+                </div>
+                <div class="col-sm-2">
+                    <input ng-model="searchedStructureId" ng-change="preSearchByOfficeId()" type="number" placeholder="Структура ..." autofocus class="form-control" />
+                </div>
+                <hr />
+            </div>
+            <table class="table table-condensed">
+                <tr>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Год рождения</th>
+                    <th>E-mail</th>
+                </tr>
+                <tr ng-repeat="employee in employees | filter: {surname: surname, firstname: firstname, lastname: lastname, birthday: birthday } | filter:searchByOfficeId">
+                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.surname }}</a></td>
+                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.firstname }}</a></td>
+                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.lastname }}</a></td>
+                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.birthday | date: 'dd.MM.yyyy' }}</a></td>
+                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.email }}</a></td>
                 </tr>
             </table>
         </div>

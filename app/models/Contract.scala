@@ -75,6 +75,12 @@ object Contract {
     }.headOption
   }
 
+  def findAllByEmployeeId(employeeId: Long) = inTransaction {
+    from(contractTable) {
+      contract => where(contract.employee_id === employeeId) select (contract)
+    }.toList
+  }
+
   def insert(contract: Contract): Contract = inTransaction {
     contractTable.insert(contract)
   }
