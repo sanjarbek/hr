@@ -1,8 +1,24 @@
-angular.module('app').controller('PassportController', function ($scope, $filter, passportsData, PassportService, $modal, $log) {
+angular.module('app').controller('PassportController', function ($scope, $filter, passportData, PassportService, $modal, $log) {
 
-    $scope.passports = passportsData;
+    if (passportData != "null") {
+        $scope.passportForm = passportData;
+        $scope.passportForm.open_date = $filter("date")(passportData.open_date, 'yyyy-MM-dd');
+        $scope.passportForm.end_date = $filter("date")(passportData.end_date, 'yyyy-MM-dd');
+        $scope.isNew = false;
+    } else {
+        $scope.passportForm = {
+            id: null,
+            employee_id: null,
+            serial: null,
+            number: null,
+            organ: null,
+            open_date: null,
+            end_date: null
+        };
+        $scope.isNew = true;
+    }
 
-    $scope.isCollapsed = true;
+    $scope.editMode = true;
 
     $scope.resetPassport = function () {
         $scope.selectAction = $scope.savePassport;
@@ -20,68 +36,35 @@ angular.module('app').controller('PassportController', function ($scope, $filter
 
     $scope.savePassport = function () {
 
-        $scope.passportForm.id = 0;
-        $scope.passportForm.employee_id = $scope.activeEmployee.id;
+        if ($scope.isNew) {
+            $scope.passportForm.id = 0;
+            $scope.passportForm.employee_id = $scope.activeEmployee.id;
 
-        PassportService.save($scope.passportForm).then(function (result) {
-            $scope.passports.push(result.data);
-            PNotify.desktop.permission();
-            (new PNotify({
-                title: 'Статус сохранения',
-                text: 'Новая запись успешно сохранена.',
-                desktop: {
-                    desktop: true
-                }
-            })).get().click(function (e) {
-                    if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
-                });
-        });
+            PassportService.save($scope.passportForm).then(function (result) {
 
-        $scope.passportForm = {};
-    };
+                $scope.isNew = false;
+                $scope.passportForm.id = result.data.id;
 
-    $scope.selectPassport = function (passport) {
-        $scope.selectAction = $scope.updatePassport;
-        $scope.passportForm = passport;
-        $scope.passportForm.open_date = $filter("date")(passport.open_date, 'yyyy-MM-dd');
-        $scope.passportForm.end_date = $filter("date")(passport.end_date, 'yyyy-MM-dd');
-        $scope.isCollapsed = false;
-    };
-
-    $scope.updatePassport = function () {
-
-        PassportService.update($scope.passportForm).then(function (result) {
-
-            for (i = 0; i < $scope.passports.length; i++) {
-                if ($scope.passports[i].id == $scope.passportForm.id)
-                    $scope.passports[i] = $scope.passportForm;
-            }
-
-            PNotify.desktop.permission();
-            (new PNotify({
-                title: 'Статус изменений',
-                text: 'Изменения успешно сохранены.',
-                desktop: {
-                    desktop: true
-                }
-            })).get().click(function (e) {
-                    if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
-                });
-        });
-    }
-
-    $scope.deletePassport = function (passport) {
-        var result = confirm("Вы действительно хотите удалить данную запись?");
-        if (result) {
-            PassportService.delete(passport).then(function (result) {
-                for (i = 0; i < $scope.passports.length; i++) {
-                    if ($scope.passports[i].id == passport.id)
-                        $scope.passports.splice(i, 1);
-                }
                 PNotify.desktop.permission();
                 (new PNotify({
-                    title: 'Статус удаления',
-                    text: 'Удаление успешно выполнен.',
+                    title: 'Статус сохранения',
+                    text: 'Новая запись успешно сохранена.',
+                    desktop: {
+                        desktop: true
+                    }
+                })).get().click(function (e) {
+                        if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                    });
+            });
+
+        } else {
+            PassportService.update($scope.passportForm).then(function (result) {
+
+                $scope.isNew = false;
+                PNotify.desktop.permission();
+                (new PNotify({
+                    title: 'Статус изменений',
+                    text: 'Изменения успешно сохранены.',
                     desktop: {
                         desktop: true
                     }
@@ -90,6 +73,8 @@ angular.module('app').controller('PassportController', function ($scope, $filter
                     });
             });
         }
-    }
+
+        $scope.editMode = !$scope.editMode;
+    };
 
 })

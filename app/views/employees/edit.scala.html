@@ -1,0 +1,91 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Форма личных данных сотрудника
+    </div>
+    <div class="panel-body">
+        <form ng-submit="saveEmployee()" class="form-horizontal">
+            <fieldset ng-disabled="editMode">
+                <div class="form-group form-group-sm">
+                    <label for="surname" class="col-sm-5 col-md-4 control-label">Фамилия</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="surname" ng-model="newEmployeeForm.surname" />
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="firstname" class="col-sm-5 col-md-4 control-label">Имя</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="firstname" ng-model="newEmployeeForm.firstname" />
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="lastname" class="col-sm-5 col-md-4 control-label">Отчество</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="lastname" ng-model="newEmployeeForm.lastname" />
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="birthday" class="col-sm-5 col-md-4 control-label">Дата рождения</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="date" name="birthday" ng-model="newEmployeeForm.birthday" class="input-sm form-control" min="1900-01-01" max="2014-01-01" />
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="citizenship" class="col-sm-5 col-md-4 control-label">Гражданство</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="citizenship" ng-model="newEmployeeForm.citizenship"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="insurance_number" class="col-sm-5 col-md-4 control-label">Номер страхового свидетельства</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="insurance_number" ng-model="newEmployeeForm.insurance_number"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="tax_number" class="col-sm-5 col-md-4 control-label">ИНН налогоплательщика</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="tax_number" ng-model="newEmployeeForm.tax_number"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="home_phone" class="col-sm-5 col-md-4 control-label">Домашний телефон</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="home_phone" ng-model="newEmployeeForm.home_phone"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="mobile_phone" class="col-sm-5 col-md-4 control-label">Сотовый телефон</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="text" name="mobile_phone" ng-model="newEmployeeForm.mobile_phone"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="email" class="col-sm-5 col-md-4 control-label">Электронная почта</label>
+                    <div class="col-sm-7 col-md-4">
+                        <input class="form-control" type="email" name="email" ng-model="newEmployeeForm.email" />
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="panel-footer">
+        <div class="pull-right">
+            <button class="btn btn-primary" ng-click="editMode=false" ng-show="editMode"><span class="glyphicon glyphicon-edit"></span>
+                Редактировать</button>
+            <button class="btn btn-info" ng-click="updateEmployee()" ng-show="!editMode"><span class="glyphicon glyphicon-save"></span>
+                Сохранить</button>
+            <button class="btn btn-default" ng-click="editMode=true" ng-show="!editMode">Отменить</button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

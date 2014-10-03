@@ -21,9 +21,14 @@ object Passports extends Controller {
     Ok(Json.toJson(passports))
   }
 
-  def jsonEmployeePassport(employeeId: Long) = Action {
-    val passports = Passport.findEmployeePassport(employeeId).map { passport => Json.toJson(passport)}
-    Ok(Json.toJson(passports))
+  def jsonEmployeePassport(employee_id: Long) = Action {
+    Passport.findEmployeePassport(employee_id).map {
+      passport => Ok(Json.toJson(passport))
+    }.getOrElse(Ok(JsNull))
+  }
+
+  def show = Action {
+    Ok(views.html.passport.show())
   }
 
   def save = Action(parse.json) { implicit request =>

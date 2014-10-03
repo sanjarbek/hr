@@ -4,13 +4,18 @@ angular.module('app').service('EmployeeService', function ($http, $state) {
 
     var activeEmployee = {};
 
-    //save method create a new employee if not already exists
-    //else update the existing object
     this.save = function (employee) {
         $http.post('/employees/save', employee)
             .success(function (employee) {
                 console.log(employee)
                 $state.go("employees.detail", {employeeId: employee.id});
+            });
+    }
+
+    this.update = function (employee) {
+        return $http.put('/employees/update', employee)
+            .success(function (result) {
+                return result;
             });
     }
 

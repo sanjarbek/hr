@@ -22,7 +22,8 @@ libraryDependencies ++= Seq(
   //  "org.jopendocument" % "jOpenDocument" % "1.3",
   "org.docx4j" % "docx4j" % "3.2.0",
   "org.apache.poi" % "poi-ooxml" % "3.10.1",
-  "org.apache.poi" % "poi" % "3.10.1"
+  "org.apache.poi" % "poi" % "3.10.1",
+  "org.webjars" % "angular-xeditable" % "0.1.8"
 )
 
 playScalaSettings

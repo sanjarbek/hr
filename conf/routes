@@ -19,7 +19,9 @@ GET           /employees/json/list                  controllers.Employees.jsonLi
 GET           /employees/json/get                   controllers.Employees.jsonGet(id: Long)
 GET           /employees/create                     controllers.Employees.newEmployee
 GET           /employees/show                       controllers.Employees.show
+GET           /employees/edit                       controllers.Employees.edit
 POST          /employees/save                       controllers.Employees.save
+PUT           /employees/update                     controllers.Employees.update
 
 GET           /employees/json/family                controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
 GET           /employees/json/passports             controllers.Passports.jsonEmployeePassport(employeeId: Long)
@@ -94,7 +96,9 @@ PUT           /educations/update                    controllers.Educations.updat
 DELETE        /educations/delete                    controllers.Educations.delete(id: Long)
 
 GET           /passports/list                       controllers.Passports.list
+GET           /passports/show                       controllers.Passports.show
 GET           /passports/json/list                  controllers.Passports.jsonList
+GET           /passports/json/get                   controllers.Passports.jsonEmployeePassport(employee_id: Long)
 POST          /passports/save                       controllers.Passports.save
 PUT           /passports/update                     controllers.Passports.update
 DELETE        /passports/delete                     controllers.Passports.delete(id: Long)

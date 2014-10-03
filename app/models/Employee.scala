@@ -12,19 +12,20 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
 case class Employee(
-  id: Long,
-  surname: String,
-  firstname: String,
-  lastname: String,
-  birthday: Date,
-  citizenship: String,
-  insurance_number: String,
-  tax_number: String,
-  home_phone: String,
-  mobile_phone: String,
-  email: String ) extends KeyedEntity[Long]
+                     id: Long,
+                     surname: String,
+                     firstname: String,
+                     lastname: String,
+                     birthday: Date,
+                     citizenship: String,
+                     insurance_number: String,
+                     tax_number: String,
+                     home_phone: String,
+                     mobile_phone: String,
+                     email: String) extends KeyedEntity[Long]
 
 object Employee {
+
   import Database.{employeeTable, relationshipTable}
 
   implicit val employeeWrites: Writes[Employee] = (
@@ -59,32 +60,29 @@ object Employee {
     employee => select(employee)
   }
 
-  def findAll: Iterable[Employee] = inTransaction{
+  def findAll: Iterable[Employee] = inTransaction {
     allQ.toList
   }
 
-  def findById(id: Long) = inTransaction{
+  def findById(id: Long) = inTransaction {
     from(employeeTable) {
-      employee => where(employee.id === id) select(employee)
+      employee => where(employee.id === id) select (employee)
     }.headOption
   }
 
-  def insert(employee: Employee): Employee = inTransaction{
+  def insert(employee: Employee): Employee = inTransaction {
     employeeTable.insert(employee)
   }
 
   def update(employee: Employee) {
-    inTransaction{ employeeTable.update(employee)}
+    inTransaction {
+      employeeTable.update(employee)
+    }
   }
 
-  def listOfFamily(employee: Employee)  = inTransaction{
+  def listOfFamily(employee: Employee) = inTransaction {
     from(relationshipTable) {
-      family => where(family.employee_id===employee.id).compute(count)
+      family => where(family.employee_id === employee.id).compute(count)
     }.toLong
-  }
-
-  def passport(id: Long) = {
-    val passports = Passport.findEmployeePassport(id)(0)
-    passports
   }
 }

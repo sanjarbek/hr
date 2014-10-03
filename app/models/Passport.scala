@@ -56,9 +56,9 @@ object Passport {
   }
 
   def findEmployeePassport(employeeId: Long) = inTransaction {
-    from(allQ) { passport =>
-      where(passport.employee_id === employeeId) select (passport)
-    }.toList
+    from(passportTable) {
+      passport => where(passport.employee_id === employeeId) select (passport)
+    }.headOption
   }
 
   def findById(id: Long) = inTransaction {

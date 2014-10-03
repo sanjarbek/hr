@@ -10,6 +10,7 @@
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("pnotify.history.css"))'>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("tree-control.css"))'>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("tree-control-attribute.css"))'>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("xeditable.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/main.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/anim-in-out.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/custom_bootstrap.css"))'>
@@ -94,6 +95,7 @@
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("angular-tree-control.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ui-bootstrap.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ui-bootstrap-tpls.min.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("xeditable.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("ng-table.min.js"))'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/anim-in-out.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/reconnecting-websocket.js")'></script>
@@ -125,7 +127,7 @@
         $ ( function ( ) {
             @*var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");*@
             @*var ws = new ReconnectingWebSocket ( "ws://192.168.0.128:9001/connection/status" ) ;*@
-        var ws = new ReconnectingWebSocket ( "    @routes.Application.serverStatus.webSocketURL() " );
+        var ws = new ReconnectingWebSocket ( "     @routes.Application.serverStatus.webSocketURL() " );
         ws.onmessage = function ( msg ) {
         $ ( '#server-status' ).text ( msg.data ) ;
         $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;

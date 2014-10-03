@@ -20,10 +20,10 @@ angular.module('app').service('PassportService', function ($http) {
             })
     }
 
-    this.delete = function (passport) {
-        return $http.delete('/relationships/delete', {params: {id: passport.id}})
-            .success(function (result) {
-                return result;
+    this.getEmployeePassport = function (employee_id) {
+        return $http.get('/passports/json/get', {params: {employee_id: employee_id}})
+            .then(function (result) {
+                return result.data;
             })
     }
 

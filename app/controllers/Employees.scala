@@ -69,6 +69,23 @@ object Employees extends Controller {
     Ok(views.html.employees.show())
   }
 
+  def edit = Action {
+    Ok(views.html.employees.edit())
+  }
+
+  def update = Action(parse.json) { implicit request =>
+    val employeeJson = request.body
+    employeeJson.validate[Employee].fold(
+      valid = { employee =>
+        Employee.update(employee)
+        Ok(Json.toJson("Updated"))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
   def template = Action {
     Ok(views.html.employees.default())
   }

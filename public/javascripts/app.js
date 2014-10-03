@@ -56,8 +56,10 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return EmployeeService.get($stateParams.employeeId);
                 }
             },
-            controller: function ($scope, activeEmployeeData, $upload) {
+            controller: function ($scope, activeEmployeeData, $upload, $state) {
                 $scope.activeEmployee = activeEmployeeData;
+
+                $state.go("employees.detail.edit");
 
                 $scope.onFileSelect = function ($files) {
                     //$files: an array of files selected, each file has name, size, and type.
@@ -91,6 +93,35 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                      It could also be used to monitor the progress of a normal http post/put request with large data*/
                     // $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
                 };
+            }
+        })
+        .state('employees.detail.edit', {
+            url: '/edit',
+            templateUrl: '/employees/edit',
+            controller: function ($scope, activeEmployeeData, EmployeeService, $filter) {
+
+                $scope.newEmployeeForm = activeEmployeeData;
+                $scope.newEmployeeForm.birthday = $filter("date")(activeEmployeeData.birthday, 'yyyy-MM-dd');
+
+                $scope.editMode = true;
+
+                $scope.updateEmployee = function () {
+                    EmployeeService.update($scope.newEmployeeForm).then(function (result) {
+
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус изменений',
+                            text: 'Изменения успешно сохранены.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                            });
+                    });
+
+                    $scope.editMode = !$scope.editMode;
+                }
             }
         })
         .state('employees.detail.relationship', {
@@ -156,14 +187,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             absract: true,
             url: '/contract',
             template: '<div ui-view></div>'
-//            resolve: {
-//                contractTypeData: function (ContractTypeService, activeEmployeeData) {
-//                    return ContractTypeService.list();
-//                },
-//                structuresData: function (StructureService) {
-//                    return StructureService.list();
-//                }
-//            }
         })
         .state('employees.detail.contract.list', {
             url: '/list',
@@ -778,6 +801,16 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             resolve: {
                 passportsData: function (PassportService, activeEmployeeData) {
                     return PassportService.list(activeEmployeeData.id);
+                }
+            },
+            controller: 'PassportController'
+        })
+        .state('employees.detail.passports.show', {
+            url: '/show',
+            templateUrl: '/passports/show',
+            resolve: {
+                passportData: function (PassportService, activeEmployeeData) {
+                    return PassportService.getEmployeePassport(activeEmployeeData.id);
                 }
             },
             controller: 'PassportController'

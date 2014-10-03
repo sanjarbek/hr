@@ -7,11 +7,11 @@
                 </a>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <input type="file" ng-file-select="onFileSelect($files)">
-            </div>
-        </div>
+        @*<div class="row">*@
+        @*<div class="col-sm-12">*@
+        @*<input type="file" ng-file-select="onFileSelect($files)">*@
+        @*</div>*@
+        @*</div>*@
         <div class="row">
             <div class="col-sm-12">
                 <div style="text-align : center ;">
@@ -23,11 +23,11 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="list-group">
-                    <a href="#" class="list-group-item" ui-sref-active="active">Личные данные</a>
-                    <a href="#" class="list-group-item" ui-sref-active="active">Контактные данные</a>
+                    <a ui-sref="employees.detail.edit" class="list-group-item" ng-class="{active: $state.includes('employees.detail.edit')}">Личные данные</a>
+                    @*<a href="#" class="list-group-item" ui-sref-active="active">Контактные данные</a>*@
                     <a ui-sref="employees.detail.military.list" class="list-group-item" ng-class="{active: $state.includes('employees.detail.military')}">Воинские данные</a>
                     <a ui-sref="employees.detail.relationship.list" class="list-group-item" ng-class="{active: $state.includes('employees.detail.relationship')}">Состав семьи</a>
-                    <a ui-sref="employees.detail.passports.list" class="list-group-item" ng-class="{active: $state.includes('employees.detail.passports')}">Паспортные данные</a>
+                    <a ui-sref="employees.detail.passports.show" class="list-group-item" ng-class="{active: $state.includes('employees.detail.passports')}">Паспортные данные</a>
                     <a ui-sref="employees.detail.educations.list" class="list-group-item" ng-class="{active: $state.includes('employees.detail.educations')}">Образование</a>
                     <a href="#" class="list-group-item" ui-sref-active="active">Сертификаты</a>
                     <a ui-sref="employees.detail.contract.list" class="list-group-item" ng-class="{active: $state.includes('employees.detail.contract')}">Договора</a>
@@ -38,6 +38,8 @@
         </div>
     </div>
     <div class="col-sm-9  col-md-10">
-        <div ui-view>Сводная информация о сотруднике {{ activeEmployee }}</div>
+        <div ui-view>
+
+        </div>
     </div>
 </div>
