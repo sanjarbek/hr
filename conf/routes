@@ -109,6 +109,14 @@ POST          /militaries/save                      controllers.Militaries.save
 PUT           /militaries/update                    controllers.Militaries.update
 DELETE        /militaries/delete                    controllers.Militaries.delete(id: Long)
 
+GET           /orders/create                        controllers.Orders.create
+GET           /orders/list                          controllers.Orders.list
+GET           /orders/json/list                     controllers.Orders.jsonList
+GET           /orders/json/get                      controllers.Orders.jsonGet(id: Long)
+POST          /orders/save                          controllers.Orders.save
+PUT           /orders/update                        controllers.Orders.update
+GET           /orders/generate                      controllers.Orders.generate(id: Long)
+
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)
 

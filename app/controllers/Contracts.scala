@@ -68,7 +68,7 @@ object Contracts extends Controller {
 
             val keywords = Map(
               "$СОТРУДНИК.ИМЯ" -> employee.firstname,
-              "$СОТРУДНИК.ФАМИЛИЯ" -> employee.surname,
+              "$СОТРУДНИК.ФАМИЛИЯ" -> "<strong>employee.surname</strong>",
               "$СОТРУДНИК.ОТЧЕСТВО" -> employee.lastname,
               "$СОТРУДНИК.АДРЕС.ПРОЖИВАНИЯ" -> "г. Бишкек, пр. Чуй 57/12",
               "$СОТРУДНИК.АДРЕС.РЕГИСТРАЦИИ" -> "г. Бишкек, пр. Чуй 57/12",

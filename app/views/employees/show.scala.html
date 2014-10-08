@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-3 col-md-2">
+    <div class="col-sm-3 col-md-2  col-xs-3">
         <div class="row">
             <div class="col-sm-12">
                 <a href="#" class="thumbnail">
@@ -13,7 +13,7 @@
         @*</div>*@
         @*</div>*@
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12  col-xs-12">
                 <div style="text-align : center ;">
                     {{ activeEmployee.surname }} <br />
                     {{ activeEmployee.firstname }}
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 col-xs-12">
                 <div class="list-group">
                     <a ui-sref="employees.detail" class="list-group-item" ng-class="{active: $state.includes('employees.detail.edit')}">Личные данные</a>
                     @*<a href="#" class="list-group-item" ui-sref-active="active">Контактные данные</a>*@
@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-9  col-md-10">
+    <div class="col-sm-9  col-md-10  col-xs-9">
         <div ui-view>
             <div class="panel panel-default">
                 <div class="panel-heading">

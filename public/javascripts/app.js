@@ -1,8 +1,183 @@
-angular.module('app', ['ui.router', 'ngTable', 'treeGrid', 'ui.bootstrap', 'angularFileUpload', 'treeControl']);
+angular.module('app', [
+    'ui.router',
+    'ngTable',
+    'treeGrid',
+    'ui.bootstrap',
+    'angularFileUpload',
+    'treeControl',
+    'ngTagsInput',
+    'textAngular',
+    'ckeditor'
+]);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider) {
 
     $stateProvider
+        .state('orders', {
+            url: '/orders',
+            abstract: true,
+            template: '<div ui-view></div>'
+        })
+        .state('orders.list', {
+            url: '/list',
+            templateUrl: '/orders/list',
+            resolve: {
+                ordersData: function (OrderService) {
+                    return OrderService.list();
+                }
+            },
+            controller: function ($scope, ordersData) {
+                $scope.orders = ordersData;
+            }
+        })
+        .state('orders.edit', {
+            url: '/{orderId:[0-9]{1,6}}',
+            templateUrl: '/orders/create',
+            resolve: {
+                orderData: function (OrderService, $stateParams) {
+                    return OrderService.get($stateParams.orderId)
+                }
+            },
+            controller: function ($scope, $filter, $state, OrderService, orderData) {
+                $scope.title = 'Редактировать приказ';
+
+                $scope.formInit = function () {
+                    console.log(orderData);
+                    $scope.newOrderForm = orderData;
+                    console.log($scope.newOrderForm);
+                    $scope.newOrderForm.date_of_order = $filter("date")(orderData.date_of_order, 'yyyy-MM-dd');
+                    console.log($scope.newOrderForm.tags);
+//                    $scope.newOrderForm.tags = [];
+//                    orderData.tags.forEach(function(item){
+//                        $scope.newOrderForm.tags.push(Object({text: item}));
+//                    });
+                };
+
+                $scope.formInit();
+
+                $scope.order_categories = [
+                    {id: 1, name: 'Личный состав'},
+                    {id: 2, name: 'Основной состав'}
+                ];
+
+                $scope.options = {
+                    language: 'ru',
+                    allowedContent: true,
+                    entities: false,
+                    toolbar: [
+                        { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+                        { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+                        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-'] },
+//                        { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+//                        '/',
+                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+                        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+//                        { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+                        { name: 'insert', items: [ 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak' ] },
+//                        '/',
+                        { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+                        { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                        { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+                        { name: 'others', items: [ '-' ] }
+                    ]
+                };
+
+                $scope.save = function () {
+                    var tags = [];
+                    console.log($scope.newOrderForm.tags);
+                    $scope.newOrderForm.tags.forEach(function (item) {
+                        tags.push(item.text);
+                    });
+                    $scope.newOrderForm.tags = tags.toString();
+                    console.log($scope.newOrderForm.tags);
+                    OrderService.update($scope.newOrderForm).then(function (result) {
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус сохранения',
+                            text: 'Изменения успешно сохранены.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                            });
+                    });
+                }
+            }
+        })
+        .state('orders.create', {
+            url: '/create',
+            templateUrl: '/orders/create',
+            controller: function ($scope, OrderService, $state) {
+
+                $scope.title = 'Новый приказ';
+
+                $scope.tags = [
+                    { text: 'Tag1' },
+                    { text: 'Tag2' },
+                    { text: 'Tag3' }
+                ];
+                $scope.content = '';
+
+                $scope.order_categories = [
+                    {id: 1, name: 'Личный состав'},
+                    {id: 2, name: 'Основной состав'}
+                ];
+
+                $scope.options = {
+                    language: 'ru',
+                    allowedContent: true,
+                    entities: false,
+                    toolbar: [
+                        { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+                        { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+                        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-'] },
+//                        { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+//                        '/',
+                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+                        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+//                        { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+                        { name: 'insert', items: [ 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak' ] },
+//                        '/',
+                        { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+                        { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                        { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+                        { name: 'others', items: [ '-' ] }
+                    ]
+                };
+
+                $scope.newOrderForm = {
+                    id: 0,
+                    content: null,
+                    name: null,
+                    date_of_order: null,
+                    tags: null,
+                    nomer: null,
+                    order_category: null
+                }
+
+                $scope.save = function () {
+                    var tags = [];
+                    $scope.newOrderForm.tags.forEach(function (item) {
+                        tags.push(item.text);
+                    });
+                    $scope.newOrderForm.tags = tags.toString();
+                    OrderService.save($scope.newOrderForm).then(function (result) {
+
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус сохранения',
+                            text: 'Новая запись успешно сохранена.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                            });
+                    });
+                }
+            }
+        })
         .state('employees', {
             url: '/employees',
             abstract: true,

@@ -1,0 +1,40 @@
+@(order: Order)(implicit request: RequestHeader)
+
+@import java.text.SimpleDateFormat
+@import java.util.{Locale, Calendar}
+
+<html ng-app="app">
+    <head>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.css")).absoluteURL()'>
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-xs-6">
+                <img src="@routes.Assets.at("images/logo.png").absoluteURL()" />
+            </div>
+            <div class="col-xs-6">
+                @*<img src="@routes.Assets.at("images/title.png").absoluteURL()" />*@
+                <p style="font-size : 14 px">"ДОС-КРЕДОБАНК" АЧЫК АКЦИОНЕРДИК КООМУ</p>
+                <p style="font-size : 14 px">ОТКРЫТОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО "ДОС-КРЕДОБАНК"</p>
+            </div>
+        </div>
+        <hr style="border : 1 px solid #000000">
+        <div class="row">
+            <div class="col-xs-12" style="text-align : center ;">
+                <p><strong style="font-size : 24 px ;">ПРИКАЗ</strong></p>
+                <p style="font-size : 18 px"><strong>по личному составу</strong></p>
+                <p style="font-size : 18 px">
+                    <strong>
+                        от @(new SimpleDateFormat("dd MMMM yyyy").format(Calendar.getInstance().getTime).toString) года № ___</strong>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" style="font-size : 18 px ;">
+                <br/>
+                <br/>
+                @Html(order.content.get)
+            </div>
+        </div>
+    </body>
+</html>
