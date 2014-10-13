@@ -14,11 +14,11 @@ import collection.Iterable
 
 case class Order(
                   id: Long,
-                  order_category: Option[Int],
-                  name: Option[String],
-                  nomer: Option[Int],
-                  date_of_order: Option[Date],
-                  content: Option[String],
+                  order_category: Int,
+                  name: String,
+                  nomer: Int,
+                  date_of_order: Date,
+                  content: String,
                   tags: Option[String]
                   ) extends KeyedEntity[Long]
 
@@ -28,21 +28,21 @@ object Order {
 
   implicit val contractWrites: Writes[Order] = (
     (JsPath \ "id").write[Long] and
-      (JsPath \ "order_category").write[Option[Int]] and
-      (JsPath \ "name").write[Option[String]] and
-      (JsPath \ "nomer").write[Option[Int]] and
-      (JsPath \ "date_of_order").write[Option[Date]] and
-      (JsPath \ "content").write[Option[String]] and
+      (JsPath \ "order_category").write[Int] and
+      (JsPath \ "name").write[String] and
+      (JsPath \ "nomer").write[Int] and
+      (JsPath \ "date_of_order").write[Date] and
+      (JsPath \ "content").write[String] and
       (JsPath \ "tags").write[Option[String]]
     )(unlift(Order.unapply))
 
   implicit val contractReads: Reads[Order] = (
     (JsPath \ "id").read[Long] and
-      (JsPath \ "order_category").read[Option[Int]] and
-      (JsPath \ "name").read[Option[String]] and
-      (JsPath \ "nomer").read[Option[Int]] and
-      (JsPath \ "date_of_order").read[Option[Date]] and
-      (JsPath \ "content").read[Option[String]] and
+      (JsPath \ "order_category").read[Int] and
+      (JsPath \ "name").read[String] and
+      (JsPath \ "nomer").read[Int] and
+      (JsPath \ "date_of_order").read[Date] and
+      (JsPath \ "content").read[String] and
       (JsPath \ "tags").read[Option[String]]
     )(Order.apply _)
 

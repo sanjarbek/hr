@@ -38,22 +38,27 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return OrderService.get($stateParams.orderId)
                 }
             },
-            controller: function ($scope, $filter, $state, OrderService, orderData) {
+            controller: function ($scope, $filter, $http, $state, OrderService, orderData) {
                 $scope.title = 'Редактировать приказ';
 
                 $scope.formInit = function () {
-                    console.log(orderData);
                     $scope.newOrderForm = orderData;
-                    console.log($scope.newOrderForm);
+
+                    if (orderData.tags != null) {
+                        var tags = orderData.tags;
+                        $scope.newOrderForm.tags = [];
+                        tags.split(",").forEach(function (item) {
+                            $scope.newOrderForm.tags.push(Object({text: item}));
+                        });
+                    }
                     $scope.newOrderForm.date_of_order = $filter("date")(orderData.date_of_order, 'yyyy-MM-dd');
-                    console.log($scope.newOrderForm.tags);
-//                    $scope.newOrderForm.tags = [];
-//                    orderData.tags.forEach(function(item){
-//                        $scope.newOrderForm.tags.push(Object({text: item}));
-//                    });
                 };
 
                 $scope.formInit();
+
+                $scope.loadTags = function (query) {
+                    return OrderService.tagsList(query);
+                };
 
                 $scope.order_categories = [
                     {id: 1, name: 'Личный состав'},
@@ -85,12 +90,14 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.save = function () {
                     var tags = [];
                     console.log($scope.newOrderForm.tags);
+                    var tags_old = $scope.newOrderForm.tags;
                     $scope.newOrderForm.tags.forEach(function (item) {
                         tags.push(item.text);
                     });
                     $scope.newOrderForm.tags = tags.toString();
                     console.log($scope.newOrderForm.tags);
                     OrderService.update($scope.newOrderForm).then(function (result) {
+                        $scope.newOrderForm.tags = tags_old;
                         PNotify.desktop.permission();
                         (new PNotify({
                             title: 'Статус сохранения',
@@ -118,6 +125,10 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     { text: 'Tag3' }
                 ];
                 $scope.content = '';
+
+                $scope.loadTags = function (query) {
+                    return OrderService.tagsList(query);
+                };
 
                 $scope.order_categories = [
                     {id: 1, name: 'Личный состав'},

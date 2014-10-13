@@ -25,15 +25,17 @@
                 <p style="font-size : 18 px"><strong>по личному составу</strong></p>
                 <p style="font-size : 18 px">
                     <strong>
-                        от @(new SimpleDateFormat("dd MMMM yyyy").format(Calendar.getInstance().getTime).toString) года № ___</strong>
+                        от @(new SimpleDateFormat("dd MMMM yyyy").format(order.date_of_order).toString)
+                        года № @order.nomer
+                    </strong>
                 </p>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12" style="font-size : 18 px ;">
+            <br/>
                 <br/>
-                <br/>
-                @Html(order.content.get)
+                @Html(order.content)
             </div>
         </div>
     </body>

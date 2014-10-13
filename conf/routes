@@ -116,6 +116,7 @@ GET           /orders/json/get                      controllers.Orders.jsonGet(i
 POST          /orders/save                          controllers.Orders.save
 PUT           /orders/update                        controllers.Orders.update
 GET           /orders/generate                      controllers.Orders.generate(id: Long)
+GET        /orders/json/listByName        controllers.Orders.tagsList(query: String)
 
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)

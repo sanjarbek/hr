@@ -27,4 +27,11 @@ angular.module('app').service('OrderService', function ($http) {
             })
     }
 
+    this.tagsList = function (query) {
+        return $http.get('/orders/json/listByName', { params: { 'query': query }})
+            .success(function (result) {
+                return result;
+            });
+    }
+
 });

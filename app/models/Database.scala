@@ -20,6 +20,7 @@ object Database extends Schema {
   val militaryTable: Table[Military] = table[Military]("military_infos")
   val structureTable: Table[Structure] = table[Structure]("structures")
   val orderTable: Table[Order] = table[Order]("orders")
+  val orderTagTable: Table[OrderTag] = table[OrderTag]("order_tags")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -100,4 +101,5 @@ object Database extends Schema {
     order.id is (autoIncremented("orders_id_seq"))
   }
   }
+
 }

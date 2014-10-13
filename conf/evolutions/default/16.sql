@@ -10,6 +10,12 @@ CREATE TABLE orders (
   tags           VARCHAR
 );
 
-# -- !Downs
+CREATE TABLE order_tags (
+  id    VARCHAR UNIQUE,
+  count INT
+)
+
+  # -- !Downs
 DROP TABLE IF EXISTS orders;
 DROP SEQUENCE IF EXISTS orders_id_seq;
+DROP TABLE IF EXISTS order_tags;

@@ -5,7 +5,7 @@ import java.util.Date
 import play.api._
 import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
-import models.{Order}
+import models.{OrderTag, Order}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import io.github.cloudify.scala.spdf._
@@ -46,6 +46,15 @@ object Orders extends Controller {
     orderJson.validate[Order].fold(
       valid = { order =>
         val newOrder = Order.insert(order)
+        newOrder.tags.map(tags =>
+          tags.split(',').foreach(tag =>
+            OrderTag.findById(tag).map { order_tag =>
+              OrderTag.update(OrderTag(order_tag.id, order_tag.count + 1))
+            }.getOrElse {
+              OrderTag.insert(OrderTag(tag, 1))
+            }
+          )
+        )
         Ok(Json.toJson(newOrder))
       },
       invalid = { errors =>
@@ -58,8 +67,28 @@ object Orders extends Controller {
     val orderJson = request.body
     orderJson.validate[Order].fold(
       valid = { order =>
-        Order.update(order)
-        Ok(Json.toJson("Updated"))
+        Order.findById(order.id).map { order_old =>
+          Order.update(order)
+          val tagsListOld = order_old.tags.map { t1 => t1.split(",").toList}.getOrElse(List())
+          val tagsListNew = order.tags.map { t1 => t1.split(",").toList}.getOrElse(List())
+          val diffOld = tagsListOld.diff(tagsListNew)
+          val diffNew = tagsListNew.diff(tagsListOld)
+
+          diffOld.foreach(tag =>
+            OrderTag.findById(tag).map { order_tag =>
+              OrderTag.update(OrderTag(order_tag.id, order_tag.count - 1))
+            }
+          )
+          diffNew.foreach(tag =>
+            OrderTag.findById(tag).map { order_tag =>
+              OrderTag.update(OrderTag(order_tag.id, order_tag.count + 1))
+            }.getOrElse {
+              OrderTag.insert(OrderTag(tag, 1))
+            }
+          )
+
+          Ok(Json.toJson("Updated"))
+        }.getOrElse(NotFound("Не найдена такая запись."))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))
@@ -94,6 +123,11 @@ object Orders extends Controller {
       }
     }.getOrElse(NotFound("Не найден указанный приказ."))
 
+  }
+
+  def tagsList(query: String) = Action {
+    val tags = OrderTag.findByName(query)
+    Ok(Json.toJson(tags))
   }
 
 }

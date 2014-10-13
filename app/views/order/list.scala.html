@@ -17,7 +17,12 @@
                     <td>{{ order.id }}</td>
                     <td>{{ order.name }}</td>
                     <td>{{ order.date_of_order |  date: 'dd.MM.yyyy' }}</td>
-                    <td><a ui-sref="orders.edit({orderId: order.id})" class="pull-right btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a></td>
+                    <td>
+                        <div class="pull-right">
+                            <a ui-sref="orders.edit({orderId: order.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="/orders/generate?id={{order.id}}" target="_blank" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-download-alt"></span></a>
+                        </div>
+                    </td>
                 </tr>
             </table>
         </div>
