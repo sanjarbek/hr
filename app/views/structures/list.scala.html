@@ -1,8 +1,16 @@
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6 col-md-6">
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
+                    <div class="row">
+                        <div class="col-sm-11 col-sm-offset-1">
+                            <br>
+                            <button ng-click="createParent()" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-plus"></span> Добавить корневую
+                            </button>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-11">
                             <br/>
@@ -10,13 +18,13 @@
                             tree-model="dataForTheTree"
                             options="treeOptions"
                             >
-                                    {{node.name}}
+                                {{node.name}}
                                 <div class="pull-right">
-                                    <a ng-click="selectNode(node)" ng-show="hasChildren(node.structure_type)" >
+                                    <a ng-click="addChild(node)" ng-show="hasChildren(node.structure_type)" >
                                     <span class="glyphicon glyphicon-plus-sign"></span>
                                     </a>
-                                    <a ng-click="doIt(node)" ng-show="!node.is_position" >
-                                        <span class="glyphicon glyphicon-edit"></span>
+                                    <a ng-click="editNode(node, $parentNode)" ng-show="!node.is_position" >
+                                    <span class="glyphicon glyphicon-edit"></span>
                                     </a>
                                 </div>
                             </treecontrol>
@@ -27,18 +35,18 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-6 col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
             @Messages("Создать новую организационную структуру")
             </div>
             <div class="panel-body">
-                <form ng-submit="saveStructure()" class="form-horizontal">
+                <form class="form-horizontal">
                     <fieldset>
                         <div class="form-group form-group-sm">
                             <label for="parent_id" class="col-sm-6 control-label">Вышестоящая структура</label>
                             <div class="col-sm-6">
-                                <input type="text" value="{{ current_structure.name }}" required class="form-control" readonly />
+                                <input type="text" value="{{ parentStructure.name }}" required class="form-control" readonly />
                             </div>
                             <span class="help-inline"></span>
                         </div>
@@ -74,7 +82,7 @@
                             <span class="help-inline"></span>
                         </div>
                     </fieldset>
-                    <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+                    <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")' ng-click="actionMode()"></p>
                 </form>
             </div>
         </div>

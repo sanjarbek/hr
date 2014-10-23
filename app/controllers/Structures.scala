@@ -36,6 +36,19 @@ object Structures extends Controller {
     )
   }
 
+  def update = Action(parse.json) { implicit request =>
+    val structureJson = request.body
+    structureJson.validate[Structure].fold(
+      valid = { structure =>
+        Structure.update(structure)
+        Ok(Json.toJson("Updated"))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
   def delete(id: Long) = Action { implicit request =>
     Structure.delete(id)
     Ok(Json.toJson("Removed"))

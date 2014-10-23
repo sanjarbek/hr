@@ -8,32 +8,68 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
         {id: 2, name: 'Не активна'}
     ];
 
-    $scope.selectNode = function (structure) {
-        $scope.current_structure = structure;
-    };
+    $scope.addChild = function (node) {
+        $scope.clearForm();
+        $scope.parentStructure = node;
+        $scope.actionMode = $scope.saveStructure;
+    }
+
+    $scope.editNode = function (node, $parentNode) {
+        $scope.parentStructure = $parentNode;
+        $scope.newStructureForm = node;
+        $scope.actionMode = $scope.updateStructure;
+    }
+
+    $scope.createParent = function () {
+        $scope.parentStructure = null;
+        $scope.clearForm();
+        $scope.actionMode = $scope.saveStructure;
+    }
+
+    $scope.parentStructure = null;
+
+    $scope.clearForm = function () {
+        $scope.newStructureForm = {
+            id: 0,
+            parent_id: null,
+            name: null,
+            structure_type: null,
+            position_type: null,
+            status: null
+        }
+    }
 
     $scope.saveStructure = function () {
-        var parentId = null;
-        if ($scope.current_structure)
-            parentId = $scope.current_structure.id;
+        $scope.newStructureForm.id = 0;
+        if ($scope.parentStructure)
+            $scope.newStructureForm.parent_id = $scope.parentStructure.id;
 
-        var data = {
-            id: 0,
-            parent_id: parentId,
-            name: $scope.newStructureForm.name,
-            structure_type: $scope.newStructureForm.structure_type,
-            position_type: ($scope.newStructureForm.position_type == undefined || Boolean(!$scope.newStructureForm.is_position))
+        $scope.newStructureForm.position_type = ($scope.newStructureForm.position_type == undefined)
                 ? null
-                : $scope.newStructureForm.position_type,
-            status: $scope.newStructureForm.status
-        };
+            : $scope.newStructureForm.position_type;
 
-        StructureService.save(data).then(function (result) {
-            if (!$scope.current_structure.hasOwnProperty('children'))
-                $scope.current_structure.children = [];
-            $scope.current_structure.children.push(result.data);
+        StructureService.save($scope.newStructureForm).then(function (result) {
+            if ($scope.parentStructure != null) {
+                if (!$scope.parentStructure.hasOwnProperty('children')) {
+                    $scope.parentStructure.children = [];
+                    $scope.parentStructure.children.push(result.data);
+                }
+            }
         });
-        $scope.newStructureForm = {};
+
+        $scope.clearForm();
+    }
+
+    $scope.updateStructure = function () {
+        $scope.newStructureForm.position_type = ($scope.newStructureForm.position_type == undefined)
+            ? null
+            : $scope.newStructureForm.position_type;
+
+        StructureService.update($scope.newStructureForm).then(function (result) {
+            console.log("Updated");
+        });
+
+        $scope.clearForm();
     }
 
     $scope.hasChildren = function (structure_type) {
@@ -61,4 +97,5 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
             labelSelected: "a8"
         }
     };
+
 });

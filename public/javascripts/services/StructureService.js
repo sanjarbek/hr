@@ -7,6 +7,13 @@ angular.module('app').service('StructureService', function ($http) {
             });
     }
 
+    this.update = function (structure) {
+        return $http.put('/structures/update', structure)
+            .success(function (result) {
+                return result;
+            });
+    }
+
     this.list = function () {
         return $http.get('/structures/json/list').then(function (result) {
             return result.data;

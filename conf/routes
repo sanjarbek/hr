@@ -69,6 +69,7 @@ GET           /structures/list                      controllers.Structures.list
 GET           /structures/json/list                 controllers.Structures.jsonList
 GET           /structures/json/freepositions        controllers.Structures.jsonFreePositionsList
 POST          /structures/save                      controllers.Structures.save
+PUT        /structures/update             controllers.Structures.update
 
 GET           /contract_types/create                controllers.ContractTypes.create
 GET           /contract_types/list                  controllers.ContractTypes.list
