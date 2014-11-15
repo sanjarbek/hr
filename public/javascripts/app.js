@@ -12,7 +12,7 @@ angular.module('app', [
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider, $httpProvider) {
 
-    var interceptor = ["$rootScope", "$q", "$timeout", function ($rootScope, $q, $timeout, $state) {
+    var interceptor = ['$rootScope', '$q', '$timeout', '$injector', function ($rootScope, $q, $timeout, $injector) {
         return function (promise) {
             return promise.then(
                 function (response) {
@@ -22,7 +22,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     if (response.status == 401) {
                         console.log("Invalid token.");
                         $rootScope.$broadcast("InvalidToken");
-                        $state.go('structures.list');
+                        $injector.get('$state').transitionTo('structures.list');
                         $rootScope.sessionExpired = true;
                         $timeout(function () {
                             $rootScope.sessionExpired = false;
@@ -1050,7 +1050,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //    });
     $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams) {
         console.log("You are not authenticated." + toState.status);
-//        $state.go('structures.list');
+        $state.go('structures.list');
     });
     $rootScope.$on("$stateNotFound", function (event, toState, toParams, fromState, fromParams) {
         console.log("Page not found.");
