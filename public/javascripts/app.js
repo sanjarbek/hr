@@ -10,7 +10,35 @@ angular.module('app', [
     'ckeditor'
 ]);
 
-angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider) {
+angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider, $httpProvider) {
+
+    var interceptor = ["$rootScope", "$q", "$timeout", function ($rootScope, $q, $timeout, $state) {
+        return function (promise) {
+            return promise.then(
+                function (response) {
+                    return response;
+                },
+                function (response) {
+                    if (response.status == 401) {
+                        console.log("Invalid token.");
+                        $rootScope.$broadcast("InvalidToken");
+                        $state.go('structures.list');
+                        $rootScope.sessionExpired = true;
+                        $timeout(function () {
+                            $rootScope.sessionExpired = false;
+                        }, 5000);
+                    } else if (response.status == 403) {
+                        console.log("Insufficient privileges.");
+                        $rootScope.$broadcast("InsufficientPrivileges");
+                    } else if (response.status == 404) {
+                        console.log("Forbidden.");
+                    }
+                    return $q.reject(response);
+                }
+            );
+        };
+    }];
+    $httpProvider.responseInterceptors.push(interceptor);
 
     $stateProvider
         .state('orders', {
@@ -1006,39 +1034,26 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             },
             controller: 'MilitaryController'
-        })
+        });
 
-    ;
-}).run(function ($rootScope, $state) {
+    $urlRouterProvider.otherwise("/employees/list");
+
+}).run(function ($rootScope, $state, $log) {
     $rootScope.$state = $state;
+//    $rootScope.$on('$stateChangeError', function (ev, current, previous, rejection) {
+////        if (rejection && rejection.needsAuthentication === true) {
+//        if (rejection) {
+//            var returnUrl = $location.url();
+//            $log.log('returnUrl=' + returnUrl);
+//            console.log('returnUrl=' + returnUrl);
+//        }
+//    });
+    $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams) {
+        console.log("You are not authenticated." + toState.status);
+//        $state.go('structures.list');
+    });
+    $rootScope.$on("$stateNotFound", function (event, toState, toParams, fromState, fromParams) {
+        console.log("Page not found.");
+    });
 });
-
-
-//angular.module('app').controller('ModalDemoCtrl', '$scope', '$modal', '$log', function ($scope, $modal, $log) {
-//
-//    $scope.items = ['item1', 'item2', 'item3'];
-//
-//    $scope.open = function (size) {
-//
-//        var modalInstance = $modal.open({
-//            templateUrl: 'myModalContent.html',
-//            controller: ModalInstanceCtrl,
-//            size: size,
-//            resolve: {
-//                items: function () {
-//                    return $scope.items;
-//                }
-//            }
-//        });
-//
-//        modalInstance.result.then(function (selectedItem) {
-//            $scope.selected = selectedItem;
-//        }, function () {
-//            $log.info('Modal dismissed at: ' + new Date());
-//        });
-//    };
-//});
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
 

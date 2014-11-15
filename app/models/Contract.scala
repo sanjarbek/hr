@@ -94,4 +94,10 @@ object Contract {
   def delete(id: Long) = inTransaction {
     contractTable.deleteWhere(contract => contract.id === id)
   }
+
+  def findByStructurePosition(structure_id: Long): Option[Contract] = inTransaction {
+    from(contractTable) {
+      contract => where(contract.position_id === structure_id) select (contract)
+    }.headOption
+  }
 }

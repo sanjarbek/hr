@@ -19,7 +19,11 @@ case class Structure(
                       structure_type: Int,
                       position_type: Option[Int],
                       status: Int
-                      ) extends KeyedEntity[Int]
+                      ) extends KeyedEntity[Int] {
+  def contract: Option[Contract] = {
+    Contract.findByStructurePosition(this.id)
+  }
+}
 
 object Structure {
 

@@ -28,7 +28,8 @@ object Orders extends Controller {
 
   def jsonList = Action {
     val orders = Order.findAll.map { order => Json.toJson(order)}
-    Ok(Json.toJson(orders))
+    //    Ok(Json.toJson(orders))
+    Unauthorized(Json.obj("auth" -> "false"))
   }
 
   def jsonGet(id: Long) = Action {

@@ -41,20 +41,36 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
 
     $scope.saveStructure = function () {
         $scope.newStructureForm.id = 0;
-        if ($scope.parentStructure)
+        if ($scope.parentStructure != null)
             $scope.newStructureForm.parent_id = $scope.parentStructure.id;
+        else
+            $scope.newStructureForm.parent_id = null;
 
         $scope.newStructureForm.position_type = ($scope.newStructureForm.position_type == undefined)
-                ? null
+            ? null
             : $scope.newStructureForm.position_type;
 
         StructureService.save($scope.newStructureForm).then(function (result) {
             if ($scope.parentStructure != null) {
                 if (!$scope.parentStructure.hasOwnProperty('children')) {
                     $scope.parentStructure.children = [];
-                    $scope.parentStructure.children.push(result.data);
                 }
+                $scope.parentStructure.children.push(result.data);
             }
+            else {
+                $scope.dataForTheTree.push(result.data);
+            }
+
+            PNotify.desktop.permission();
+            (new PNotify({
+                title: 'Статус сохранения',
+                text: 'Новая запись успешно сохранена.',
+                desktop: {
+                    desktop: true
+                }
+            })).get().click(function (e) {
+                    if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                });
         });
 
         $scope.clearForm();
