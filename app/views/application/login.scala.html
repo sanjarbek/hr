@@ -1,0 +1,21 @@
+<form role="form" class="form-horizontal" >
+    <fieldset>
+        <div class="form-group">
+            <label for="exampleInputEmail1" class="col-sm-4 control-label">Имя пользователя</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="exampleInputEmail1" ng-model="credentials.username" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="col-sm-4 control-label">Пароль</label>
+            <div class="col-sm-4">
+                <input type="password" class="form-control" id="exampleInputPassword1" ng-model="credentials.password" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-4">
+                <button type="submit" class="btn btn-primary" ng-click="login(credentials)">Вход</button>
+            </div>
+        </div>
+    </fieldset>
+</form>

@@ -4,6 +4,10 @@
 
 # Home page
 GET           /                                     controllers.Application.angular
+GET           /login                                controllers.Application.login
+POST          /logout                               controllers.Application.logout
+POST          /auth                                 controllers.Application.auth
+GET           /user                                 controllers.Application.user
 POST          /upload                               controllers.Application.upload
 GET           /upload                               controllers.Application.uploadForm
 
@@ -69,7 +73,7 @@ GET           /structures/list                      controllers.Structures.list
 GET           /structures/json/list                 controllers.Structures.jsonList
 GET           /structures/json/freepositions        controllers.Structures.jsonFreePositionsList
 POST          /structures/save                      controllers.Structures.save
-PUT        /structures/update             controllers.Structures.update
+PUT           /structures/update                    controllers.Structures.update
 
 GET           /contract_types/create                controllers.ContractTypes.create
 GET           /contract_types/list                  controllers.ContractTypes.list
@@ -117,7 +121,7 @@ GET           /orders/json/get                      controllers.Orders.jsonGet(i
 POST          /orders/save                          controllers.Orders.save
 PUT           /orders/update                        controllers.Orders.update
 GET           /orders/generate                      controllers.Orders.generate(id: Long)
-GET        /orders/json/listByName        controllers.Orders.tagsList(query: String)
+GET           /orders/json/listByName               controllers.Orders.tagsList(query: String)
 
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)

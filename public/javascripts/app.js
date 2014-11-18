@@ -1,5 +1,6 @@
 angular.module('app', [
     'ui.router',
+    'ngCookies',
     'ngTable',
     'treeGrid',
     'ui.bootstrap',
@@ -22,16 +23,24 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     if (response.status == 401) {
                         console.log("Invalid token.");
                         $rootScope.$broadcast("InvalidToken");
-                        $injector.get('$state').transitionTo('structures.list');
                         $rootScope.sessionExpired = true;
                         $timeout(function () {
                             $rootScope.sessionExpired = false;
                         }, 5000);
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Права доступа.',
+                            text: 'Надо пройти аутентификацию.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                            });
+                        $injector.get('$state').transitionTo('login');
                     } else if (response.status == 403) {
                         console.log("Insufficient privileges.");
                         $rootScope.$broadcast("InsufficientPrivileges");
-                    } else if (response.status == 404) {
-                        console.log("Forbidden.");
                     }
                     return $q.reject(response);
                 }
@@ -41,6 +50,11 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
     $httpProvider.responseInterceptors.push(interceptor);
 
     $stateProvider
+        .state('login', {
+            url: '/login',
+            templateUrl: '/login',
+            controller: 'LoginCtrl'
+        })
         .state('orders', {
             url: '/orders',
             abstract: true,
@@ -1049,8 +1063,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //        }
 //    });
     $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams) {
-        console.log("You are not authenticated." + toState.status);
-        $state.go('structures.list');
+        console.log("You are not authenticated.");
+        $state.go("login");
     });
     $rootScope.$on("$stateNotFound", function (event, toState, toParams, fromState, fromParams) {
         console.log("Page not found.");

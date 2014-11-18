@@ -16,7 +16,7 @@ import play.api.templates.Html
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object Orders extends Controller {
+trait Orders extends Controller with Security {
 
   def create = Action { implicit request =>
     Ok(views.html.order.create())
@@ -26,10 +26,9 @@ object Orders extends Controller {
     Ok(views.html.order.list())
   }
 
-  def jsonList = Action {
+  def jsonList() = HasToken() { _ => currentId => implicit request =>
     val orders = Order.findAll.map { order => Json.toJson(order)}
-    //    Ok(Json.toJson(orders))
-    Unauthorized(Json.obj("auth" -> "false"))
+    Ok(Json.toJson(orders))
   }
 
   def jsonGet(id: Long) = Action {
@@ -132,3 +131,5 @@ object Orders extends Controller {
   }
 
 }
+
+object Orders extends Orders
