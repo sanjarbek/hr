@@ -1,0 +1,60 @@
+<header>
+    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+                <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li ng-class="{active: $state.includes('panel.employees')}"><a ui-sref="panel.employees.list">
+                                Сотрудники</a>
+                    </li>
+                    <li ng-class="{active: $state.includes('panel.orders')}"><a ui-sref="panel.orders.list">Приказы</a></li>
+                    <li><a href="#">Отчеты</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/logout">Выход</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Справочники <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a ui-sref="panel.relationship_types.list">Виды родства</a></li>
+                            <li><a ui-sref="panel.positions.list">Должности</a></li>
+                            <li><a ui-sref="panel.position_categories.list">Категории должностей</a></li>
+                            <li><a ui-sref="panel.offices.list">Офисы</a></li>
+                            @*<li><a ui-sref="departments.list">Структура старая</a></li>*@
+                            <li><a ui-sref="panel.structures.list">Структура</a></li>
+                            <li><a ui-sref="panel.structure_types.list">Виды структур</a></li>
+                            <li><a ui-sref="panel.contract_types.list">Виды договоров</a></li>
+                            <li><a ui-sref="panel.institutions.list">Учебные заведения</a></li>
+                        </ul>
+                    </li>
+                    <li class="#"><a >Настройки</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<br>
+<br>
+<br>
+<br>
+<div class="row">
+    <div class="col-sm-12">
+        <div ui-view></div>
+    </div>
+</div>

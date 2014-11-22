@@ -1,33 +1,32 @@
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            @Messages("Должности")
-            <div class="pull-right">
-                <a ui-sref="positions.list"><span class="glyphicon glyphicon-list"></span></a>
-            </div>
-        </div>
-        <div class="panel-body">
-            <form ng-submit="savePosition()" class="form-horizontal">
-                <fieldset>
-                    <div class="form-group form-group-sm">
-                        <label for="category_id" class="col-sm-2 control-label">Категория</label>
-                        <div class="col-sm-10">
-                            <select required class="form-control" name="category_id" ng-model="newPositionForm.category_id"
-                            ng-options="category.name for category in position_categories"
-                            >
-                            </select>
-                        </div>
-                        <span class="help-inline"></span>
-                    </div>
-                    <div class="form-group form-group-sm">
-                    <label for="name" class="col-sm-2 control-label">Название</label>
-                        <div class="col-sm-10">
-                            <input required class="form-control"  type="text" name="name" ng-model="newPositionForm.name"/>
-                        </div>
-                        <span class="help-inline"></span>
-                    </div>
-                </fieldset>
-                <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
-            </form>
-        </div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @Messages("Должности")
+    <div class="pull-right">
+        <a ui-sref="panel.positions.list"><span class="glyphicon glyphicon-list"></span></a>
     </div>
+    </div>
+    <div class="panel-body">
+        <form ng-submit="savePosition()" class="form-horizontal">
+            <fieldset>
+                <div class="form-group form-group-sm">
+                    <label for="category_id" class="col-sm-2 control-label">Категория</label>
+                    <div class="col-sm-10">
+                        <select required class="form-control" name="category_id" ng-model="newPositionForm.category_id"
+                        ng-options="category.name for category in position_categories"
+                        >
+                            </select>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="name" class="col-sm-2 control-label">Название</label>
+                    <div class="col-sm-10">
+                        <input required class="form-control" type="text" name="name" ng-model="newPositionForm.name"/>
+                    </div>
+                    <span class="help-inline"></span>
+                </div>
+            </fieldset>
+            <p><input type="submit" class="btn btn-primary pull-right" value='@Messages("Сохранить")'></p>
+        </form>
+    </div>
+</div>

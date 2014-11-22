@@ -41,7 +41,6 @@ trait Security {
       val maybeToken = request.headers.get(AuthTokenHeader).orElse(request.getQueryString(AuthTokenUrlKey))
       maybeToken flatMap { token =>
         Cache.getAs[Long](token) map { userid =>
-          Logger.info(Cache.getAs[Long](token).toString)
           f(token)(userid)(request)
         }
       } getOrElse Unauthorized(Json.obj("err" -> "No Token"))
@@ -139,6 +138,10 @@ object Application extends Application {
 
   def login = Action { implicit request =>
     Ok(views.html.application.login())
+  }
+
+  def menu = HasToken() { _ => currentId => implicit request =>
+    Ok(views.html.application.menu())
   }
 
   //  def genereateOdf = Action {

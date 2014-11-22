@@ -5,8 +5,9 @@
 # Home page
 GET           /                                     controllers.Application.angular
 GET           /login                                controllers.Application.login
-POST          /logout                               controllers.Application.logout
+GET           /logout                               controllers.Application.logout
 POST          /auth                                 controllers.Application.auth
+GET           /menu                                 controllers.Application.menu
 GET           /user                                 controllers.Application.user
 POST          /upload                               controllers.Application.upload
 GET           /upload                               controllers.Application.uploadForm

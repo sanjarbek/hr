@@ -2,7 +2,7 @@
     <div class="panel-heading">
         @Messages("Новый член семьи")
     <div class="pull-right">
-        <a ui-sref="employees.detail.relationship.list"><span class="glyphicon glyphicon-list"></span></a>
+        <a ui-sref='panel.employees.detail.relationship.list'><span class="glyphicon glyphicon-list"></span></a>
     </div>
     </div>
     <div class="panel-body">
@@ -21,7 +21,7 @@
                 <div class="form-group form-group-sm">
                     <label for="surname" class="col-sm-2 control-label">Фамилия</label>
                     <div class="col-sm-10">
-                        <input required class="form-control" type="text" name="surname" ng-model="newRelationshipForm.surname"/>
+                        <input required class="form-control" type="text" name="surname" ng-model="newRelationshipForm.surname" />
                     </div>
                     <span class="help-inline"></span>
                 </div>

@@ -1,37 +1,36 @@
-
-    @*<div class="row">*@
-        @*<div class="col-sm-12">*@
-            @*<div class="panel panel-default">*@
-                @*<div class="panel-heading">*@
-                    @*<a ui-sref="offices.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>*@
-                    @*Список офисов*@
-                @*</div>*@
-                @*<table class="table table-condensed" ng-table="officeTableParams">*@
-                    @*<tr ng-repeat="office in offices">*@
-                        @*<td data-title="'Название'">{{ office.name}}</td>*@
-                        @*<td data-title="'Email'">{{ office.email}}</td>*@
-                        @*<td data-title="'Телефон'">{{ office.phone}}</td>*@
-                        @*<td data-title="'Факс'">{{ office.fax}}</td>*@
-                    @*</tr>*@
-                @*</table>*@
-            @*</div>*@
-        @*</div>*@
-    @*</div>*@
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                <a ui-sref="offices.create" class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
+@*<div class="row">*@
+@*<div class="col-sm-12">*@
+@*<div class="panel panel-default">*@
+@*<div class="panel-heading">*@
+@*<a ui-sref='panel.offices.create' class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>*@
+@*Список офисов*@
+@*</div>*@
+@*<table class="table table-condensed" ng-table="officeTableParams">*@
+@*<tr ng-repeat="office in offices">*@
+@*<td data-title="'Название'">{{ office.name}}</td>*@
+@*<td data-title="'Email'">{{ office.email}}</td>*@
+@*<td data-title="'Телефон'">{{ office.phone}}</td>*@
+@*<td data-title="'Факс'">{{ office.fax}}</td>*@
+@*</tr>*@
+@*</table>*@
+@*</div>*@
+@*</div>*@
+@*</div>*@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a ui-sref='panel.offices.create' class="pull-right"><span class="glyphicon glyphicon-plus"></span></a>
                 Список офисов
-                </div>
-                <tree-grid
-                tree-data="tree_data"
-                col-defs="col_defs"
-                expand-on="expanding_property"
-                tree-control="officesTree"
-                on-select="officesTreeHandler(branch)" >
-                </tree-grid>
             </div>
+            <tree-grid
+            tree-data="tree_data"
+            col-defs="col_defs"
+            expand-on="expanding_property"
+            tree-control="officesTree"
+            on-select="officesTreeHandler(branch)" >
+                </tree-grid>
         </div>
     </div>
+</div>
 

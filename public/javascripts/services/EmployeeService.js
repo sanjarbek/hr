@@ -8,7 +8,7 @@ angular.module('app').service('EmployeeService', function ($http, $state) {
         $http.post('/employees/save', employee)
             .success(function (employee) {
                 console.log(employee)
-                $state.go("employees.detail", {employeeId: employee.id});
+                $state.go('panel.employees.detail', {employeeId: employee.id});
             });
     }
 

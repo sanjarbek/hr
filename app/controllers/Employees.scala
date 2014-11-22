@@ -12,7 +12,7 @@ import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.templates.Html
 
-object Employees extends Controller {
+object Employees extends Controller with Security {
 
   private val employeeForm: Form[Employee] = Form(
     mapping(
@@ -30,20 +30,20 @@ object Employees extends Controller {
     )(Employee.apply)(Employee.unapply)
   )
 
-  def list = Action { implicit  request =>
+  def list = Action { implicit request =>
     Ok(views.html.employees.list())
   }
 
   def jsonGet(id: Long) = Action {
-    Employee.findById(id).map{ employee =>
+    Employee.findById(id).map { employee =>
       Ok(Json.toJson(employee))
     }.getOrElse(NotFound)
 
-//    val employee = Employee.findById(id)
-//    Ok(Json.toJson(employee))
+    //    val employee = Employee.findById(id)
+    //    Ok(Json.toJson(employee))
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => request =>
     val employees = Employee.findAll.map { employee => Json.toJson(employee)}
     Ok(Json.toJson(employees))
   }

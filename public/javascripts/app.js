@@ -55,12 +55,17 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             templateUrl: '/login',
             controller: 'LoginCtrl'
         })
-        .state('orders', {
+        .state('panel', {
+            url: '',
+            abstract: true,
+            templateUrl: '/menu'
+        })
+        .state('panel.orders', {
             url: '/orders',
             abstract: true,
             template: '<div ui-view></div>'
         })
-        .state('orders.list', {
+        .state('panel.orders.list', {
             url: '/list',
             templateUrl: '/orders/list',
             resolve: {
@@ -72,7 +77,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.orders = ordersData;
             }
         })
-        .state('orders.edit', {
+        .state('panel.orders.edit', {
             url: '/{orderId:[0-9]{1,6}}',
             templateUrl: '/orders/create',
             resolve: {
@@ -154,7 +159,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('orders.create', {
+        .state('panel.orders.create', {
             url: '/create',
             templateUrl: '/orders/create',
             controller: function ($scope, OrderService, $state) {
@@ -231,12 +236,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('employees', {
+        .state('panel.employees', {
             url: '/employees',
             abstract: true,
             template: '<div ui-view></div>'
         })
-        .state('employees.create', {
+        .state('panel.employees.create', {
             url: '/create',
             templateUrl: '/employees/create',
             controller: function ($scope, EmployeeService) {
@@ -260,7 +265,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('employees.list', {
+        .state('panel.employees.list', {
             url: '/list',
             templateUrl: '/employees/list',
             resolve: {
@@ -276,7 +281,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'EmployeeController'
         })
-        .state('employees.detail', {
+        .state('panel.employees.detail', {
             url: '/{employeeId:[0-9]{1,6}}',
             templateUrl: '/employees/show',
             resolve: {
@@ -343,12 +348,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //                };
             }
         })
-        .state('employees.detail.relationship', {
+        .state('panel.employees.detail.relationship', {
             absract: true,
             url: '/relationship',
             template: '<div ui-view></div>'
         })
-        .state('employees.detail.relationship.list', {
+        .state('panel.employees.detail.relationship.list', {
             url: '/list',
             templateUrl: '/relationships/list',
             resolve: {
@@ -361,21 +366,21 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'RelationshipController'
         })
-        .state('employees.detail.relationship.type', {
+        .state('panel.employees.detail.relationship.type', {
             abstract: true,
             url: '/create',
             template: '<div ui-view></div>'
         })
-        .state('employees.detail.relationship.type.create', {
+        .state('panel.employees.detail.relationship.type.create', {
             url: '/create',
             templateUrl: '/relationship_types/create'
         })
-        .state('relationship_types', {
+        .state('panel.relationship_types', {
             abstract: true,
             url: '/relationship_types',
             template: '<div ui-view></div>'
         })
-        .state('relationship_types.list', {
+        .state('panel.relationship_types.list', {
             url: '/list',
             templateUrl: '/relationship_types/list',
             resolve: {
@@ -387,7 +392,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.relationship_types = relationshipTypesData;
             }
         })
-        .state('relationship_types.create', {
+        .state('panel.relationship_types.create', {
             url: '/create',
             templateUrl: '/relationship_types/create',
             controller: function ($scope, RelationshipTypeService) {
@@ -402,12 +407,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('employees.detail.contract', {
+        .state('panel.employees.detail.contract', {
             absract: true,
             url: '/contract',
             template: '<div ui-view></div>'
         })
-        .state('employees.detail.contract.list', {
+        .state('panel.employees.detail.contract.list', {
             url: '/list',
             templateUrl: '/contracts/list',
             resolve: {
@@ -482,7 +487,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('employees.detail.contract.create', {
+        .state('panel.employees.detail.contract.create', {
             url: '/create',
             templateUrl: '/contracts/create',
             resolve: {
@@ -548,12 +553,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('positions', {
+        .state('panel.positions', {
             abstract: true,
             url: '/positions',
             template: '<div ui-view  class="anim-in-out"></div>'
         })
-        .state('positions.list', {
+        .state('panel.positions.list', {
             url: '/list',
             templateUrl: '/positions/list',
             resolve: {
@@ -565,7 +570,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.positions = positionsData;
             }
         })
-        .state('positions.create', {
+        .state('panel.positions.create', {
             url: '/create',
             templateUrl: '/positions/create',
             resolve: {
@@ -588,12 +593,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('position_categories', {
+        .state('panel.position_categories', {
             abstract: true,
             url: '/position_categories',
             template: '<div ui-view></div>'
         })
-        .state('position_categories.list', {
+        .state('panel.position_categories.list', {
             url: '/list',
             templateUrl: '/position_categories/list',
             resolve: {
@@ -605,7 +610,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.position_categories = positionCategoriesData;
             }
         })
-        .state('position_categories.create', {
+        .state('panel.position_categories.create', {
             url: '/create',
             templateUrl: '/position_categories/create',
             controller: function ($scope, PositionCategoryService) {
@@ -620,12 +625,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('structure_types', {
+        .state('panel.structure_types', {
             abstract: true,
             url: '/office_types',
             template: '<div ui-view></div>'
         })
-        .state('structure_types.list', {
+        .state('panel.structure_types.list', {
             url: '/list',
             templateUrl: '/structure_types/list',
             resolve: {
@@ -637,7 +642,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.structure_types = structureTypesData;
             }
         })
-        .state('structure_types.create', {
+        .state('panel.structure_types.create', {
             url: '/create',
             templateUrl: '/structure_types/create',
             controller: function ($scope, StructureTypeService) {
@@ -653,12 +658,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('offices', {
+        .state('panel.offices', {
             abstract: true,
             url: '/offices',
             template: '<div ui-view></div>'
         })
-        .state('offices.list', {
+        .state('panel.offices.list', {
             url: '/list',
             templateUrl: '/offices/list',
             resolve: {
@@ -680,7 +685,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 ];
             }
         })
-        .state('offices.create', {
+        .state('panel.offices.create', {
             url: '/create',
             templateUrl: '/offices/create',
             resolve: {
@@ -715,12 +720,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.offices = officesData;
             }
         })
-        .state('departments', {
+        .state('panel.departments', {
             abstract: true,
             url: '/departments',
             template: '<div ui-view></div>'
         })
-        .state('departments.list', {
+        .state('panel.departments.list', {
             url: '/list',
             templateUrl: '/departments/list',
             resolve: {
@@ -801,7 +806,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 };
             }
         })
-        .state('departments.create', {
+        .state('panel.departments.create', {
             url: '/create',
             templateUrl: '/departments/create',
             resolve: {
@@ -870,12 +875,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('structures', {
+        .state('panel.structures', {
             abstract: true,
             url: '/structures',
             template: '<div ui-view></div>'
         })
-        .state('structures.list', {
+        .state('panel.structures.list', {
             url: '/list',
             templateUrl: '/structures/list',
             resolve: {
@@ -891,12 +896,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'StructureCtrl'
         })
-        .state('contract_types', {
+        .state('panel.contract_types', {
             abstract: true,
             url: '/contract_types',
             template: '<div ui-view></div>'
         })
-        .state('contract_types.list', {
+        .state('panel.contract_types.list', {
             url: '/list',
             templateUrl: '/contract_types/list',
             resolve: {
@@ -942,7 +947,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 };
             }
         })
-        .state('contract_types.create', {
+        .state('panel.contract_types.create', {
             url: '/create',
             templateUrl: '/contract_types/create',
             controller: function ($scope, ContractTypeService) {
@@ -958,12 +963,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('institutions', {
+        .state('panel.institutions', {
             abstract: true,
             url: '/institutions',
             template: '<div ui-view></div>'
         })
-        .state('institutions.list', {
+        .state('panel.institutions.list', {
             url: '/list',
             templateUrl: '/institutions/list',
             resolve: {
@@ -975,7 +980,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.institutions = institutionsData;
             }
         })
-        .state('institutions.create', {
+        .state('panel.institutions.create', {
             url: '/create',
             templateUrl: '/institutions/create',
             controller: function ($scope, InstitutionService) {
@@ -991,12 +996,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             }
         })
-        .state('employees.detail.educations', {
+        .state('panel.employees.detail.educations', {
             absract: true,
             url: '/educations',
             template: '<div ui-view></div>'
         })
-        .state('employees.detail.educations.list', {
+        .state('panel.employees.detail.educations.list', {
             url: '/list',
             templateUrl: '/educations/list',
             resolve: {
@@ -1009,12 +1014,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'EducationController'
         })
-        .state('employees.detail.passports', {
+        .state('panel.employees.detail.passports', {
             absract: true,
             url: '/passports',
             template: '<div ui-view></div>'
         })
-        .state('employees.detail.passports.list', {
+        .state('panel.employees.detail.passports.list', {
             url: '/list',
             templateUrl: '/passports/list',
             resolve: {
@@ -1024,7 +1029,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'PassportController'
         })
-        .state('employees.detail.passports.show', {
+        .state('panel.employees.detail.passports.show', {
             url: '/show',
             templateUrl: '/passports/show',
             resolve: {
@@ -1034,12 +1039,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'PassportController'
         })
-        .state('employees.detail.military', {
+        .state('panel.employees.detail.military', {
             absract: true,
             url: '/militaries',
             template: '<div ui-view></div>'
         })
-        .state('employees.detail.military.list', {
+        .state('panel.employees.detail.military.list', {
             url: '/list',
             templateUrl: '/militaries/list',
             resolve: {
@@ -1064,7 +1069,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //    });
     $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams) {
         console.log("You are not authenticated.");
-        $state.go("login");
+//        $state.go("login");
     });
     $rootScope.$on("$stateNotFound", function (event, toState, toParams, fromState, fromParams) {
         console.log("Page not found.");

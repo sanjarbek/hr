@@ -8,7 +8,7 @@
                         <button type="button" ng-click="showSearch()" class="btn btn-primary">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>
-                        <a ui-sref="employees.create" >
+                        <a ui-sref='panel.employees.create' >
                             <button type="button" class="btn btn-default">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
@@ -43,12 +43,12 @@
                     <th>Год рождения</th>
                     <th>E-mail</th>
                 </tr>
-                <tr ng-repeat="employee in employees | filter: {surname: surname, firstname: firstname, lastname: lastname, birthday: birthday } | filter:searchByOfficeId">
-                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.surname }}</a></td>
-                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.firstname }}</a></td>
-                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.lastname }}</a></td>
-                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.birthday | date: 'dd.MM.yyyy' }}</a></td>
-                    <td><a ui-sref="employees.detail({employeeId: employee.id})">{{ employee.email }}</a></td>
+                <tr ng-repeat='employee in employees | filter: {surname: surname, firstname: firstname, lastname: lastname, birthday: birthday } | filter:searchByOfficeId'>
+                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.surname }}</a></td>
+                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.firstname }}</a></td>
+                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.lastname }}</a></td>
+                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.birthday | date: 'dd.MM.yyyy' }}</a></td>
+                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.email }}</a></td>
                 </tr>
             </table>
         </div>

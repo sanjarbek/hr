@@ -49,7 +49,7 @@ angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http,
             .then(
             function (response) {
                 $scope.user = response.data;
-                $state.go('orders.list');
+                $state.go('panel.orders.list');
             },
             function (response) {
                 console.log(response);
