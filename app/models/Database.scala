@@ -1,9 +1,24 @@
 package models
 
+import java.sql.Timestamp
+
+import org.joda.time.DateTime
+import org.squeryl.customtypes.{TimestampField, CustomTypesMode}
 import org.squeryl.{Table, Schema}
 import org.squeryl.PrimitiveTypeMode._
 
 object Database extends Schema {
+
+  //--------------------------------------------------------------------------------------------
+  class TimeStamp(t: Timestamp) extends TimestampField(t)
+
+  implicit def jodaToTimeStamp(dateTime: DateTime): TimeStamp = new TimeStamp(new Timestamp(dateTime.getMillis))
+
+  implicit def timeStampToJoda(timeStamp: TimeStamp): DateTime = new DateTime(timeStamp.value.getTime)
+
+  //--------------------------------------------------------------------------------------------
+
+
   val employeeTable: Table[Employee] = table[Employee]("employees")
   val relationshipTable: Table[Relationship] = table[Relationship]("relationships")
   val relationshipTypeTable: Table[RelationshipType] = table[RelationshipType]("relationship_types")
@@ -21,6 +36,7 @@ object Database extends Schema {
   val structureTable: Table[Structure] = table[Structure]("structures")
   val orderTable: Table[Order] = table[Order]("orders")
   val orderTagTable: Table[OrderTag] = table[OrderTag]("order_tags")
+  val testTable: Table[Test] = table[Test]("test_tmp")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -102,4 +118,8 @@ object Database extends Schema {
   }
   }
 
+  on(testTable) { test => declare {
+    test.id is (autoIncremented("test1_id_seq"))
+  }
+  }
 }

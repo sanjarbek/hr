@@ -11,6 +11,8 @@ GET           /menu                                 controllers.Application.menu
 GET           /user                                 controllers.Application.user
 POST          /upload                               controllers.Application.upload
 GET           /upload                               controllers.Application.uploadForm
+GET        /temp/add           controllers.Tests.add
+GET        /temp/update        controllers.Tests.update
 
 # Состояния работоспособности сервера
 GET           /connection/status                    controllers.Application.serverStatus
@@ -123,6 +125,7 @@ POST          /orders/save                          controllers.Orders.save
 PUT           /orders/update                        controllers.Orders.update
 GET           /orders/generate                      controllers.Orders.generate(id: Long)
 GET           /orders/json/listByName               controllers.Orders.tagsList(query: String)
+
 
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)
