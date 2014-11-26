@@ -14,22 +14,6 @@ import play.api.templates.Html
 
 object Employees extends Controller with Security {
 
-  private val employeeForm: Form[Employee] = Form(
-    mapping(
-      "id" -> ignored(0L),
-      "surname" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "firstname" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "lastname" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "birthday" -> date,
-      "citizenship" -> nonEmptyText(minLength = 2, maxLength = 30),
-      "insurance_number" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "tax_number" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "home_phone" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "mobile_phone" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "email" -> nonEmptyText(minLength = 2, maxLength = 20)
-    )(Employee.apply)(Employee.unapply)
-  )
-
   def list = Action { implicit request =>
     Ok(views.html.employees.list())
   }

@@ -1370,9 +1370,9 @@ body > .header .logo .icon {
 
 /* Checkbox and radio inputs */
 .checkbox,
-.radio {
-    padding-left: 0;
-}
+    /*.radio {*/
+    /*padding-left: 0;*/
+    /*}*/
 
 /*
     Compenent: Progress bars
@@ -4134,4 +4134,10 @@ fieldset[disabled] .btn-vk.active {
 .btn-vk .badge {
     color: #587ea3;
     background-color: #ffffff;
+}
+
+legend.scheduler-border {
+    width: inherit; /* Or auto */
+    padding: 0 10px; /* To give a bit of padding on the left and right */
+    border-bottom: none;
 }

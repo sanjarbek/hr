@@ -255,9 +255,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                         citizenship: $scope.newEmployeeForm.citizenship,
                         insurance_number: $scope.newEmployeeForm.insurance_number,
                         tax_number: $scope.newEmployeeForm.tax_number,
-                        home_phone: $scope.newEmployeeForm.home_phone,
-                        mobile_phone: $scope.newEmployeeForm.mobile_phone,
-                        email: $scope.newEmployeeForm.email
+                        sex: Boolean($scope.newEmployeeForm.sex)
                     };
 
                     EmployeeService.save(data);

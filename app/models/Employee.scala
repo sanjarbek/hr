@@ -1,8 +1,12 @@
 package models
 
+import java.sql.Timestamp
 import java.util.Date
 
+import models.Database.formatTimestamp
+import org.joda.time.DateTime
 import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.annotations.{Column, ColumnBase}
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
 import org.squeryl._
@@ -20,9 +24,8 @@ case class Employee(
                      citizenship: String,
                      insurance_number: String,
                      tax_number: String,
-                     home_phone: String,
-                     mobile_phone: String,
-                     email: String) extends KeyedEntity[Long]
+                     sex: Boolean
+                     ) extends Entity
 
 object Employee {
 
@@ -37,9 +40,7 @@ object Employee {
       (JsPath \ "citizenship").write[String] and
       (JsPath \ "insurance_number").write[String] and
       (JsPath \ "tax_number").write[String] and
-      (JsPath \ "home_phone").write[String] and
-      (JsPath \ "mobile_phone").write[String] and
-      (JsPath \ "email").write[String]
+      (JsPath \ "sex").write[Boolean]
     )(unlift(Employee.unapply))
 
   implicit val employeeReads: Reads[Employee] = (
@@ -51,9 +52,7 @@ object Employee {
       (JsPath \ "citizenship").read[String] and
       (JsPath \ "insurance_number").read[String] and
       (JsPath \ "tax_number").read[String] and
-      (JsPath \ "home_phone").read[String] and
-      (JsPath \ "mobile_phone").read[String] and
-      (JsPath \ "email").read[String]
+      (JsPath \ "sex").read[Boolean]
     )(Employee.apply _)
 
   def allQ: Query[Employee] = from(employeeTable) {
@@ -71,12 +70,12 @@ object Employee {
   }
 
   def insert(employee: Employee): Employee = inTransaction {
-    employeeTable.insert(employee)
+    employee.save.asInstanceOf[Employee]
   }
 
   def update(employee: Employee) {
     inTransaction {
-      employeeTable.update(employee)
+      employee.save
     }
   }
 

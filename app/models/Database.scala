@@ -1,9 +1,39 @@
 package models
 
+import java.sql.Timestamp
+
+import org.joda.time.DateTime
+import org.squeryl.customtypes.TimestampField
 import org.squeryl.{Table, Schema}
 import org.squeryl.PrimitiveTypeMode._
+import play.api.libs.json.Json.JsValueWrapper
+import play.api.libs.json._
 
 object Database extends Schema {
+
+  //--------------------------------------------------------------------------------------------
+  class TimeStamp(t: Timestamp) extends TimestampField(t)
+
+  implicit def jodaToTimeStamp(dateTime: DateTime): TimeStamp = new TimeStamp(new Timestamp(dateTime.getMillis))
+
+  implicit def timeStampToJoda(timeStamp: TimeStamp): DateTime = new DateTime(timeStamp.value.getTime)
+
+  implicit val formatTimestamp = new Format[Timestamp] {
+
+    def writes(ts: Timestamp): JsValue = Json.obj("date" -> ts.toString())
+
+    def reads(ts: JsValue): JsResult[Timestamp] = {
+      // something like that... not tested !
+      try {
+        JsSuccess(Timestamp.valueOf(ts.as[String]))
+      } catch {
+        case e: IllegalArgumentException => JsError("Unable to parse timestamp")
+      }
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------
+
   val employeeTable: Table[Employee] = table[Employee]("employees")
   val relationshipTable: Table[Relationship] = table[Relationship]("relationships")
   val relationshipTypeTable: Table[RelationshipType] = table[RelationshipType]("relationship_types")

@@ -1,17 +1,17 @@
 # --- !Ups
 
 CREATE TABLE employees (
-  id BIGSERIAL,
-  surname varchar(20),
-  firstname varchar(20),
-  lastname varchar(20),
+  id               BIGSERIAL PRIMARY KEY,
+  surname          TEXT      NOT NULL,
+  firstname        TEXT      NOT NULL,
+  lastname         TEXT,
   birthday date,
-  citizenship varchar(30),
-  insurance_number varchar(20) ,
-  tax_number varchar(20) ,
-  home_phone varchar(20) ,
-  mobile_phone varchar(20) ,
-  email varchar(20)
+  citizenship      text,
+  insurance_number text,
+  tax_number       text,
+  sex              boolean   not null,
+  created_at       timestamp not null,
+  updated_at       timestamp not null
 );
 
 # -- !Downs

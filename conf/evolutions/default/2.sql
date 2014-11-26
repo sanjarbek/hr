@@ -1,13 +1,15 @@
 # --- !Ups
 
 CREATE TABLE relationships (
-  id BIGSERIAL,
+  id          BIGSERIAL PRIMARY KEY,
   employee_id BIGINT NOT NULL,
-  degree int,
-  surname varchar(20),
-  firstname varchar(20),
-  lastname varchar(20),
-  birthday date
+  degree      INT    NOT NULL,
+  surname     TEXT,
+  firstname   TEXT,
+  lastname    TEXT,
+  birthday    DATE,
+  created_at  TIMESTAMP,
+  updated_at  TIMESTAMP
 );
 
 # -- !Downs
