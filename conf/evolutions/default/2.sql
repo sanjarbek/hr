@@ -7,11 +7,9 @@ CREATE TABLE relationships (
   surname     TEXT,
   firstname   TEXT,
   lastname    TEXT,
-  birthday    DATE,
-  created_at  TIMESTAMP,
-  updated_at  TIMESTAMP
+  birthday    DATE
 );
 
 # -- !Downs
-DROP TABLE if exists relationships;
-DROP SEQUENCE if exists relationships_id_seq;
+DROP TABLE IF EXISTS relationships;
+DROP SEQUENCE IF EXISTS relationships_id_seq;

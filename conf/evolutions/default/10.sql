@@ -1,7 +1,7 @@
 # --- !Ups
 
 CREATE TABLE contracts (
-  id                BIGSERIAL,
+  id                BIGSERIAL PRIMARY KEY,
   position_id       INT,
   contract_type     INT,
   employee_id       BIGINT,

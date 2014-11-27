@@ -1,10 +1,10 @@
 # --- !Ups
 
 CREATE TABLE departments (
-  id        SERIAL,
-  parent_id INTEGER,
-  office_id INTEGER,
-  name      VARCHAR(50),
+  id            SERIAL PRIMARY KEY,
+  parent_id     INTEGER,
+  office_id     INTEGER,
+  name          TEXT,
   is_position   BOOL,
   position_type INT
 );

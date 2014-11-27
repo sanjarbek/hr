@@ -1,17 +1,17 @@
 # --- !Ups
 
 CREATE TABLE orders (
-  id             BIGSERIAL,
-  name           VARCHAR,
+  id             BIGSERIAL PRIMARY KEY,
+  name           TEXT,
   order_category INT,
   nomer          INT,
   date_of_order  DATE,
-  content        VARCHAR,
-  tags           VARCHAR
+  content        TEXT,
+  tags           TEXT
 );
 
 CREATE TABLE order_tags (
-  id    VARCHAR UNIQUE,
+  id    TEXT UNIQUE,
   count INT
 )
 

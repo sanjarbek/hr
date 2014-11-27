@@ -1,17 +1,15 @@
 # --- !Ups
 
 CREATE TABLE military_infos (
-  id                BIGSERIAL,
-  employee_id       BIGINT,
-  category          VARCHAR,
-  military_rank     VARCHAR,
-  structure         VARCHAR,
-  full_code         VARCHAR,
-  validity_category VARCHAR,
-  commissariat      VARCHAR,
-  removal_mark      VARCHAR,
-  created           TIMESTAMP DEFAULT localtimestamp,
-  updated           TIMESTAMP DEFAULT localtimestamp
+  id                BIGSERIAL PRIMARY KEY,
+  employee_id       BIGINT UNIQUE,
+  category          TEXT,
+  military_rank     TEXT,
+  structure         TEXT,
+  full_code         TEXT,
+  validity_category TEXT,
+  commissariat      TEXT,
+  removal_mark      TEXT
 );
 
 # -- !Downs

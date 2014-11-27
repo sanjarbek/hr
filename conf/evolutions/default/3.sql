@@ -1,10 +1,10 @@
 # --- !Ups
 
 CREATE TABLE relationship_types (
-  id SERIAL,
-  name varchar(30)
+  id   SERIAL PRIMARY KEY,
+  name TEXT
 );
 
 # -- !Downs
-DROP TABLE if exists relationship_types;
-DROP SEQUENCE if exists relationship_types_id_seq;
+DROP TABLE IF EXISTS relationship_types;
+DROP SEQUENCE IF EXISTS relationship_types_id_seq;

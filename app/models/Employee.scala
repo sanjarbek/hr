@@ -26,7 +26,7 @@ case class Employee(
                      insurance_number: String,
                      tax_number: String,
                      sex: Boolean
-                     ) extends Entity
+                     ) extends KeyedEntity[Long]
 
 object Employee {
 
@@ -71,12 +71,11 @@ object Employee {
   }
 
   def insert(employee: Employee): Employee = inTransaction {
-    employee.save.asInstanceOf[Employee]
+    employeeTable.insert(employee)
   }
 
   def update(employee: Employee) = inTransaction {
-    Logger.debug(s"Result=$employee")
-    employee.save
+    employeeTable.update(employee)
   }
 
   def listOfFamily(employee: Employee) = inTransaction {

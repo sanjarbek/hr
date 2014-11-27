@@ -12,7 +12,7 @@ import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.templates.Html
 
-object Employees extends Controller with Security {
+object Employees extends Controller {
 
   def list = Action { implicit request =>
     Ok(views.html.employees.list())
@@ -27,7 +27,7 @@ object Employees extends Controller with Security {
     //    Ok(Json.toJson(employee))
   }
 
-  def jsonList = HasToken() { _ => currentId => request =>
+  def jsonList = Action { request =>
     val employees = Employee.findAll.map { employee => Json.toJson(employee)}
     Ok(Json.toJson(employees))
   }

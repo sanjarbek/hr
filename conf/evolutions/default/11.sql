@@ -1,9 +1,9 @@
 # --- !Ups
 
 CREATE TABLE institutions (
-  id        SERIAL,
-  longname  VARCHAR,
-  shortname VARCHAR
+  id        SERIAL PRIMARY KEY,
+  longname  TEXT,
+  shortname TEXT
 );
 
 # -- !Downs

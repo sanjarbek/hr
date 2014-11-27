@@ -1,11 +1,11 @@
 # --- !Ups
 
 CREATE TABLE passports (
-  id          BIGSERIAL,
-  employee_id BIGINT,
-  serial      VARCHAR,
-  number      VARCHAR,
-  organ       VARCHAR,
+  id          BIGSERIAL PRIMARY KEY,
+  employee_id BIGINT UNIQUE,
+  serial      TEXT,
+  number      TEXT,
+  organ       TEXT,
   open_date   DATE,
   end_date    DATE
 );

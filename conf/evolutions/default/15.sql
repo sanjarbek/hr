@@ -1,9 +1,9 @@
 # --- !Ups
 
 CREATE TABLE structures (
-  id             SERIAL,
+  id             SERIAL PRIMARY KEY,
   parent_id      INTEGER,
-  name           VARCHAR(50),
+  name           TEXT,
   structure_type INT,
   position_type  INT,
   status         SMALLINT

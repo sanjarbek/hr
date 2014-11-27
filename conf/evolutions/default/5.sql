@@ -1,8 +1,8 @@
 # --- !Ups
 
 CREATE TABLE structure_types (
-  id           SERIAL,
-  name         VARCHAR(40),
+  id           SERIAL PRIMARY KEY,
+  name         TEXT,
   has_children BOOL
 );
 

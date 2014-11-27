@@ -1,8 +1,8 @@
 # --- !Ups
 
 CREATE TABLE position_categories (
-  id   SERIAL,
-  name VARCHAR(50)
+  id   SERIAL PRIMARY KEY,
+  name TEXT
 );
 
 # -- !Downs

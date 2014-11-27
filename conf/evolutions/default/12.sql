@@ -1,12 +1,12 @@
 # --- !Ups
 
 CREATE TABLE educations (
-  id             BIGSERIAL,
+  id             BIGSERIAL PRIMARY KEY,
   employee_id    BIGINT,
   institution_id INT,
-  serialnumber   VARCHAR,
-  speciality     VARCHAR,
-  qualification  VARCHAR,
+  serialnumber   TEXT,
+  speciality     TEXT,
+  qualification  TEXT,
   start_date     DATE,
   end_date       DATE
 );
