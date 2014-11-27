@@ -2,10 +2,13 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Список учебных заведений
-                    <a ng-click="resetEducation()" class="pull-right btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>
-                        Добавить</a>
-                    <div class="clearfix"></div>
+                <label><h4>Список учебных заведений</h4></label>
+                <div class="pull-right">
+                    <button type="button" ng-click="resetEducation()" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus"></span> Добавить
+                    </button>
+                </div>
+                <div class="clearfix"></div>
             </div>
             <table class="table table-condensed">
                 <tr>
@@ -43,54 +46,48 @@
             <div class="panel-body">
                 <form ng-submit="selectAction()" class="form-horizontal">
                     <fieldset>
-                        <div class="form-group form-group-sm">
-                            <label for="institution" class="col-sm-3 control-label">Учебное заведение</label>
-                            <div class="col-sm-2">
-                                <select required class="form-control" name="institution" ng-model="educationForm.institution_id"
-                                ng-options="institution.id as institution.longname for institution in institutions"></select>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="institution" class="control-label">Учебное заведение</label>
+                                <div class="input-group">
+                                    <select required class="form-control" name="institution" ng-model="educationForm.institution_id"
+                                    ng-options="institution.id as institution.longname for institution in institutions"></select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-add" ng-click="open()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="col-sm-1  add-control">
-                                <a class="btn btn-xs btn-success" ng-click="open()"><span class="glyphicon glyphicon-plus-sign"></span></a>
-                            </div>
-                            <span class="help-inline"></span>
-                            <label for="serialnumber" class="col-sm-3 control-label">Номер/серия диплома</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="serialnumber" class="control-label">Номер/серия диплома</label>
                                 <input required class="form-control" type="text" name="startDate" ng-model="educationForm.serialnumber"/>
                             </div>
-                            <span class="help-inline"></span>
-                        </div>
-                        <div class="form-group form-group-sm">
-                            <label for="speciality" class="col-sm-3 control-label">Специальность</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="speciality" class="control-label">Специальность</label>
                                 <input required class="form-control" type="text" name="speciality" ng-model="educationForm.speciality"/>
                             </div>
-                            <span class="help-inline"></span>
-                            <label for="qualification" class="col-sm-3 control-label">Квалификация по диплому</label>
-                            <div class="col-sm-3">
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="qualification" class="control-label">Квалификация по диплому</label>
                                 <input required class="form-control" type="text" name="qualification" ng-model="educationForm.qualification"/>
                             </div>
-                            <span class="help-inline"></span>
-                        </div>
-                        <div class="form-group form-group-sm">
-                            <label for="startDate" class="col-sm-3 control-label">Дата поступления</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="startDate" class="control-label">Дата поступления</label>
                                 <input required class="form-control" type="date" name="startDate" ng-model="educationForm.start_date"/>
                             </div>
-                            <span class="help-inline"></span>
-                            <label for="endDate" class="col-sm-3 control-label">Дата окончания</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="endDate" class="control-label">Дата окончания</label>
                                 <input required class="form-control" type="date" name="endDate" ng-model="educationForm.end_date"/>
                             </div>
-                            <span class="help-inline"></span>
                         </div>
                     </fieldset>
                 </form>
             </div>
             <div class="panel-footer">
                 <div class="pull-right">
-                    <a class="btn btn-info" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
-                        Сохранить</a>
-                    <input type="button" class="btn btn-warning" value='@Messages("Отменить")' ng-click="isCollapsed=true">
+                    <a class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
+                    Сохранить</a>
+                    <input type="button" class="btn btn-default" value='@Messages("Отменить")' ng-click="isCollapsed=true">
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -101,7 +98,7 @@
 
 <script type="text/ng-template" id="myModalContent.html">
 <div class="modal-header">
-<h4 class="modal-title"> @Messages("Новая степень родства") </h4>
+<h4 class="modal-title"> @Messages("Новое учебное заведение") </h4>
 </div>
 <form ng-submit="saveInstitution()" class="form-horizontal">
 <div class="modal-body">

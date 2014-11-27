@@ -36,3 +36,9 @@ legend.scheduler-border {
     margin-bottom: 3px;
 }
 
+.btn-add {
+    padding: 3px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
