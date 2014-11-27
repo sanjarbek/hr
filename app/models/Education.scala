@@ -20,7 +20,7 @@ case class Education(
                       end_date: Date,
                       serialnumber: String,
                       speciality: String,
-                      qualification: String
+                      qualification_id: Int
                       ) extends KeyedEntity[Long]
 
 object Education {
@@ -35,7 +35,7 @@ object Education {
       (JsPath \ "end_date").write[Date] and
       (JsPath \ "serialnumber").write[String] and
       (JsPath \ "speciality").write[String] and
-      (JsPath \ "qualification").write[String]
+      (JsPath \ "qualification_id").write[Int]
     )(unlift(Education.unapply))
 
   implicit val educationReads: Reads[Education] = (
@@ -46,7 +46,7 @@ object Education {
       (JsPath \ "end_date").read[Date] and
       (JsPath \ "serialnumber").read[String] and
       (JsPath \ "speciality").read[String] and
-      (JsPath \ "qualification").read[String]
+      (JsPath \ "qualification_id").read[Int]
     )(Education.apply _)
 
   def allQ: Query[Education] = from(educationTable) {

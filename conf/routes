@@ -101,6 +101,9 @@ POST          /educations/save                      controllers.Educations.save
 PUT           /educations/update                    controllers.Educations.update
 DELETE        /educations/delete                    controllers.Educations.delete(id: Long)
 
+GET         /qualification_types/json/list        controllers.Educations.jsonQualificationTypesList
+POST        /qualification_types/save             controllers.Educations.qualificationTypeSave
+
 #GET           /passports/list                       controllers.Passports.list
 GET           /passports/show                       controllers.Passports.show
 #GET           /passports/json/list                  controllers.Passports.jsonList

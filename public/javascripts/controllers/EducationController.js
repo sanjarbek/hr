@@ -1,6 +1,7 @@
-angular.module('app').controller('EducationController', function ($scope, $filter, educationsData, institutionsData, EducationService, $modal, $log) {
+angular.module('app').controller('EducationController', function ($scope, $filter, educationsData, qualificationsData, institutionsData, EducationService, $modal, $log) {
     $scope.educations = educationsData;
     $scope.institutions = institutionsData;
+    $scope.qualifications = qualificationsData;
 
     $scope.isCollapsed = true;
 
@@ -33,7 +34,7 @@ angular.module('app').controller('EducationController', function ($scope, $filte
             id: null,
             employee_id: null,
             institution_id: null,
-            qualification: null,
+            qualification_id: null,
             speciality: null,
             start_date: null,
             end_date: null,
@@ -93,17 +94,31 @@ angular.module('app').controller('EducationController', function ($scope, $filte
         }
     }
 
-    $scope.open = function (size) {
+    $scope.institutionModalOpen = function (size) {
 
         var modalInstance = $modal.open({
-            templateUrl: 'myModalContent.html',
+            templateUrl: 'institutionModalContent.html',
             controller: 'ModalInstitutionController',
             size: size
         });
 
         modalInstance.result.then(function (result) {
-            console.log(result);
             $scope.institutions.push(result.data);
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+    $scope.qualificationModalOpen = function (size) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'qualificationModalContent.html',
+            controller: 'ModalQualificationController',
+            size: size
+        });
+
+        modalInstance.result.then(function (result) {
+            $scope.qualifications.push(result.data);
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
         });
@@ -126,6 +141,31 @@ angular.module('app').controller('ModalInstitutionController', function ($scope,
             id: 0,
             shortname: null,
             longname: null
+        };
+    }
+
+    $scope.ok = function (result) {
+        $modalInstance.close(result);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+});
+
+angular.module('app').controller('ModalQualificationController', function ($scope, $modalInstance, QualificationService) {
+
+    $scope.qualificationForm = {
+        id: 0,
+        name: null
+    };
+    $scope.saveQualification = function () {
+
+        $scope.ok(QualificationService.save($scope.qualificationForm));
+
+        $scope.qualificationForm = {
+            id: 0,
+            name: null
         };
     }
 

@@ -1006,6 +1006,9 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 institutionsData: function (InstitutionService) {
                     return InstitutionService.list();
                 },
+                qualificationsData: function (QualificationService) {
+                    return QualificationService.list();
+                },
                 educationsData: function (activeEmployeeData, EducationService) {
                     return EducationService.list(activeEmployeeData.id);
                 }

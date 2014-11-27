@@ -4,7 +4,7 @@ import java.util.Date
 
 import play.api._
 import play.api.mvc._
-import models.{Education}
+import models.{QualificationType, Education}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
@@ -63,4 +63,20 @@ object Educations extends Controller {
     Ok(views.html.education.show())
   }
 
+  def jsonQualificationTypesList() = Action {
+    val qualificationTypes = QualificationType.findAll.map { qualification => Json.toJson(qualification)}
+    Ok(Json.toJson(qualificationTypes))
+  }
+
+  def qualificationTypeSave() = Action(parse.json) { implicit request =>
+    val qualificationTypeJson = request.body
+    qualificationTypeJson.validate[QualificationType].fold(
+      valid = { qualificationType =>
+        Ok(Json.toJson(QualificationType.insert(qualificationType)))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
 }

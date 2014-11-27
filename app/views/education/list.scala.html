@@ -23,7 +23,7 @@
                     <td>{{ (institutions | filter: {id: education.institution_id })[0].shortname }}</td>
                     <td>{{ education.serialnumber }}</td>
                     <td>{{ education.speciality }}</td>
-                    <td>{{ education.qualification }}</td>
+                    <td>{{ (qualifications | filter: {id: education.qualification_id })[0].name }}</td>
                     <td>{{ education.start_date  | date: 'dd.MM.yyyy' }}</td>
                     <td>{{ education.end_date |  date: 'dd.MM.yyyy' }}</td>
                     <td>
@@ -53,7 +53,7 @@
                                     <select required class="form-control" name="institution" ng-model="educationForm.institution_id"
                                     ng-options="institution.id as institution.longname for institution in institutions"></select>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default btn-add" ng-click="open()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                                        <button class="btn btn-default btn-add" ng-click="institutionModalOpen()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
                                     </span>
                                 </div>
                             </div>
@@ -68,8 +68,14 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="qualification" class="control-label">Квалификация по диплому</label>
-                                <input required class="form-control" type="text" name="qualification" ng-model="educationForm.qualification"/>
+                                <label for="qualification_id" class="control-label">Квалификация по диплому</label>
+                                <div class="input-group">
+                                    <select required class="form-control" name="qualification_id" ng-model="educationForm.qualification_id"
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications"></select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-add" ng-click="qualificationModalOpen()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4">
                                 <label for="startDate" class="control-label">Дата поступления</label>
@@ -96,9 +102,9 @@
 </div>
 
 
-<script type="text/ng-template" id="myModalContent.html">
+<script type="text/ng-template" id="institutionModalContent.html">
 <div class="modal-header">
-<h4 class="modal-title"> @Messages("Новое учебное заведение") </h4>
+<h4 class="modal-title"> Новое учебное заведение </h4>
 </div>
 <form ng-submit="saveInstitution()" class="form-horizontal">
 <div class="modal-body">
@@ -121,5 +127,29 @@
 <button class="btn btn-primary" ng-click="saveInstitution()">Создать</button>
 <button class="btn btn-warning" ng-click="cancel()">Отменить</button>
 </div>
+</form>
+</script>
+
+
+<script type="text/ng-template" id="qualificationModalContent.html">
+<div class="modal-header">
+<h4 class="modal-title"> Новая квалификация по диплому </h4>
+</div>
+<form ng-submit="saveQualification()" class="form-horizontal">
+<fieldset>
+<div class="modal-body">
+<div class="form-group form-group-sm">
+<label for="name" class="col-sm-3 control-label">Название</label>
+<div class="col-sm-9">
+<input required class="form-control" type="text" ng-model="qualificationForm.name"/>
+</div>
+<span class="help-inline"></span>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary" ng-click="saveQualification()">Создать</button>
+<button class="btn btn-warning" ng-click="cancel()">Отменить</button>
+</div>
+</fieldset>
 </form>
 </script>

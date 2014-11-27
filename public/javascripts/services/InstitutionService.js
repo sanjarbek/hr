@@ -15,6 +15,23 @@ angular.module('app').service('InstitutionService', function ($http) {
 
 });
 
+angular.module('app').service('QualificationService', function ($http) {
+
+    this.save = function (qualification) {
+        return $http.post('/qualification_types/save', qualification)
+            .success(function (result) {
+                return result;
+            });
+    }
+
+    this.list = function () {
+        return $http.get('/qualification_types/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+});
+
 angular.module('app').service('EducationService', function ($http) {
 
     this.save = function (institution) {
