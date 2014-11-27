@@ -11,6 +11,7 @@ import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
 import org.squeryl._
 import org.squeryl.Query
+import play.api.Logger
 import collection.Iterable
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -73,10 +74,9 @@ object Employee {
     employee.save.asInstanceOf[Employee]
   }
 
-  def update(employee: Employee) {
-    inTransaction {
-      employee.save
-    }
+  def update(employee: Employee) = inTransaction {
+    Logger.debug(s"Result=$employee")
+    employee.save
   }
 
   def listOfFamily(employee: Employee) = inTransaction {
