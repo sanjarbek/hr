@@ -63,7 +63,7 @@ object Military {
   def findEmployeeMilitary(employeeId: Long) = inTransaction {
     from(allQ) { military =>
       where(military.employee_id === employeeId) select (military)
-    }.toList
+    }.headOption
   }
 
   def findById(id: Long) = inTransaction {

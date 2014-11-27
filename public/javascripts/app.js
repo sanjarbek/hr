@@ -1017,16 +1017,16 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             url: '/passports',
             template: '<div ui-view></div>'
         })
-        .state('panel.employees.detail.passports.list', {
-            url: '/list',
-            templateUrl: '/passports/list',
-            resolve: {
-                passportsData: function (PassportService, activeEmployeeData) {
-                    return PassportService.list(activeEmployeeData.id);
-                }
-            },
-            controller: 'PassportController'
-        })
+//        .state('panel.employees.detail.passports.list', {
+//            url: '/list',
+//            templateUrl: '/passports/list',
+//            resolve: {
+//                passportsData: function (PassportService, activeEmployeeData) {
+//                    return PassportService.list(activeEmployeeData.id);
+//                }
+//            },
+//            controller: 'PassportController'
+//        })
         .state('panel.employees.detail.passports.show', {
             url: '/show',
             templateUrl: '/passports/show',
@@ -1042,12 +1042,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             url: '/militaries',
             template: '<div ui-view></div>'
         })
-        .state('panel.employees.detail.military.list', {
-            url: '/list',
-            templateUrl: '/militaries/list',
+        .state('panel.employees.detail.military.show', {
+            url: '/show',
+            templateUrl: '/militaries/show',
             resolve: {
-                militariesData: function (MilitaryService, activeEmployeeData) {
-                    return MilitaryService.list(activeEmployeeData.id);
+                militaryData: function (MilitaryService, activeEmployeeData) {
+                    return MilitaryService.getEmployeeMilitary(activeEmployeeData.id);
                 }
             },
             controller: 'MilitaryController'

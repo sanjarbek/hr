@@ -16,14 +16,19 @@ object Militaries extends Controller {
     Ok(views.html.military.list())
   }
 
+  def show = Action {
+    Ok(views.html.military.show())
+  }
+
   def jsonList = Action {
     val militaries = Military.findAll.map { military => Json.toJson(military)}
     Ok(Json.toJson(militaries))
   }
 
   def jsonEmployeeMilitary(employeeId: Long) = Action {
-    val militaries = Military.findEmployeeMilitary(employeeId).map { military => Json.toJson(military)}
-    Ok(Json.toJson(militaries))
+    Military.findEmployeeMilitary(employeeId).map {
+      military => Ok(Json.toJson(military))
+    }.getOrElse(Ok(JsNull))
   }
 
   def save = Action(parse.json) { implicit request =>

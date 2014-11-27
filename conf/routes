@@ -101,16 +101,16 @@ POST          /educations/save                      controllers.Educations.save
 PUT           /educations/update                    controllers.Educations.update
 DELETE        /educations/delete                    controllers.Educations.delete(id: Long)
 
-GET           /passports/list                       controllers.Passports.list
+#GET           /passports/list                       controllers.Passports.list
 GET           /passports/show                       controllers.Passports.show
-GET           /passports/json/list                  controllers.Passports.jsonList
+#GET           /passports/json/list                  controllers.Passports.jsonList
 GET           /passports/json/get                   controllers.Passports.jsonEmployeePassport(employee_id: Long)
 POST          /passports/save                       controllers.Passports.save
 PUT           /passports/update                     controllers.Passports.update
 DELETE        /passports/delete                     controllers.Passports.delete(id: Long)
 
-GET           /militaries/list                      controllers.Militaries.list
-GET           /militaries/json/list                 controllers.Militaries.jsonList
+GET           /militaries/show                      controllers.Militaries.show
+GET           /militaries/json/get                  controllers.Militaries.jsonEmployeeMilitary(employeeId: Long)
 POST          /militaries/save                      controllers.Militaries.save
 PUT           /militaries/update                    controllers.Militaries.update
 DELETE        /militaries/delete                    controllers.Militaries.delete(id: Long)

@@ -1,7 +1,6 @@
 angular.module('app').service('MilitaryService', function ($http) {
 
     this.save = function (military) {
-        console.log(military);
         return $http.post('/militaries/save', military)
             .success(function (result) {
                 return result;
@@ -10,6 +9,12 @@ angular.module('app').service('MilitaryService', function ($http) {
 
     this.list = function (employee_id) {
         return $http.get('/employees/json/military', {params: {employeeId: employee_id}}).then(function (result) {
+            return result.data;
+        });
+    }
+
+    this.getEmployeeMilitary = function (employee_id) {
+        return $http.get('/militaries/json/get', {params: {employeeId: employee_id}}).then(function (result) {
             return result.data;
         });
     }
