@@ -20,6 +20,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "angular-ui-bootstrap" % "0.11.0-2",
   "org.webjars" % "angular-file-upload" % "1.6.6",
   "org.webjars" % "angular-tree-control" % "0.2.2",
+  "org.webjars" % "smart-table" % "1.4.4",
   //  "org.jopendocument" % "jOpenDocument" % "1.3",
   "org.docx4j" % "docx4j" % "3.2.0",
   "org.apache.poi" % "poi-ooxml" % "3.10.1",

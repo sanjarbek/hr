@@ -7,6 +7,7 @@ import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
 import org.squeryl._
 import org.squeryl.Query
+import play.api.Logger
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.json.Reads._
@@ -49,7 +50,7 @@ object Structure {
 
 
   def allQ: Query[Structure] = from(structureTable) {
-    office => select(office)
+    office => select(office) orderBy(office.id asc, office.parent_id asc)
   }
 
   def findAll: Iterable[Structure] = inTransaction {

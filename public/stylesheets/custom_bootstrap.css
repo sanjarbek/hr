@@ -42,3 +42,11 @@ legend.scheduler-border {
     line-height: 1.5;
 }
 
+ul.pagination {
+    margin: 1px 0;
+}
+
+div.pagination {
+    margin: 1px 0;
+}
+

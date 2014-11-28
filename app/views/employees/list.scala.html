@@ -31,21 +31,34 @@
                 </div>
                 <hr />
             </div>
-            <table class="table table-condensed">
+            <table st-table="employees" class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Фамилия</th>
+                        <th>Имя</th>
+                        <th>Отчество</th>
+                        <th>Год рождения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='employee in employees | filter: {surname: surname, firstname: firstname, lastname: lastname, birthday: birthday } | filter:searchByOfficeId'>
+                        <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.surname }}</a></td>
+                        <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.firstname }}</a></td>
+                        <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.lastname }}</a></td>
+                        <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.birthday | date: 'dd.MM.yyyy' }}</a></td>
+                    </tr>
+                </tbody>
+                @*<tfoot>*@
                 <tr>
-                    <th>Фамилия</th>
-                    <th>Имя</th>
-                    <th>Отчество</th>
-                    <th>Год рождения</th>
+                    <td colspan="5" class="text-light-blue">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10" class="pagination-sm"></div>
+                    </td>
                 </tr>
-                <tr ng-repeat='employee in employees | filter: {surname: surname, firstname: firstname, lastname: lastname, birthday: birthday } | filter:searchByOfficeId'>
-                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.surname }}</a></td>
-                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.firstname }}</a></td>
-                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.lastname }}</a></td>
-                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.birthday | date: 'dd.MM.yyyy' }}</a></td>
-                    <td><a ui-sref='panel.employees.detail({employeeId: employee.id})'>{{ employee.email }}</a></td>
-                </tr>
+                @*</tfoot>*@
             </table>
         </div>
     </div>
 </div>
+
+
+

@@ -8,7 +8,8 @@ angular.module('app', [
     'treeControl',
     'ngTagsInput',
     'textAngular',
-    'ckeditor'
+    'ckeditor',
+    'smart-table'
 ]);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider, $httpProvider) {

@@ -1,5 +1,6 @@
 package controllers
 
+import play.api.Logger
 import play.api.mvc._
 import models.{Structure}
 import play.api.libs.json._
@@ -11,7 +12,9 @@ object Structures extends Controller {
   }
 
   def jsonList = Action {
-    val structures = Structure.findFreePositions.map { structure => Json.toJson(structure)}
+    val structures = Structure.findAll.map { structure =>
+      Json.toJson(structure)
+    }
     Ok(Json.toJson(structures))
   }
 

@@ -3,6 +3,8 @@ angular.module('app').controller('EmployeeController', function ($scope, Employe
     $scope.employees = employeesData;
     $scope.structures = structuresData;
 
+    $scope.itemsByPage = 15;
+
     $scope.search = false;
 
     $scope.showSearch = function () {
