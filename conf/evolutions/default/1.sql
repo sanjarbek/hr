@@ -9,7 +9,9 @@ CREATE TABLE employees (
   citizenship      TEXT,
   insurance_number TEXT,
   tax_number       TEXT,
-  sex              BOOLEAN NOT NULL
+  sex              BOOLEAN NOT NULL,
+  created_at  timestamp not null ,
+  updated_at timestamp not null
 );
 
 # -- !Downs

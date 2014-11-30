@@ -12,25 +12,27 @@ import play.api.libs.json._
 object Database extends Schema {
 
   //--------------------------------------------------------------------------------------------
-  class TimeStamp(t: Timestamp) extends TimestampField(t)
+  class TimeStamp(t: Timestamp) extends TimestampField(t) {
+    override def toString = this.getMillis.toString
+  }
 
   implicit def jodaToTimeStamp(dateTime: DateTime): TimeStamp = new TimeStamp(new Timestamp(dateTime.getMillis))
 
   implicit def timeStampToJoda(timeStamp: TimeStamp): DateTime = new DateTime(timeStamp.value.getTime)
 
-  implicit val formatTimestamp = new Format[Timestamp] {
 
-    def writes(ts: Timestamp): JsValue = Json.obj("date" -> ts.toString())
+  implicit val formatTimeStamp = new Format[TimeStamp] {
+    def writes(ts: TimeStamp): JsValue = Json.toJson(ts.getMillis.toString)
 
-    def reads(ts: JsValue): JsResult[Timestamp] = {
-      // something like that... not tested !
+    def reads(ts: JsValue): JsResult[TimeStamp] = {
       try {
-        JsSuccess(Timestamp.valueOf(ts.as[String]))
+        JsSuccess(new TimeStamp(new Timestamp(DateTime.parse(ts.as[String]).getMillis)))
       } catch {
         case e: IllegalArgumentException => JsError("Unable to parse timestamp")
       }
     }
   }
+
 
   //--------------------------------------------------------------------------------------------
 

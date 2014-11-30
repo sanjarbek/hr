@@ -20,12 +20,12 @@
                     <td><strong>Дата окончания</strong></td>
                 </tr>
                 <tr ng-repeat="education in educations">
-                    <td>{{ (institutions | filter: {id: education.institution_id })[0].shortname }}</td>
+                    <td><span data-toggle="tooltip" data-placement="left" title=" {{ (institutions | filter: {id: education.institution_id })[0].longname }} ">{{ (institutions | filter: {id: education.institution_id })[0].shortname }}</span></td>
                     <td>{{ education.serialnumber }}</td>
                     <td>{{ education.speciality }}</td>
                     <td>{{ (qualifications | filter: {id: education.qualification_id })[0].name }}</td>
-                    <td>{{ education.start_date  | date: 'dd.MM.yyyy' }}</td>
-                    <td>{{ education.end_date |  date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ education.start_date  | date: 'yyyy' }}</td>
+                    <td>{{ education.end_date |  date: 'yyyy' }}</td>
                     <td>
                         <a class="btn btn-xs btn-primary" ng-click="selectEducation(education)">
                             <span class="glyphicon glyphicon-edit"></span>
@@ -41,7 +41,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                @Messages("Создать новый учебу")
+            @Messages("Создать новый учебу")
             </div>
             <div class="panel-body">
                 <form ng-submit="selectAction()" class="form-horizontal">
@@ -92,7 +92,7 @@
             <div class="panel-footer">
                 <div class="pull-right">
                     <a class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
-                    Сохранить</a>
+                        Сохранить</a>
                     <input type="button" class="btn btn-default" value='@Messages("Отменить")' ng-click="isCollapsed=true">
                 </div>
                 <div class="clearfix"></div>

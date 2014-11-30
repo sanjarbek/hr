@@ -40,8 +40,8 @@ object Employees extends Controller {
     val employeeJson = request.body
     employeeJson.validate[Employee].fold(
       valid = { employee =>
-        val ret = Employee.insert(employee)
-        Ok(Json.toJson(ret))
+        val tmp: Employee = employee.save
+        Ok(Json.toJson(tmp))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))
@@ -61,7 +61,7 @@ object Employees extends Controller {
     val employeeJson = request.body
     employeeJson.validate[Employee].fold(
       valid = { employee =>
-        Employee.update(employee)
+        employee.update
         Ok(Json.toJson("Updated"))
       },
       invalid = { errors =>

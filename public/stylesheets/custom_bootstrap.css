@@ -50,3 +50,14 @@ div.pagination {
     margin: 1px 0;
 }
 
+.panel-title {
+    margin-bottom: -5px;
+    margin-top: 8px;
+}
+
+.panel-heading {
+    padding-bottom: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    padding-left: 10;
+}

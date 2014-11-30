@@ -256,7 +256,9 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                         citizenship: $scope.newEmployeeForm.citizenship,
                         insurance_number: $scope.newEmployeeForm.insurance_number,
                         tax_number: $scope.newEmployeeForm.tax_number,
-                        sex: Boolean($scope.newEmployeeForm.sex)
+                        sex: Boolean($scope.newEmployeeForm.sex),
+                        created_at: '2011-01-01',
+                        updated_at: '2011-01-01'
                     };
 
                     EmployeeService.save(data);
@@ -293,6 +295,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 
                 $scope.newEmployeeForm = activeEmployeeData;
                 $scope.newEmployeeForm.birthday = $filter("date")(activeEmployeeData.birthday, 'yyyy-MM-dd');
+                $scope.newEmployeeForm.created_at = $filter("date")(activeEmployeeData.created_at, 'yyyy-MM-dd');
+                $scope.newEmployeeForm.updated_at = $filter("date")(activeEmployeeData.updated_at, 'yyyy-MM-dd');
 
                 $scope.editMode = false;
 

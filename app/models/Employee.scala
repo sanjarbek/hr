@@ -3,7 +3,7 @@ package models
 import java.sql.Timestamp
 import java.util.Date
 
-import models.Database.formatTimestamp
+import models.Database.{TimeStamp, formatTimeStamp}
 import org.joda.time.DateTime
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.annotations.{Column, ColumnBase}
@@ -25,8 +25,21 @@ case class Employee(
                      citizenship: String,
                      insurance_number: String,
                      tax_number: String,
-                     sex: Boolean
-                     ) extends KeyedEntity[Long]
+                     sex: Boolean,
+                     override var created_at: TimeStamp,
+                     override var updated_at: TimeStamp
+                     ) extends Entity[Long] {
+  override def save = inTransaction {
+    super.save.asInstanceOf[Employee]
+  }
+
+  def update = inTransaction {
+    Employee.findById(this.id).map { employee =>
+      val tmp = this.copy(created_at = employee.created_at, updated_at = employee.updated_at)
+      tmp.save
+    }
+  }
+}
 
 object Employee {
 
@@ -41,7 +54,9 @@ object Employee {
       (JsPath \ "citizenship").write[String] and
       (JsPath \ "insurance_number").write[String] and
       (JsPath \ "tax_number").write[String] and
-      (JsPath \ "sex").write[Boolean]
+      (JsPath \ "sex").write[Boolean] and
+      (JsPath \ "created_at").write[TimeStamp] and
+      (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(Employee.unapply))
 
   implicit val employeeReads: Reads[Employee] = (
@@ -53,7 +68,9 @@ object Employee {
       (JsPath \ "citizenship").read[String] and
       (JsPath \ "insurance_number").read[String] and
       (JsPath \ "tax_number").read[String] and
-      (JsPath \ "sex").read[Boolean]
+      (JsPath \ "sex").read[Boolean] and
+      (JsPath \ "created_at").read[TimeStamp] and
+      (JsPath \ "updated_at").read[TimeStamp]
     )(Employee.apply _)
 
   def allQ: Query[Employee] = from(employeeTable) {
