@@ -24,7 +24,7 @@
             <div class="col-sm-12 col-xs-12">
                 <div class="list-group">
                     <a ui-sref='panel.employees.detail' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.edit')}">Личные данные</a>
-                    @*<a href="#" class="list-group-item" ui-sref-active="active">Контактные данные</a>*@
+                    <a ui-sref='panel.employees.detail.contact_info.show' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.edit')}">Контактные данные</a>
                     <a ui-sref='panel.employees.detail.military.show' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.military')}">Воинские данные</a>
                     <a ui-sref='panel.employees.detail.relationship.list' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.relationship')}">Состав семьи</a>
                     <a ui-sref='panel.employees.detail.passports.show' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.passports')}">Паспортные данные</a>

@@ -101,8 +101,8 @@ POST          /educations/save                      controllers.Educations.save
 PUT           /educations/update                    controllers.Educations.update
 DELETE        /educations/delete                    controllers.Educations.delete(id: Long)
 
-GET         /qualification_types/json/list        controllers.Educations.jsonQualificationTypesList
-POST        /qualification_types/save             controllers.Educations.qualificationTypeSave
+GET           /qualification_types/json/list        controllers.Educations.jsonQualificationTypesList
+POST          /qualification_types/save             controllers.Educations.qualificationTypeSave
 
 #GET           /passports/list                       controllers.Passports.list
 GET           /passports/show                       controllers.Passports.show
@@ -126,6 +126,13 @@ POST          /orders/save                          controllers.Orders.save
 PUT           /orders/update                        controllers.Orders.update
 GET           /orders/generate                      controllers.Orders.generate(id: Long)
 GET           /orders/json/listByName               controllers.Orders.tagsList(query: String)
+
+GET           /contact_informations/show            controllers.ContactInformations.show
+GET           /contact_informations/json/get        controllers.ContactInformations.jsonEmployeeContact(employeeId: Long)
+POST          /contact_informations/save            controllers.ContactInformations.save
+PUT           /contact_informations/update          controllers.ContactInformations.update
+DELETE        /contact_informations/delete          controllers.ContactInformations.delete(id: Long)
+
 
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)

@@ -1025,16 +1025,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             url: '/passports',
             template: '<div ui-view></div>'
         })
-//        .state('panel.employees.detail.passports.list', {
-//            url: '/list',
-//            templateUrl: '/passports/list',
-//            resolve: {
-//                passportsData: function (PassportService, activeEmployeeData) {
-//                    return PassportService.list(activeEmployeeData.id);
-//                }
-//            },
-//            controller: 'PassportController'
-//        })
         .state('panel.employees.detail.passports.show', {
             url: '/show',
             templateUrl: '/passports/show',
@@ -1044,6 +1034,21 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             },
             controller: 'PassportController'
+        })
+        .state('panel.employees.detail.contact_info', {
+            absract: true,
+            url: '/contact',
+            template: '<div ui-view></div>'
+        })
+        .state('panel.employees.detail.contact_info.show', {
+            url: '/show',
+            templateUrl: '/contact_informations/show',
+            resolve: {
+                contactInformationData: function (ContactInformationService, activeEmployeeData) {
+                    return ContactInformationService.getEmployeeContactInformation(activeEmployeeData.id);
+                }
+            },
+            controller: 'ContactCtrl'
         })
         .state('panel.employees.detail.military', {
             absract: true,
