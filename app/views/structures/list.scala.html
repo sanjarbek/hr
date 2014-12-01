@@ -21,10 +21,10 @@
                                 {{node.name}}
                                 <div class="pull-right">
                                     <a ng-click="addChild(node)" ng-show="hasChildren(node.structure_type)" >
-                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                        <span class="glyphicon glyphicon-plus-sign"></span>
                                     </a>
                                     <a ng-click="editNode(node, $parentNode)" ng-show="!node.is_position" >
-                                    <span class="glyphicon glyphicon-edit"></span>
+                                        <span class="glyphicon glyphicon-edit"></span>
                                     </a>
                                 </div>
                             </treecontrol>
@@ -44,38 +44,61 @@
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="form-group form-group-sm">
-                            <label for="parent_id" class="col-sm-6 control-label">Вышестоящая структура</label>
-                            <div class="col-sm-6">
+                            <label for="parent_id" class="col-sm-5 col-md-4 control-label">Вышестоящая структура</label>
+                            <div class="col-sm-7">
                                 <input type="text" value="{{ parentStructure.name }}" required class="form-control" readonly />
                             </div>
                             <span class="help-inline"></span>
                         </div>
                         <div class="form-group form-group-sm">
-                            <label for="name" class="col-sm-6 control-label">Название</label>
-                            <div class="col-sm-6">
+                            <label for="name" class="col-sm-5 col-md-4 control-label">Название</label>
+                            <div class="col-sm-7">
                                 <input required class="form-control" type="text" name="name" ng-model="newStructureForm.name"/>
                             </div>
                             <span class="help-inline"></span>
                         </div>
                         <div class="form-group form-group-sm">
-                            <label for="structure_type" class="col-sm-6 control-label">Тип</label>
-                            <div class="col-sm-6">
+                            <label for="fullname" class="col-sm-5 col-md-4 control-label">Полное название</label>
+                            <div class="col-sm-7">
+                                <textarea required class="form-control" type="text" name="fullname" ng-model="newStructureForm.fullname">
+
+                                </textarea>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="structure_type" class="col-sm-5 col-md-4 control-label">Тип</label>
+                            <div class="col-sm-7">
                                 <select class="form-control" name="structure_type" ng-model="newStructureForm.structure_type"
                                 ng-options="structure_item.id as structure_item.name for structure_item in structure_types"></select>
                             </div>
                             <span class="help-inline"></span>
                         </div>
-                        <div class="form-group form-group-sm">
-                            <label for="position_type" class="col-sm-6 control-label">Категория должности</label>
-                            <div class="col-sm-6">
+                        <div class="form-group form-group-sm" ng-show="newStructureForm.structure_type==4">
+                            <label for="salary" class="col-sm-5 col-md-4 control-label">Оклад</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="number" min="0" name="salary" value="0" ng-model="newStructureForm.salary"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm" ng-show="newStructureForm.structure_type==4">
+                            <label for="bonus" class="col-sm-5 col-md-4 control-label">Премия</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="number" min="0" value="0" name="bonus" ng-model="newStructureForm.bonus"/>
+                            </div>
+                            <span class="help-inline"></span>
+                        </div>
+                        <div class="form-group form-group-sm" ng-show="newStructureForm.structure_type==4">
+                            <label for="position_type" class="col-sm-5 col-md-4 control-label">Категория должности</label>
+                            <div class="col-sm-7">
                                 <select class="form-control" name="position_type" ng-model="newStructureForm.position_type"
                                 ng-options="position.id as position.name for position in position_types"></select>
                             </div>
                             <span class="help-inline"></span>
                         </div>
                         <div class="form-group form-group-sm" >
-                            <label for="status" class="col-sm-6 control-label">Статус</label>
-                            <div class="col-sm-6">
+                            <label for="status" class="col-sm-5 col-md-4 control-label">Статус</label>
+                            <div class="col-sm-7">
                                 <select class="form-control" name="status" ng-model="newStructureForm.status"
                                 ng-options="status.id as status.name for status in statuses"></select>
                             </div>

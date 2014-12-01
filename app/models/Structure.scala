@@ -17,6 +17,9 @@ case class Structure(
                       id: Int,
                       parent_id: Option[Int],
                       name: String,
+                      fullname: String,
+                      salary: Float,
+                      bonus: Float,
                       structure_type: Int,
                       position_type: Option[Int],
                       status: Int
@@ -34,6 +37,9 @@ object Structure {
     (JsPath \ "id").write[Int] and
       (JsPath \ "parent_id").write[Option[Int]] and
       (JsPath \ "name").write[String] and
+      (JsPath \ "fullname").write[String] and
+      (JsPath \ "salary").write[Float] and
+      (JsPath \ "bonus").write[Float] and
       (JsPath \ "structure_type").write[Int] and
       (JsPath \ "position_type").write[Option[Int]] and
       (JsPath \ "status").write[Int]
@@ -43,6 +49,9 @@ object Structure {
     (JsPath \ "id").read[Int] and
       (JsPath \ "parent_id").read[Option[Int]] and
       (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](50)) and
+      (JsPath \ "fullname").read[String](minLength[String](2) keepAnd maxLength[String](250)) and
+      (JsPath \ "salary").read[Float] and
+      (JsPath \ "bonus").read[Float] and
       (JsPath \ "structure_type").read[Int] and
       (JsPath \ "position_type").read[Option[Int]] and
       (JsPath \ "status").read[Int]

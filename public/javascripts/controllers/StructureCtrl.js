@@ -33,6 +33,9 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
             id: 0,
             parent_id: null,
             name: null,
+            fullname: null,
+            salary: 0,
+            bonus: 0,
             structure_type: null,
             position_type: null,
             status: null
@@ -40,7 +43,10 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
     }
 
     $scope.saveStructure = function () {
+        console.log($scope.newStructureForm);
+
         $scope.newStructureForm.id = 0;
+
         if ($scope.parentStructure != null)
             $scope.newStructureForm.parent_id = $scope.parentStructure.id;
         else

@@ -3,7 +3,10 @@
 CREATE TABLE structures (
   id             SERIAL PRIMARY KEY,
   parent_id      INTEGER,
-  name           TEXT,
+  name           TEXT NOT NULL,
+  fullname       TEXT,
+  salary         NUMERIC DEFAULT 0,
+  bonus          NUMERIC DEFAULT 0,
   structure_type INT,
   position_type  INT,
   status         SMALLINT
