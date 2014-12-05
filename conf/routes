@@ -133,6 +133,11 @@ POST          /contact_informations/save            controllers.ContactInformati
 PUT           /contact_informations/update          controllers.ContactInformations.update
 DELETE        /contact_informations/delete          controllers.ContactInformations.delete(id: Long)
 
+GET         /calendar_types/show             controllers.Calendars.showCalendarType
+POST        /calendar_types/save             controllers.Calendars.saveCalendarType
+GET         /calendar_types/json/list        controllers.Calendars.jsonCalendarTypes
+
+
 
 # Webjar plugin included.
 GET           /webjars/*file                        controllers.WebJarAssets.at(file)

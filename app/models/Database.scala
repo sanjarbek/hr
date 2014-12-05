@@ -1,9 +1,11 @@
 package models
 
 import java.sql.Timestamp
+import java.time.{ZoneId, Instant, LocalDate, LocalDateTime}
 
 import org.joda.time.DateTime
-import org.squeryl.customtypes.TimestampField
+import java.util.Date
+import org.squeryl.customtypes.{DateField, TimestampField}
 import org.squeryl.{Table, Schema}
 import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.json.Json.JsValueWrapper
@@ -13,22 +15,53 @@ object Database extends Schema {
 
   //--------------------------------------------------------------------------------------------
   class TimeStamp(t: Timestamp) extends TimestampField(t) {
-    override def toString = this.getMillis.toString
+    override def toString = this.value.toString
   }
 
-  implicit def jodaToTimeStamp(dateTime: DateTime): TimeStamp = new TimeStamp(new Timestamp(dateTime.getMillis))
+  implicit def jodaToTimeStamp(dateTime: LocalDateTime): TimeStamp = new TimeStamp(Timestamp.valueOf(dateTime))
 
-  implicit def timeStampToJoda(timeStamp: TimeStamp): DateTime = new DateTime(timeStamp.value.getTime)
+  implicit def timeStampToJoda(timeStamp: TimeStamp): LocalDateTime = timeStamp.value.toLocalDateTime
 
 
   implicit val formatTimeStamp = new Format[TimeStamp] {
-    def writes(ts: TimeStamp): JsValue = Json.toJson(ts.getMillis.toString)
+    def writes(ts: TimeStamp): JsValue = Json.toJson(ts.value.toString)
 
     def reads(ts: JsValue): JsResult[TimeStamp] = {
       try {
-        JsSuccess(new TimeStamp(new Timestamp(DateTime.parse(ts.as[String]).getMillis)))
+        JsSuccess(new TimeStamp(Timestamp.valueOf(ts.as[String])))
       } catch {
         case e: IllegalArgumentException => JsError("Unable to parse timestamp")
+      }
+    }
+  }
+
+  class MyLocalDate(d: Date) extends DateField(d) {
+    override def toString = d.toString
+  }
+
+  implicit def myLocalDateToLocalDate(date: MyLocalDate): LocalDate = {
+    val instant = Instant.ofEpochMilli(date.value.getTime)
+    LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate
+  }
+
+  implicit def localDateToMyLocalDate(date: LocalDate): MyLocalDate = {
+    val instant = date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
+    new MyLocalDate(Date.from(instant))
+  }
+
+  implicit val formatMyLocalDate = new Format[MyLocalDate] {
+    def writes(mld: MyLocalDate): JsValue = {
+      val instant = Instant.ofEpochMilli(mld.value.getTime)
+      val localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate.toString
+      Json.toJson(localDate)
+    }
+
+    def reads(ts: JsValue): JsResult[MyLocalDate] = {
+      try {
+        val instant = LocalDate.parse(ts.as[String]).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant
+        JsSuccess(new MyLocalDate(Date.from(instant)))
+      } catch {
+        case e: IllegalArgumentException => JsError("Unable to parse date")
       }
     }
   }
@@ -55,6 +88,9 @@ object Database extends Schema {
   val orderTagTable: Table[OrderTag] = table[OrderTag]("order_tags")
   val qualificationTypeTable: Table[QualificationType] = table[QualificationType]("qualification_types")
   val contactInformationTable: Table[ContactInformation] = table[ContactInformation]("contact_informations")
+  val calendarTypeTable: Table[CalendarType] = table[CalendarType]("calendar_types")
+  val calendarTable: Table[Calendar] = table[Calendar]("calendars")
+  val dayTypeTable: Table[DayType] = table[DayType]("day_types")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -143,6 +179,21 @@ object Database extends Schema {
 
   on(contactInformationTable) { contactInformation => declare {
     contactInformation.id is (autoIncremented("contact_informations_id_seq"))
+  }
+  }
+
+  on(calendarTypeTable) { calendarType => declare {
+    calendarType.id is (autoIncremented("calendar_types_id_seq"))
+  }
+  }
+
+  on(calendarTable) { calendar => declare {
+    calendar.id is (autoIncremented("calendars_id_seq"))
+  }
+  }
+
+  on(dayTypeTable) { dayType => declare {
+    dayType.id is (autoIncremented("day_types_id_seq"))
   }
   }
 

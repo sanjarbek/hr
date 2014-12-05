@@ -1,0 +1,32 @@
+<h4>Виды рабочих графиков.</h4>
+<div class="row">
+    <div class="col-sm-4 col-md-3 col-lg-2">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Название нового графика" ng-model="newCalendarTypeForm.name" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary btn-add" ng-click="saveCalendarType()" type="button"><span class="glyphicon glyphicon-ok"></span></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr><th>Название</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="calendarType in calendarTypeList">
+                            <td>{{ calendarType.name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8 col-md-9 col-lg-10">
+
+        </div>
+</div>

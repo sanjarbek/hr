@@ -1,5 +1,7 @@
 package models
 
+import java.time.LocalDateTime
+
 import models.Database.TimeStamp
 import org.joda.time.DateTime
 import org.squeryl.{KeyedEntity}
@@ -35,8 +37,14 @@ trait Entity[K] extends Model[K] with Product {
   var updated_at: TimeStamp
 
   override def save = {
-    if (!isPersisted()) created_at = DateTime.now()
-    updated_at = DateTime.now()
+    if (!isPersisted()) {
+      val now = LocalDateTime.now()
+      updated_at = now
+      created_at = now
+    }
+    else {
+      updated_at = LocalDateTime.now()
+    }
 
     super.save
   }

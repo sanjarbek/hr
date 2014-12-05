@@ -1,10 +1,6 @@
 package models
 
-import java.sql.Timestamp
-import java.util.Date
-
-import models.Database.{TimeStamp, formatTimeStamp}
-import org.joda.time.DateTime
+import models.Database.{MyLocalDate, TimeStamp, formatTimeStamp, formatMyLocalDate}
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.annotations.{Column, ColumnBase}
 import org.squeryl.{Query, KeyedEntity}
@@ -21,7 +17,7 @@ case class Employee(
                      surname: String,
                      firstname: String,
                      lastname: String,
-                     birthday: Date,
+                     birthday: MyLocalDate,
                      citizenship: String,
                      insurance_number: String,
                      tax_number: String,
@@ -50,7 +46,7 @@ object Employee {
       (JsPath \ "surname").write[String] and
       (JsPath \ "firstname").write[String] and
       (JsPath \ "lastname").write[String] and
-      (JsPath \ "birthday").write[Date] and
+      (JsPath \ "birthday").write[MyLocalDate] and
       (JsPath \ "citizenship").write[String] and
       (JsPath \ "insurance_number").write[String] and
       (JsPath \ "tax_number").write[String] and
@@ -64,7 +60,7 @@ object Employee {
       (JsPath \ "surname").read[String] and
       (JsPath \ "firstname").read[String] and
       (JsPath \ "lastname").read[String] and
-      (JsPath \ "birthday").read[Date] and
+      (JsPath \ "birthday").read[MyLocalDate] and
       (JsPath \ "citizenship").read[String] and
       (JsPath \ "insurance_number").read[String] and
       (JsPath \ "tax_number").read[String] and

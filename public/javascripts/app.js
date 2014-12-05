@@ -257,8 +257,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                         insurance_number: $scope.newEmployeeForm.insurance_number,
                         tax_number: $scope.newEmployeeForm.tax_number,
                         sex: Boolean($scope.newEmployeeForm.sex),
-                        created_at: '2011-01-01',
-                        updated_at: '2011-01-01'
+                        created_at: '2011-01-01 00:00:00',
+                        updated_at: '2011-01-01 00:00:00'
                     };
 
                     EmployeeService.save(data);
@@ -1064,6 +1064,21 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             },
             controller: 'MilitaryController'
+        })
+        .state('panel.calendar_types', {
+            abstract: true,
+            url: '/calendar_types',
+            template: '<div ui-view></div>'
+        })
+        .state('panel.calendar_types.list', {
+            url: '/list',
+            templateUrl: '/calendar_types/show',
+            resolve: {
+                calendarTypesData: function (CalendarTypeService) {
+                    return CalendarTypeService.list();
+                }
+            },
+            controller: 'CalendarTypeCtrl'
         });
 
     $urlRouterProvider.otherwise("/employees/list");
