@@ -4,6 +4,7 @@ angular.module('app', [
     'ngTable',
     'treeGrid',
     'ui.bootstrap',
+    'ui.calendar',
     'angularFileUpload',
     'treeControl',
     'ngTagsInput',

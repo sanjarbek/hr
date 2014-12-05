@@ -31,6 +31,24 @@ angular.module('app').controller('CalendarTypeCtrl', function ($scope, $filter, 
 
         $scope.resetCalendarTypeForm();
     }
+
+    $scope.eventSources = [];
+
+    $scope.uiConfig = {
+        calendar: {
+            height: 450,
+            editable: true,
+            header: {
+                left: 'title',
+                center: '',
+                right: 'today prev,next'
+            },
+            eventClick: $scope.alertOnEventClick,
+            eventDrop: $scope.alertOnDrop,
+            eventResize: $scope.alertOnResize,
+            eventRender: $scope.eventRender
+        }
+    };
 });
 
 
