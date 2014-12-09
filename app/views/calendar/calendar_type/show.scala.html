@@ -27,7 +27,34 @@
         </div>
     </div>
     <div class="col-sm-8 col-md-9 col-lg-10">
-        <div ui-calendar="uiConfig.calendar" class="calendar" ng-model="eventSources"></div>
+        @*<div ui-calendar="uiConfig.calendar" class="calendar" ng-model="eventSources"></div>*@
+
+        <!-- contextmenu -->
+    <div contextmenu="meta.contextmenu" class="dropdown contextmenu">
+        <ul class="dropdown-menu" role="menu">
+            <li class="dropdown-header">
+          {{ meta.contextmenu.$item.name }}
+            </li>
+            <li>
+                <a role="menuitem" href ng-click="delete( meta.contextmenu.$item )" >
+                    <span class="glyphicon glyphicon-remove"></span> Delete
+                </a>
+            </li>
+            <li>
+                <a role="menuitem">asdf</a>
+            </li>
+        </ul>
+    </div>
+
+        <!-- table -->
+    <table class="table table-bordered table-striped table-condensed">
+        <tr ng-repeat="row in list">
+            <td>{{ row.id }}</td>
+            <td contextmenu-item="row" contextmenu-container="meta.contextmenu">{{ row.name }}</td>
+            <td contextmenu-item="row" contextmenu-container="meta.testmenu">{{ row.email }}</td>
+        </tr>
+    </table>
+
     </div>
 </div>
 

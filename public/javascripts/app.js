@@ -10,7 +10,8 @@ angular.module('app', [
     'ngTagsInput',
     'textAngular',
     'ckeditor',
-    'smart-table'
+    'smart-table',
+    'io.dennis.contextmenu'
 ]);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider, $httpProvider) {
