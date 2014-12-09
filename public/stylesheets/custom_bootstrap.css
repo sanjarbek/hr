@@ -61,3 +61,8 @@ div.pagination {
     padding-top: 3px;
     padding-left: 10;
 }
+
+.row {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}

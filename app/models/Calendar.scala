@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 import models.Database.{MyLocalDate, TimeStamp}
 import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.Query
+import org.squeryl._
 import org.squeryl.annotations.Column
 import play.api.libs.json.{Reads, JsPath, Writes}
 import play.api.libs.functional.syntax._
@@ -89,6 +89,7 @@ case class Calendar(
 object Calendar {
 
   import Database.calendarTable
+  import Database.myLocalDateToLocalDate
 
   implicit val calendarWrites: Writes[Calendar] = (
     (JsPath \ "id").write[Long] and
@@ -120,6 +121,12 @@ object Calendar {
     from(calendarTable) {
       calendar => where(calendar.id === id) select (calendar)
     }.headOption
+  }
+
+  def findCalendarByType(calendarTypeId: Int) = inTransaction {
+    from(calendarTable) {
+      calendar => where(calendar.calendar_type === calendarTypeId) select (calendar) orderBy (calendar.id)
+    }.toList
   }
 
 }

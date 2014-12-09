@@ -1078,6 +1078,9 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             resolve: {
                 calendarTypesData: function (CalendarTypeService) {
                     return CalendarTypeService.list();
+                },
+                dayTypesData: function (DayTypeService) {
+                    return DayTypeService.list();
                 }
             },
             controller: 'CalendarTypeCtrl'

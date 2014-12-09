@@ -7,7 +7,7 @@ import java.time.temporal.WeekFields
 import models.Database.MyLocalDate
 import models.{Calendar, DayType, CalendarType}
 import play.api.Logger
-import play.api.libs.json.{JsError, Json}
+import play.api.libs.json.{JsValue, JsError, Json}
 import play.api.mvc.{Action, Controller}
 
 object Calendars extends Controller {
@@ -60,8 +60,19 @@ object Calendars extends Controller {
     Ok(views.html.calendar.calendar_type.show())
   }
 
+  def showCalendarByTypeAndYear(calendarTypeId: Int, year: Int) = Action {
+    val calendarYearDays = Calendar.findCalendarByType(calendarTypeId).filter(_.calendar_date.getYear == year).map { calendarYear => Json.toJson(calendarYear)}
+    Ok(Json.toJson(calendarYearDays))
+  }
+
   def jsonCalendarTypes() = Action {
     val calendarTypes = CalendarType.findAll.map { calendarType => Json.toJson(calendarType)}
     Ok(Json.toJson(calendarTypes))
   }
+
+  def jsonCalendarDayTypes() = Action {
+    val dayTypes = DayType.findAll.filter(_.dayType).map { dayType => Json.toJson(dayType)}
+    Ok(Json.toJson(dayTypes))
+  }
+
 }

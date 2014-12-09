@@ -133,10 +133,12 @@ POST          /contact_informations/save            controllers.ContactInformati
 PUT           /contact_informations/update          controllers.ContactInformations.update
 DELETE        /contact_informations/delete          controllers.ContactInformations.delete(id: Long)
 
+GET         /calendar_types/create           controllers.Calendars.createCalendarType
 GET         /calendar_types/show             controllers.Calendars.showCalendarType
 POST        /calendar_types/save             controllers.Calendars.saveCalendarType
 GET         /calendar_types/json/list        controllers.Calendars.jsonCalendarTypes
-
+GET         /day_types/json/list             controllers.Calendars.jsonCalendarDayTypes
+GET         /calendar/json/list              controllers.Calendars.showCalendarByTypeAndYear(calendarTypeId: Int = 1, year: Int = 2014)
 
 
 # Webjar plugin included.
