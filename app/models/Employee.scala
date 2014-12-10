@@ -22,6 +22,8 @@ case class Employee(
                      insurance_number: String,
                      tax_number: String,
                      sex: Boolean,
+                     @Column("relationship_status_id") val relationshipStatus: Int,
+                     @Column("nationality_id") val nationalityId: Int,
                      override var created_at: TimeStamp,
                      override var updated_at: TimeStamp
                      ) extends Entity[Long] {
@@ -51,6 +53,8 @@ object Employee {
       (JsPath \ "insurance_number").write[String] and
       (JsPath \ "tax_number").write[String] and
       (JsPath \ "sex").write[Boolean] and
+      (JsPath \ "relationshipStatus").write[Int] and
+      (JsPath \ "nationalityId").write[Int] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(Employee.unapply))
@@ -65,6 +69,8 @@ object Employee {
       (JsPath \ "insurance_number").read[String] and
       (JsPath \ "tax_number").read[String] and
       (JsPath \ "sex").read[Boolean] and
+      (JsPath \ "relationshipStatus").read[Int] and
+      (JsPath \ "nationalityId").read[Int] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
     )(Employee.apply _)
@@ -95,5 +101,109 @@ object Employee {
     from(relationshipTable) {
       family => where(family.employee_id === employee.id).compute(count)
     }.toLong
+  }
+}
+
+
+case class Nationality(
+                        id: Int,
+                        name: String,
+                        override var created_at: TimeStamp,
+                        override var updated_at: TimeStamp
+                        ) extends Entity[Int] {
+  override def save = inTransaction {
+    super.save.asInstanceOf[Nationality]
+  }
+
+  def update = inTransaction {
+    Nationality.findById(this.id).map { nationality =>
+      val tmp = this.copy(created_at = nationality.created_at, updated_at = nationality.updated_at)
+      tmp.save
+    }
+  }
+}
+
+object Nationality {
+
+  import Database.{nationalityTable}
+
+  implicit val nationalityWrites: Writes[Nationality] = (
+    (JsPath \ "id").write[Int] and
+      (JsPath \ "name").write[String] and
+      (JsPath \ "created_at").write[TimeStamp] and
+      (JsPath \ "updated_at").write[TimeStamp]
+    )(unlift(Nationality.unapply))
+
+  implicit val nationalityReads: Reads[Nationality] = (
+    (JsPath \ "id").read[Int] and
+      (JsPath \ "name").read[String] and
+      (JsPath \ "created_at").read[TimeStamp] and
+      (JsPath \ "updated_at").read[TimeStamp]
+    )(Nationality.apply _)
+
+  def allQ: Query[Nationality] = from(nationalityTable) {
+    nationality => select(nationality)
+  }
+
+  def findAll: Iterable[Nationality] = inTransaction {
+    allQ.toList
+  }
+
+  def findById(id: Long) = inTransaction {
+    from(nationalityTable) {
+      nationality => where(nationality.id === id) select (nationality)
+    }.headOption
+  }
+}
+
+
+case class RelationshipStatus(
+                               id: Int,
+                               name: String,
+                               override var created_at: TimeStamp,
+                               override var updated_at: TimeStamp
+                               ) extends Entity[Int] {
+  override def save = inTransaction {
+    super.save.asInstanceOf[RelationshipStatus]
+  }
+
+  def update = inTransaction {
+    RelationshipStatus.findById(this.id).map { nationality =>
+      val tmp = this.copy(created_at = nationality.created_at, updated_at = nationality.updated_at)
+      tmp.save
+    }
+  }
+}
+
+object RelationshipStatus {
+
+  import Database.{relationshipStatusTable}
+
+  implicit val nationalityWrites: Writes[RelationshipStatus] = (
+    (JsPath \ "id").write[Int] and
+      (JsPath \ "name").write[String] and
+      (JsPath \ "created_at").write[TimeStamp] and
+      (JsPath \ "updated_at").write[TimeStamp]
+    )(unlift(RelationshipStatus.unapply))
+
+  implicit val nationalityReads: Reads[RelationshipStatus] = (
+    (JsPath \ "id").read[Int] and
+      (JsPath \ "name").read[String] and
+      (JsPath \ "created_at").read[TimeStamp] and
+      (JsPath \ "updated_at").read[TimeStamp]
+    )(RelationshipStatus.apply _)
+
+  def allQ: Query[RelationshipStatus] = from(relationshipStatusTable) {
+    nationality => select(nationality)
+  }
+
+  def findAll: Iterable[RelationshipStatus] = inTransaction {
+    allQ.toList
+  }
+
+  def findById(id: Long) = inTransaction {
+    from(relationshipStatusTable) {
+      nationality => where(nationality.id === id) select (nationality)
+    }.headOption
   }
 }

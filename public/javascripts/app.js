@@ -247,26 +247,15 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('panel.employees.create', {
             url: '/create',
             templateUrl: '/employees/create',
-            controller: function ($scope, EmployeeService) {
-                $scope.saveEmployee = function () {
-                    var data = {
-                        id: 0,
-                        surname: $scope.newEmployeeForm.surname,
-                        firstname: $scope.newEmployeeForm.firstname,
-                        lastname: $scope.newEmployeeForm.lastname,
-                        birthday: $scope.newEmployeeForm.birthday,
-                        citizenship: $scope.newEmployeeForm.citizenship,
-                        insurance_number: $scope.newEmployeeForm.insurance_number,
-                        tax_number: $scope.newEmployeeForm.tax_number,
-                        sex: Boolean($scope.newEmployeeForm.sex),
-                        created_at: '2011-01-01 00:00:00',
-                        updated_at: '2011-01-01 00:00:00'
-                    };
-
-                    EmployeeService.save(data);
-                    $scope.newEmployeeForm = {};
+            resolve: {
+                nationalitiesData: function (NationalityService) {
+                    return NationalityService.list();
+                },
+                relationshipStatusesData: function (RelationshipStatusService) {
+                    return RelationshipStatusService.list();
                 }
-            }
+            },
+            controller: 'EmployeeCreateController'
         })
         .state('panel.employees.list', {
             url: '/list',
@@ -290,10 +279,18 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             resolve: {
                 activeEmployeeData: function (EmployeeService, $stateParams) {
                     return EmployeeService.get($stateParams.employeeId);
+                },
+                nationalitiesData: function (NationalityService) {
+                    return NationalityService.list();
+                },
+                relationshipStatusesData: function (RelationshipStatusService) {
+                    return RelationshipStatusService.list();
                 }
             },
-            controller: function ($scope, EmployeeService, activeEmployeeData, $upload, $state, $filter) {
+            controller: function ($scope, EmployeeService, activeEmployeeData, $upload, $state, $modal, $filter, nationalitiesData, relationshipStatusesData) {
                 $scope.activeEmployee = activeEmployeeData;
+                $scope.relationshipStatuses = relationshipStatusesData;
+                $scope.nationalities = nationalitiesData;
 
                 $scope.newEmployeeForm = activeEmployeeData;
                 $scope.newEmployeeForm.birthday = $filter("date")(activeEmployeeData.birthday, 'yyyy-MM-dd');
@@ -303,7 +300,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.editMode = false;
 
                 $scope.updateEmployee = function () {
-                    console.log("Start updating ...");
                     EmployeeService.update($scope.newEmployeeForm).then(function (result) {
 
                         PNotify.desktop.permission();
@@ -318,6 +314,38 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                             });
                     });
                 }
+
+                $scope.openNationalityModal = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'nationalityModal.html',
+                        controller: 'ModalNationalityController',
+                        size: size
+
+                    });
+
+                    modalInstance.result.then(function (result) {
+                        $scope.nationalities.push(result.data);
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+
+                $scope.openRelationshipStatusModal = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'relationshipStatusModal.html',
+                        controller: 'ModalRelationshipStatusController',
+                        size: size
+
+                    });
+
+                    modalInstance.result.then(function (result) {
+                        $scope.relationshipStatuses.push(result.data);
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
 
 //                $scope.onFileSelect = function ($files) {
 //                    //$files: an array of files selected, each file has name, size, and type.

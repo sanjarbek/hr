@@ -91,6 +91,8 @@ object Database extends Schema {
   val calendarTypeTable: Table[CalendarType] = table[CalendarType]("calendar_types")
   val calendarTable: Table[Calendar] = table[Calendar]("calendars")
   val dayTypeTable: Table[DayType] = table[DayType]("day_types")
+  val relationshipStatusTable: Table[RelationshipStatus] = table[RelationshipStatus]("relationship_statuses")
+  val nationalityTable: Table[Nationality] = table[Nationality]("nationalities")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -194,6 +196,16 @@ object Database extends Schema {
 
   on(dayTypeTable) { dayType => declare {
     dayType.id is (autoIncremented("day_types_id_seq"))
+  }
+  }
+
+  on(nationalityTable) { nationality => declare {
+    nationality.id is (autoIncremented("nationalities_id_seq"))
+  }
+  }
+
+  on(relationshipStatusTable) { relationshipStatus => declare {
+    relationshipStatus.id is (autoIncremented("relationship_statuses_id_seq"))
   }
   }
 

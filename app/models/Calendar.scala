@@ -129,6 +129,12 @@ object Calendar {
     }.toList
   }
 
+  def findCalendarTypeYears(calendarTypeId: Int) = inTransaction {
+    from(calendarTable) {
+      calendar => where(calendar.calendar_type === calendarTypeId) select (calendar)
+    }.toList
+  }
+
 }
 
 case class DayType(

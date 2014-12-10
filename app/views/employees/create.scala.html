@@ -36,14 +36,14 @@
                             <legend class="scheduler-border">Пол</legend>
                             <div class="radio-inline">
                                 <label>
-                                    <input type="radio" class name="sex" value="true" ng-init="newEmployeeForm.sex='true'" checked ng-model="newEmployeeForm.sex">
-                                    Мужской
+                                    <input type="radio" class name="sex" ng-value=true ng-init="newEmployeeForm.sex=true" checked ng-model="newEmployeeForm.sex">
+                                Мужской
                                 </label>
                             </div>
                             <div class="radio-inline">
                                 <label>
-                                    <input type="radio" name="sex" value="false" ng-model="newEmployeeForm.sex">
-                                    Женский
+                                    <input type="radio" name="sex" ng-value=false ng-model="newEmployeeForm.sex">
+                                Женский
                                 </label>
                             </div>
                         </fieldset>
@@ -61,7 +61,79 @@
                         <input class="form-control" type="text" name="tax_number" ng-model="newEmployeeForm.tax_number"/>
                     </div>
                 </div>
-            </fieldset>
+            <div class="form-group">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label for="relationshipStatus" class="control-label">Семейное положение</label>
+                    <div class="input-group">
+                        <select required class="form-control" name="relationshipStatus" ng-model="newEmployeeForm.relationshipStatus"
+                        ng-options="relationshipStatus.id as relationshipStatus.name for relationshipStatus in relationshipStatuses">
+                            <option value="">Выберите ...</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-add" ng-click="openRelationshipStatusModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label for="nationalityId" class="control-label">Национальность</label>
+                    <div class="input-group">
+                        <select required class="form-control" name="nationalityId" ng-model="newEmployeeForm.nationalityId"
+                        ng-options="nationality.id as nationality.name for nationality in nationalities">
+                            <option value="">Выберите ...</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-add" ng-click="openNationalityModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
         </form>
     </div>
+</div>
+
+<div>
+    <script type="text/ng-template" id="nationalityModal.html">
+    <div class="modal-header">
+    <h4 class="modal-title">Новая национальность</h4>
+    </div>
+    <div class="modal-body">
+    <form ng-submit="saveNationality()" class="form-horizontal">
+    <div class="form-group form-group-sm">
+    <label for="name" class="col-sm-2 control-label">Название</label>
+    <div class="col-sm-10">
+    <input required class="form-control" type="text" name="name" ng-model="newNationalityForm.name"/>
+    </div>
+    <span class="help-inline"></span>
+    </div>
+    </form>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveNationality()">Создать</button>
+    <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+    </div>
+    </script>
+</div>
+
+<div>
+    <script type="text/ng-template" id="relationshipStatusModal.html">
+    <div class="modal-header">
+    <h4 class="modal-title">Новая статус семейного положения</h4>
+    </div>
+    <div class="modal-body">
+    <form ng-submit="saveRelationshipStatus()" class="form-horizontal">
+    <div class="form-group form-group-sm">
+    <label for="name" class="col-sm-2 control-label">Название</label>
+    <div class="col-sm-10">
+    <input required class="form-control" type="text" name="name" ng-model="newRelationshipStatusForm.name"/>
+    </div>
+    <span class="help-inline"></span>
+    </div>
+    </form>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveRelationshipStatus()">Создать</button>
+    <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+    </div>
+    </script>
 </div>

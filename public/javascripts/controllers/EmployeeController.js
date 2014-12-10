@@ -76,3 +76,137 @@ angular.module('app').directive('stringToTimestamp', function () {
         }
     }
 });
+
+angular.module('app').controller('EmployeeCreateController', function ($scope, $modal, $log, EmployeeService, nationalitiesData, relationshipStatusesData) {
+
+    $scope.relationshipStatuses = relationshipStatusesData;
+    $scope.nationalities = nationalitiesData;
+
+    $scope.newEmployeeForm = {
+        id: 0,
+        surname: null,
+        firstname: null,
+        lastname: null,
+        birthday: null,
+        citizenship: null,
+        insurance_number: null,
+        tax_number: null,
+        sex: true,
+        relationshipStatus: null,
+        nationalityId: null,
+        created_at: '2011-01-01 00:00:00',
+        updated_at: '2011-01-01 00:00:00'
+    };
+
+    $scope.saveEmployee = function () {
+        EmployeeService.save($scope.newEmployeeForm);
+        $scope.newEmployeeForm = {
+            id: 0,
+            surname: null,
+            firstname: null,
+            lastname: null,
+            birthday: null,
+            citizenship: null,
+            insurance_number: null,
+            tax_number: null,
+            sex: true,
+            relationshipStatus: null,
+            nationalityId: null,
+            created_at: '2011-01-01 00:00:00',
+            updated_at: '2011-01-01 00:00:00'
+        };
+    };
+
+    $scope.openNationalityModal = function (size) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'nationalityModal.html',
+            controller: 'ModalNationalityController',
+            size: size
+
+        });
+
+        modalInstance.result.then(function (result) {
+            $scope.nationalities.push(result.data);
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+    $scope.openRelationshipStatusModal = function (size) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'relationshipStatusModal.html',
+            controller: 'ModalRelationshipStatusController',
+            size: size
+
+        });
+
+        modalInstance.result.then(function (result) {
+            $scope.relationshipStatuses.push(result.data);
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+});
+
+angular.module('app').controller('ModalRelationshipStatusController', function ($scope, $modalInstance, RelationshipStatusService) {
+
+    $scope.newRelationshipStatusForm = {
+        id: 0,
+        name: null,
+        created_at: '2014-01-01 00:00:00',
+        updated_at: '2014-01-01 00:00:00'
+    };
+
+    $scope.saveRelationshipStatus = function () {
+
+        $scope.ok(RelationshipStatusService.save($scope.newRelationshipStatusForm));
+
+        $scope.newRelationshipStatusForm = {
+            id: 0,
+            name: null,
+            created_at: '2014-01-01 00:00:00',
+            updated_at: '2014-01-01 00:00:00'
+        };
+    }
+
+    $scope.ok = function (result) {
+        $modalInstance.close(result);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+});
+
+
+angular.module('app').controller('ModalNationalityController', function ($scope, $modalInstance, NationalityService) {
+
+    $scope.newNationalityForm = {
+        id: 0,
+        name: null,
+        created_at: '2014-01-01 00:00:00',
+        updated_at: '2014-01-01 00:00:00'
+    };
+
+    $scope.saveNationality = function () {
+
+        $scope.ok(NationalityService.save($scope.newNationalityForm));
+
+        $scope.newNationalityForm = {
+            id: 0,
+            name: null,
+            created_at: '2014-01-01 00:00:00',
+            updated_at: '2014-01-01 00:00:00'
+        };
+    }
+
+    $scope.ok = function (result) {
+        $modalInstance.close(result);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+});

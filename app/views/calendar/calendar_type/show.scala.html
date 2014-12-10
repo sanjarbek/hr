@@ -1,70 +1,131 @@
 <h4>Виды рабочих графиков.</h4>
 <hr>
 <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <div class="row">
-            <div class="form-group">
-                <div class="col-sm-4 col-md-4 col-lg-4">
-                    <label for="year" class="control-label">Вид календаря</label>
-                    <div class="input-group">
-                        <select required class="form-control" name="degree" ng-model="calendarForm.type" ng-options="calendarType.id as calendarType.name for calendarType in calendarTypes">
-                            <option value="">Выберите тип календаря ...</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-add" ng-click="open()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-md-4 col-lg-4">
-                    <label for="year" class="control-label">Календарный год</label>
-                    <div class="input-group">
-                        <select required class="form-control" name="degree" ng-model="calendarForm.year" ng-options="year for year in years">
-                            <option value="">Выберите год ...</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-add" ng-click="" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <label for="firstname" class="control-label">&nbsp;</label>
-                    <button class="form-control btn btn-primary btn-add" ng-click="searchCalendar()">Сформировать</button>
-                </div>
-
-            </div>
-        </div>
+    <div class="col-sm-4 col-md-4 col-lg-4">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12">
-                @*<div ui-calendar="uiConfig.calendar" class="calendar" ng-model="eventSources"></div>*@
+                <label for="year" class="control-label">Вид календаря</label>
+                <div class="input-group">
+                    <select required class="form-control" name="degree" ng-model="calendarForm.type"
+                    ng-options="calendarType.id as calendarType.name for calendarType in calendarTypes"
+                    ng-change="calendarTypeChanged(calendarForm.type)">
+                        <option value="">Выберите тип календаря ...</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-add" ng-click="openCalendarTypeModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </div>
 
-                <!-- contextmenu -->
-            <div contextmenu="meta.contextmenu" class="dropdown contextmenu">
-                <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">
-                  {{ meta.contextmenu.$item.name }}
-                    </li>
-                    <li ng-repeat="dayType in dayTypes">
-                        <a role="menuitem" href ng-click="delete( meta.contextmenu.$item, dayType )" >
-                            <span class="glyphicon glyphicon-remove"></span> {{ dayType.name }}
-                        </a>
-                    </li>
-                </ul>
             </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12">
-                    <table class="table table-bordered table-striped table-condensed">
-                        <tr ng-repeat="calendarDay in calendarDays" contextmenu-item="calendarDay" contextmenu-container="meta.contextmenu">
-                            <td>{{ calendarDay.calendar_date }}</td>
-                            <td>{{ calendarDay.day_type }}</td>
-                        </tr>
-                    </table>
+        </div>
+        <br>
+        <div class="row" ng-show="calendarForm.type">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <label for="year" class="control-label">Календарный год</label>
+                <div class="input-group">
+                    <span class="input-group-btn" ng-show="calendarForm.year">
+                        <button class="form-control btn btn-primary btn-add" ng-click="searchCalendar()"><span class="glyphicon glyphicon-download"></span></button>
+                    </span>
+                    <select required class="form-control" name="degree" ng-model="calendarForm.year" ng-options="year for year in years">
+                        <option value="">Выберите год ...</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-add" ng-click="openCalendarModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
                 </div>
             </div>
-
+        </div>
+        <br>
+        <div class="row" ng-show="calendarForm.type && calendarForm.year">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <label for="year" class="control-label">Календарный месяц</label>
+                <select required class="form-control" name="degree" ng-model="calendarForm.month" ng-options=" k as v for (k, v) in yearMonths | orderBy: 'k' ">
+                    <option value="">Выберите месяц ...</option>
+                </select>
             </div>
-
         </div>
     </div>
+    <div class="col-sm-8 col-md-8 col-lg-8">
+            <!-- contextmenu -->
+        <div contextmenu="meta.contextmenu" class="dropdown contextmenu">
+            <ul class="dropdown-menu" role="menu">
+                <li class="dropdown-header">
+              {{ meta.contextmenu.$item.calendar_date | date: 'dd.MM.yyyy' }}
+                </li>
+                <li ng-repeat="dayType in dayTypes">
+                    <a role="menuitem" href ng-click="updateCalendarDay( meta.contextmenu.$item, dayType )" >
+                        {{ dayType.name }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="row" ng-show="calendarForm.type">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <table class="table table-bordered table-condensed">
+                    <tr ng-repeat="calendarDay in calendarDays | filter: {calendar_date: calendarForm.year} | filter: filterByMonth(calendarForm.month) | orderBy: calendar_date" contextmenu-item="calendarDay" contextmenu-container="meta.contextmenu" ng-class="rowClass(calendarDay)">
+                        <td>{{ calendarDay.calendar_date | date: 'dd.MM.yyyy' }}</td>
+                        <td>{{ weekDays[(calendarDay.calendar_date | date: 'EEEE')] }}</td>
+                        <td>{{ (dayTypes | filter: {id: calendarDay.day_type})[0].name  }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
+    </div>
+
+</div>
+
+
+<div>
+    <script type="text/ng-template" id="calendarTypeModal.html">
+    <div class="modal-header">
+    <h4 class="modal-title">Новый тип календаря</h4>
+    </div>
+    <div class="modal-body">
+    <form ng-submit="saveCalendarType()" class="form-horizontal">
+    <div class="form-group form-group-sm">
+    <label for="name" class="col-sm-2 control-label">Название</label>
+    <div class="col-sm-10">
+    <input required class="form-control" type="text" name="name" ng-model="newCalendarTypeForm.name"/>
+    </div>
+    </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveCalendarType()">Создать</button>
+    <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+    </script>
+</div>
+
+
+<div>
+    <script type="text/ng-template" id="calendarModal.html">
+    <div class="modal-header">
+    <h4 class="modal-title">Заполнить календарный год</h4>
+    </div>
+    <div class="modal-body">
+    <form ng-submit="saveCalendar()" class="form-horizontal">
+        @*<div class="form-group form-group-sm">*@
+        @*<label for="name" class="col-sm-2 control-label">Тип календаря</label>*@
+        @*<div class="col-sm-10">*@
+        @*<input required class="form-control" type="number" ng-model="newCalendarForm.calendarType"/>*@
+        @*</div>*@
+        @*<span class="help-inline"></span>*@
+        @*</div>*@
+    <div class="form-group form-group-sm">
+    <label for="name" class="col-sm-2 control-label">Год</label>
+    <div class="col-sm-10">
+    <input required class="form-control" type="number" name="name" ng-model="newCalendarForm.year"/>
+    </div>
+    <span class="help-inline"></span>
+    </div>
+    </form>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveCalendar()">Создать</button>
+    <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+    </div>
+    </script>
 </div>
 

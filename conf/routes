@@ -3,148 +3,154 @@
 # ~~~~
 
 # Home page
-GET           /                                     controllers.Application.angular
-GET           /login                                controllers.Application.login
-GET           /logout                               controllers.Application.logout
-POST          /auth                                 controllers.Application.auth
-GET           /menu                                 controllers.Application.menu
-GET           /user                                 controllers.Application.user
-POST          /upload                               controllers.Application.upload
-GET           /upload                               controllers.Application.uploadForm
+GET           /                                       controllers.Application.angular
+GET           /login                                  controllers.Application.login
+GET           /logout                                 controllers.Application.logout
+POST          /auth                                   controllers.Application.auth
+GET           /menu                                   controllers.Application.menu
+GET           /user                                   controllers.Application.user
+POST          /upload                                 controllers.Application.upload
+GET           /upload                                 controllers.Application.uploadForm
 
 # Состояния работоспособности сервера
-GET           /connection/status                    controllers.Application.serverStatus
-GET           /generatepoi                          controllers.Application.generatepoi
+GET           /connection/status                      controllers.Application.serverStatus
+GET           /generatepoi                            controllers.Application.generatepoi
 
 
 # Сотрудники
-GET           /employees/template                   controllers.Employees.template
-GET           /employees/list                       controllers.Employees.list
-GET           /employees/json/list                  controllers.Employees.jsonList
-GET           /employees/json/get                   controllers.Employees.jsonGet(id: Long)
-GET           /employees/create                     controllers.Employees.newEmployee
-GET           /employees/show                       controllers.Employees.show
-GET           /employees/edit                       controllers.Employees.edit
-POST          /employees/save                       controllers.Employees.save
-PUT           /employees/update                     controllers.Employees.update
+GET           /employees/template                     controllers.Employees.template
+GET           /employees/list                         controllers.Employees.list
+GET           /employees/json/list                    controllers.Employees.jsonList
+GET           /employees/json/get                     controllers.Employees.jsonGet(id: Long)
+GET           /employees/create                       controllers.Employees.newEmployee
+GET           /employees/show                         controllers.Employees.show
+GET           /employees/edit                         controllers.Employees.edit
+POST          /employees/save                         controllers.Employees.save
+PUT           /employees/update                       controllers.Employees.update
 
-GET           /employees/json/family                controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
-GET           /employees/json/passports             controllers.Passports.jsonEmployeePassport(employeeId: Long)
-GET           /employees/json/military              controllers.Militaries.jsonEmployeeMilitary(employeeId: Long)
+GET           /employees/json/family                  controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
+GET           /employees/json/passports               controllers.Passports.jsonEmployeePassport(employeeId: Long)
+GET           /employees/json/military                controllers.Militaries.jsonEmployeeMilitary(employeeId: Long)
 
 # Состав семьи
-GET           /relationships/list                   controllers.Relationships.list
-GET           /relationships/show                   controllers.Relationships.show
-POST          /relationships/save                   controllers.Relationships.save
-PUT           /relationships/update                 controllers.Relationships.update
-DELETE        /relationships/delete                 controllers.Relationships.delete(id: Long)
-GET           /relationships/json/list              controllers.Relationships.jsonList
+GET           /relationships/list                     controllers.Relationships.list
+GET           /relationships/show                     controllers.Relationships.show
+POST          /relationships/save                     controllers.Relationships.save
+PUT           /relationships/update                   controllers.Relationships.update
+DELETE        /relationships/delete                   controllers.Relationships.delete(id: Long)
+GET           /relationships/json/list                controllers.Relationships.jsonList
 
-GET           /relationship_types/create            controllers.RelationshipTypes.create
-GET           /relationship_types/list              controllers.RelationshipTypes.list
-GET           /relationship_types/json/list         controllers.RelationshipTypes.jsonList
-POST          /relationship_types/save              controllers.RelationshipTypes.save
+GET           /relationship_types/create              controllers.RelationshipTypes.create
+GET           /relationship_types/list                controllers.RelationshipTypes.list
+GET           /relationship_types/json/list           controllers.RelationshipTypes.jsonList
+POST          /relationship_types/save                controllers.RelationshipTypes.save
 
-GET           /positions/create                     controllers.Positions.create
-GET           /positions/list                       controllers.Positions.list
-GET           /positions/json/list                  controllers.Positions.jsonList
-POST          /positions/save                       controllers.Positions.save
+GET           /positions/create                       controllers.Positions.create
+GET           /positions/list                         controllers.Positions.list
+GET           /positions/json/list                    controllers.Positions.jsonList
+POST          /positions/save                         controllers.Positions.save
 
-GET           /position_categories/create           controllers.PositionCategories.create
-GET           /position_categories/list             controllers.PositionCategories.list
-GET           /position_categories/json/list        controllers.PositionCategories.jsonList
-POST          /position_categories/save             controllers.PositionCategories.save
+GET           /position_categories/create             controllers.PositionCategories.create
+GET           /position_categories/list               controllers.PositionCategories.list
+GET           /position_categories/json/list          controllers.PositionCategories.jsonList
+POST          /position_categories/save               controllers.PositionCategories.save
 
-GET           /structure_types/create               controllers.StructureTypes.create
-GET           /structure_types/list                 controllers.StructureTypes.list
-GET           /structure_types/json/list            controllers.StructureTypes.jsonList
-POST          /structure_types/save                 controllers.StructureTypes.save
+GET           /structure_types/create                 controllers.StructureTypes.create
+GET           /structure_types/list                   controllers.StructureTypes.list
+GET           /structure_types/json/list              controllers.StructureTypes.jsonList
+POST          /structure_types/save                   controllers.StructureTypes.save
 
-GET           /offices/create                       controllers.Offices.create
-GET           /offices/list                         controllers.Offices.list
-GET           /offices/json/list                    controllers.Offices.jsonList
-POST          /offices/save                         controllers.Offices.save
+GET           /offices/create                         controllers.Offices.create
+GET           /offices/list                           controllers.Offices.list
+GET           /offices/json/list                      controllers.Offices.jsonList
+POST          /offices/save                           controllers.Offices.save
 
-GET           /departments/create                   controllers.Departments.create
-GET           /departments/list                     controllers.Departments.list
-GET           /departments/json/list                controllers.Departments.jsonList
-POST          /departments/save                     controllers.Departments.save
+GET           /departments/create                     controllers.Departments.create
+GET           /departments/list                       controllers.Departments.list
+GET           /departments/json/list                  controllers.Departments.jsonList
+POST          /departments/save                       controllers.Departments.save
 
-GET           /structures/list                      controllers.Structures.list
-GET           /structures/json/list                 controllers.Structures.jsonList
-GET           /structures/json/freepositions        controllers.Structures.jsonFreePositionsList
-POST          /structures/save                      controllers.Structures.save
-PUT           /structures/update                    controllers.Structures.update
+GET           /structures/list                        controllers.Structures.list
+GET           /structures/json/list                   controllers.Structures.jsonList
+GET           /structures/json/freepositions          controllers.Structures.jsonFreePositionsList
+POST          /structures/save                        controllers.Structures.save
+PUT           /structures/update                      controllers.Structures.update
 
-GET           /contract_types/create                controllers.ContractTypes.create
-GET           /contract_types/list                  controllers.ContractTypes.list
-GET           /contract_types/json/list             controllers.ContractTypes.jsonList
-POST          /contract_types/save                  controllers.ContractTypes.save
-POST          /contract_types/upload                controllers.ContractTypes.upload
+GET           /contract_types/create                  controllers.ContractTypes.create
+GET           /contract_types/list                    controllers.ContractTypes.list
+GET           /contract_types/json/list               controllers.ContractTypes.jsonList
+POST          /contract_types/save                    controllers.ContractTypes.save
+POST          /contract_types/upload                  controllers.ContractTypes.upload
 
-GET           /contracts/create                     controllers.Contracts.create
-GET           /contracts/list                       controllers.Contracts.list
-GET           /contracts/json/list                  controllers.Contracts.jsonList
-POST          /contracts/save                       controllers.Contracts.save
-GET           /contracts/json/ownlist               controllers.Contracts.jsonEmployeeContractsList(id: Long)
-GET           /contracts/:id/download               controllers.Contracts.download(id: Long)
+GET           /contracts/create                       controllers.Contracts.create
+GET           /contracts/list                         controllers.Contracts.list
+GET           /contracts/json/list                    controllers.Contracts.jsonList
+POST          /contracts/save                         controllers.Contracts.save
+GET           /contracts/json/ownlist                 controllers.Contracts.jsonEmployeeContractsList(id: Long)
+GET           /contracts/:id/download                 controllers.Contracts.download(id: Long)
 
-GET           /institutions/create                  controllers.Institutions.create
-GET           /institutions/list                    controllers.Institutions.list
-GET           /institutions/json/list               controllers.Institutions.jsonList
-POST          /institutions/save                    controllers.Institutions.save
+GET           /institutions/create                    controllers.Institutions.create
+GET           /institutions/list                      controllers.Institutions.list
+GET           /institutions/json/list                 controllers.Institutions.jsonList
+POST          /institutions/save                      controllers.Institutions.save
 
-GET           /educations/create                    controllers.Educations.create
-GET           /educations/list                      controllers.Educations.list
-GET           /educations/json/list                 controllers.Educations.jsonList
-POST          /educations/save                      controllers.Educations.save
-PUT           /educations/update                    controllers.Educations.update
-DELETE        /educations/delete                    controllers.Educations.delete(id: Long)
+GET           /educations/create                      controllers.Educations.create
+GET           /educations/list                        controllers.Educations.list
+GET           /educations/json/list                   controllers.Educations.jsonList
+POST          /educations/save                        controllers.Educations.save
+PUT           /educations/update                      controllers.Educations.update
+DELETE        /educations/delete                      controllers.Educations.delete(id: Long)
 
-GET           /qualification_types/json/list        controllers.Educations.jsonQualificationTypesList
-POST          /qualification_types/save             controllers.Educations.qualificationTypeSave
+GET           /qualification_types/json/list          controllers.Educations.jsonQualificationTypesList
+POST          /qualification_types/save               controllers.Educations.qualificationTypeSave
 
 #GET           /passports/list                       controllers.Passports.list
-GET           /passports/show                       controllers.Passports.show
+GET           /passports/show                         controllers.Passports.show
 #GET           /passports/json/list                  controllers.Passports.jsonList
-GET           /passports/json/get                   controllers.Passports.jsonEmployeePassport(employee_id: Long)
-POST          /passports/save                       controllers.Passports.save
-PUT           /passports/update                     controllers.Passports.update
-DELETE        /passports/delete                     controllers.Passports.delete(id: Long)
+GET           /passports/json/get                     controllers.Passports.jsonEmployeePassport(employee_id: Long)
+POST          /passports/save                         controllers.Passports.save
+PUT           /passports/update                       controllers.Passports.update
+DELETE        /passports/delete                       controllers.Passports.delete(id: Long)
 
-GET           /militaries/show                      controllers.Militaries.show
-GET           /militaries/json/get                  controllers.Militaries.jsonEmployeeMilitary(employeeId: Long)
-POST          /militaries/save                      controllers.Militaries.save
-PUT           /militaries/update                    controllers.Militaries.update
-DELETE        /militaries/delete                    controllers.Militaries.delete(id: Long)
+GET           /militaries/show                        controllers.Militaries.show
+GET           /militaries/json/get                    controllers.Militaries.jsonEmployeeMilitary(employeeId: Long)
+POST          /militaries/save                        controllers.Militaries.save
+PUT           /militaries/update                      controllers.Militaries.update
+DELETE        /militaries/delete                      controllers.Militaries.delete(id: Long)
 
-GET           /orders/create                        controllers.Orders.create
-GET           /orders/list                          controllers.Orders.list
-GET           /orders/json/list                     controllers.Orders.jsonList
-GET           /orders/json/get                      controllers.Orders.jsonGet(id: Long)
-POST          /orders/save                          controllers.Orders.save
-PUT           /orders/update                        controllers.Orders.update
-GET           /orders/generate                      controllers.Orders.generate(id: Long)
-GET           /orders/json/listByName               controllers.Orders.tagsList(query: String)
+GET           /orders/create                          controllers.Orders.create
+GET           /orders/list                            controllers.Orders.list
+GET           /orders/json/list                       controllers.Orders.jsonList
+GET           /orders/json/get                        controllers.Orders.jsonGet(id: Long)
+POST          /orders/save                            controllers.Orders.save
+PUT           /orders/update                          controllers.Orders.update
+GET           /orders/generate                        controllers.Orders.generate(id: Long)
+GET           /orders/json/listByName                 controllers.Orders.tagsList(query: String)
 
-GET           /contact_informations/show            controllers.ContactInformations.show
-GET           /contact_informations/json/get        controllers.ContactInformations.jsonEmployeeContact(employeeId: Long)
-POST          /contact_informations/save            controllers.ContactInformations.save
-PUT           /contact_informations/update          controllers.ContactInformations.update
-DELETE        /contact_informations/delete          controllers.ContactInformations.delete(id: Long)
+GET           /contact_informations/show              controllers.ContactInformations.show
+GET           /contact_informations/json/get          controllers.ContactInformations.jsonEmployeeContact(employeeId: Long)
+POST          /contact_informations/save              controllers.ContactInformations.save
+PUT           /contact_informations/update            controllers.ContactInformations.update
+DELETE        /contact_informations/delete            controllers.ContactInformations.delete(id: Long)
 
-GET         /calendar_types/create           controllers.Calendars.createCalendarType
-GET         /calendar_types/show             controllers.Calendars.showCalendarType
-POST        /calendar_types/save             controllers.Calendars.saveCalendarType
-GET         /calendar_types/json/list        controllers.Calendars.jsonCalendarTypes
-GET         /day_types/json/list             controllers.Calendars.jsonCalendarDayTypes
-GET         /calendar/json/list              controllers.Calendars.showCalendarByTypeAndYear(calendarTypeId: Int = 1, year: Int = 2014)
+GET           /calendar_types/show                    controllers.Calendars.showCalendarType
+POST          /calendar_types/save                    controllers.Calendars.saveCalendarType
+GET           /calendar_types/json/list               controllers.Calendars.jsonCalendarTypes
+GET           /calendar_types/json/years              controllers.Calendars.jsonCalendarTypeYears(calendarTypeId: Int)
+GET           /day_types/json/list                    controllers.Calendars.jsonCalendarDayTypes
+GET           /calendar/json/list                     controllers.Calendars.showCalendarByTypeAndYear(calendarTypeId: Int, year: Int)
+PUT           /calendar/update                        controllers.Calendars.updateCalendarDay
+GET           /calendar/create                        controllers.Calendars.create(calendarTypeId: Int, year: Int)
 
+GET           /relationship_statuses/json/list        controllers.Entities.jsonRelationshipStatusList
+POST          /relationship_statuses/save             controllers.Entities.saveRelationshipStatus
+GET           /nationalities/json/list                controllers.Entities.jsonNationalityList
+POST          /nationalities/save                     controllers.Entities.saveNationality
 
 # Webjar plugin included.
-GET           /webjars/*file                        controllers.WebJarAssets.at(file)
+GET           /webjars/*file                          controllers.WebJarAssets.at(file)
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file                         controllers.Assets.at(path="/public", file)
+GET           /assets/*file                           controllers.Assets.at(path="/public", file)
 
     

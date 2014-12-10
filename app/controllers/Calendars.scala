@@ -12,37 +12,6 @@ import play.api.mvc.{Action, Controller}
 
 object Calendars extends Controller {
 
-  def createCalendarType = Action {
-    val startTime = LocalTime.now()
-
-    val calendarType = 1
-    val year = 2014
-    val lengthOfYear = LocalDate.now().lengthOfYear()
-    val buf = scala.collection.mutable.ListBuffer.empty[Calendar]
-
-    for (dayOfYear <- 1 to lengthOfYear) {
-      val date = LocalDate.ofYearDay(year, dayOfYear)
-
-      if (date.getDayOfWeek == DayOfWeek.SATURDAY || date.getDayOfWeek == DayOfWeek.SUNDAY) {
-        buf += Calendar(0, calendarType, date, 2, null, null).save
-      }
-      else {
-        buf += Calendar(0, calendarType, date, 1, null, null).save
-      }
-    }
-
-    Ok(LocalTime.now().compareTo(startTime).toString)
-
-
-    Calendar.findById(460).map { dayType =>
-      val json = Json.toJson(dayType)
-      val normal = json.\("calendar_date").as[MyLocalDate]
-      Logger.info(normal.toString)
-      Ok(normal.plusDays(100).toString)
-    }.getOrElse(NotFound(Json.toJson("Не найден такой тип календарного дня.")))
-
-  }
-
   def saveCalendarType = Action(parse.json) { implicit request =>
     val calendarTypeJson = request.body
     calendarTypeJson.validate[CalendarType].fold(
@@ -73,6 +42,39 @@ object Calendars extends Controller {
   def jsonCalendarDayTypes() = Action {
     val dayTypes = DayType.findAll.filter(_.dayType).map { dayType => Json.toJson(dayType)}
     Ok(Json.toJson(dayTypes))
+  }
+
+  def updateCalendarDay = Action(parse.json) { implicit request =>
+    val calendarDayJson = request.body
+    calendarDayJson.validate[Calendar].fold(
+      valid = { calendarDay =>
+        val tmp: Calendar = calendarDay.save
+        Ok(Json.toJson(tmp))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def jsonCalendarTypeYears(calendarTypeId: Int) = Action {
+    val years: List[Int] = Calendar.findCalendarTypeYears(calendarTypeId).map { calendarDate => calendarDate.calendar_date.getYear}
+    Ok(Json.toJson(years.distinct))
+  }
+
+  def create(calendarTypeId: Int, year: Int) = Action {
+    val lengthOfYear = LocalDate.of(year, 1, 1).lengthOfYear()
+    for (dayOfYear <- 1 to lengthOfYear) {
+      val date = LocalDate.ofYearDay(year, dayOfYear)
+
+      if (date.getDayOfWeek == DayOfWeek.SATURDAY || date.getDayOfWeek == DayOfWeek.SUNDAY) {
+        Calendar(0, calendarTypeId, date, 2, null, null).save
+      }
+      else {
+        Calendar(0, calendarTypeId, date, 1, null, null).save
+      }
+    }
+    Ok(Json.toJson(year))
   }
 
 }

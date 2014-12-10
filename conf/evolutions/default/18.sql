@@ -15,7 +15,8 @@ CREATE TABLE districts (
 );
 
 # -- !Downs
-DROP TABLE IF EXISTS regions;
-DROP SEQUENCE IF EXISTS regions_id_seq;
-DROP TABLE IF EXISTS districts;
+DROP TABLE IF EXISTS districts CASCADE;
 DROP SEQUENCE IF EXISTS districts_id_seq;
+DROP TABLE IF EXISTS regions CASCADE;
+DROP SEQUENCE IF EXISTS regions_id_seq;
+

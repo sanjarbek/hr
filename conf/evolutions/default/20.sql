@@ -8,6 +8,11 @@ create table day_types (
   updated_at   TIMESTAMP
 );
 
+insert into day_types(name, hours, type, created_at, updated_at)
+values('Рабочий', 8, true, localtimestamp, localtimestamp),
+('Выходной', 0, true, localtimestamp, localtimestamp),
+('Праздник', 0, true, localtimestamp, localtimestamp);
+
 create table calendar_types (
   id serial primary key ,
   name text not null unique,

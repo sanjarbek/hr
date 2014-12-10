@@ -43,3 +43,33 @@ angular.module('app').service('EmployeeService', function ($http, $state) {
         });
     }
 });
+
+angular.module('app').service('RelationshipStatusService', function ($http) {
+    this.list = function () {
+        return $http.get('/relationship_statuses/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+    this.save = function (relationshipStatus) {
+        return $http.post('/relationship_statuses/save', relationshipStatus)
+            .success(function (result) {
+                return result;
+            });
+    }
+});
+
+angular.module('app').service('NationalityService', function ($http) {
+    this.list = function () {
+        return $http.get('/nationalities/json/list').then(function (result) {
+            return result.data;
+        });
+    }
+
+    this.save = function (nationality) {
+        return $http.post('/nationalities/save', nationality)
+            .success(function (result) {
+                return result;
+            });
+    }
+});
