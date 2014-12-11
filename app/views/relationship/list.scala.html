@@ -43,29 +43,30 @@
             @Messages("Новый член семьи")
             </div>
             <div class="panel-body">
-                <form ng-submit="selectAction()" name="relationshipForm" class="form-horizontal">
+                <form ng-submit="selectAction()" name="relationshipFormElement" class="form-horizontal">
                     <fieldset>
                         <div class="form-group">
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="surname" class="control-label">Фамилия</label>
+                                <label for="surname" class="control-label">Фамилия:</label>
                                 <input required class="form-control" type="text" name="surname" ng-model="relationshipForm.surname"/>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="firstname" class="control-label">Имя</label>
+                                <label for="firstname" class="control-label">Имя:</label>
                                 <input required class="form-control" type="text" name="firstname" ng-model="relationshipForm.firstname"/>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="lastname" class="control-label">Отчество</label>
+                                <label for="lastname" class="control-label">Отчество:</label>
                                 <input required class="form-control" type="text" name="lastname" ng-model="relationshipForm.lastname"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="degree" class="control-label">Степень родства</label>
+                                <label for="degree" class="control-label">Степень родства:</label>
                                 <div class="input-group">
                                     <select required class="form-control" name="degree" ng-model="relationshipForm.degree"
                                     ng-options="type.id as type.name for type in types"
                                     >
+                                        <option value="">Выберите ...</option>
                                     </select>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default btn-add" ng-click="open()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
@@ -73,7 +74,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="birthday" class="control-label">Дата рождения</label>
+                                <label for="birthday" class="control-label">Дата рождения:</label>
                                 <input required class="form-control" type="date" name="birthday" ng-model="relationshipForm.birthday" class="input-sm form-control"/>
                             </div>
                         </div>
@@ -82,8 +83,8 @@
             </div>
             <div class="panel-footer">
                 <div class="pull-right">
-                    <a class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
-                    Сохранить</a>
+                    <a ng-disabled="!relationshipFormElement.$valid" class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
+                        Сохранить</a>
                     <input name="resetForm" type="button" class="btn btn-default" value='@Messages("Отменить")' ng-click="isCollapsed=true">
                 </div>
                 <div class="clearfix"></div>

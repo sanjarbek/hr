@@ -6,6 +6,7 @@ CREATE TABLE passports (
   serial      TEXT,
   number      TEXT,
   organ       TEXT,
+  reg_address TEXT,
   open_date   DATE,
   end_date    DATE
 );

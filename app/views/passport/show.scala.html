@@ -3,42 +3,36 @@
             Паспортные данные
     </div>
     <div class="panel-body">
-        <form ng-submit="selectAction()" class="form-horizontal" name="passportFormElement">
+        <form ng-submit="selectAction()" class="form-horizontal" name="passportFormElement" novalidate>
             <fieldset ng-disabled="editMode">
                 <div class="form-group form-group-sm">
-                    <label for="serial" class="col-sm-5 col-md-3 control-label">Серия</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="serial" class="control-label">Серия:</label>
                         <input required class="form-control" type="text" name="serial" ng-model="passportForm.serial" />
                     </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="number" class="col-sm-5 col-md-3 control-label">Номер</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="number" class="control-label">Номер:</label>
                         <input required class="form-control" type="text" name="number" ng-model="passportForm.number" />
                     </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="organ" class="col-sm-5 col-md-3 control-label">Орган выдавший документ</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="organ" class="control-label">Орган выдавший документ:</label>
                         <input required class="form-control" type="text" name="organ" ng-model="passportForm.organ" />
                     </div>
-                    <span class="help-inline"></span>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label for="open_date" class="col-sm-5 col-md-3  control-label">Дата выдачи</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="reg_address" class="control-label">Адрес регистрации:</label>
+                        <textarea required class="form-control" type="text" name="reg_address" ng-model="passportForm.reg_address">
+                        </textarea>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="open_date" class="control-label">Дата выдачи:</label>
                         <input required class="form-control" type="date" name="open_date" ng-model="passportForm.open_date" class="input-sm form-control" />
                     </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="end_date" class="col-sm-5 col-md-3  control-label">Дата окончания</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="end_date" class="control-label">Дата окончания:</label>
                         <input required class="form-control" type="date" name="end_date" ng-model="passportForm.end_date" class="input-sm form-control"/>
                     </div>
-                    <span class="help-inline"></span>
                 </div>
             </fieldset>
         </form>
@@ -47,8 +41,8 @@
         <div class="pull-right">
             <button class="btn btn-primary" ng-click="editMode=false" ng-show="editMode"><span class="glyphicon glyphicon-edit"></span>
                 Редактировать</button>
-            <button class="btn btn-info" ng-click="savePassport()" ng-show="!editMode"><span class="glyphicon glyphicon-save"></span>
-                Сохранить</button>
+            <button ng-disabled="!passportFormElement.$valid" class="btn btn-primary" ng-click="savePassport()" ng-show="!editMode"><span class="glyphicon glyphicon-save"></span>
+            Сохранить</button>
             <button class="btn btn-default" ng-click="editMode=true" ng-show="!editMode">Отменить</button>
         </div>
         <div class="clearfix"></div>

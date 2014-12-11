@@ -3,10 +3,10 @@
             Контактные данные
     </div>
     <div class="panel-body">
-        <form ng-submit="selectAction()" novalidate name="contactForm">
+        <form ng-submit="selectAction()" class="form-horizontal" novalidate name="contactForm">
             <fieldset ng-disabled="editMode">
-                <div class="form-group form-group-sm">
-                    <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                <div class="col-sm-4 col-md-4 col-lg-4">
                         <label for="email" class="control-label">Электронная почта:</label>
                         <input class="form-control" type="email" name="email" ng-model="contactInformationForm.email" />
                     </div>
@@ -19,8 +19,8 @@
                         <input class="form-control" type="text" name="mobile_phone" ng-model="contactInformationForm.mobile_phone" required />
                     </div>
                 </div>
-                <div class="form-group form-group-sm">
-                    <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group">
+                <div class="col-sm-6 col-md-6 col-lg-6">
                         <label for="home_address" class="control-label">Место рождения:</label>
                         <textarea class="form-control" name="home_address" ng-model="contactInformationForm.home_address">
                         </textarea>

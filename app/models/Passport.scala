@@ -18,6 +18,7 @@ case class Passport(
                      serial: String,
                      number: String,
                      organ: String,
+                     reg_address: String,
                      open_date: Date,
                      end_date: Date
                      ) extends KeyedEntity[Long]
@@ -32,6 +33,7 @@ object Passport {
       (JsPath \ "serial").write[String] and
       (JsPath \ "number").write[String] and
       (JsPath \ "organ").write[String] and
+      (JsPath \ "reg_address").write[String] and
       (JsPath \ "open_date").write[Date] and
       (JsPath \ "end_date").write[Date]
     )(unlift(Passport.unapply))
@@ -42,6 +44,7 @@ object Passport {
       (JsPath \ "serial").read[String](minLength[String](2) keepAnd maxLength[String](5)) and
       (JsPath \ "number").read[String](minLength[String](2) keepAnd maxLength[String](10)) and
       (JsPath \ "organ").read[String] and
+      (JsPath \ "reg_address").read[String] and
       (JsPath \ "open_date").read[Date] and
       (JsPath \ "end_date").read[Date]
     )(Passport.apply _)
