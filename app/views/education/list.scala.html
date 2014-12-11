@@ -15,8 +15,7 @@
                     <td><strong>Учебное заведение</strong></td>
                     <td><strong>Номер/серия диплома</strong></td>
                     <td><strong>Специальность</strong></td>
-                    <td><strong>Квалификация</strong></td>
-                    <td><strong>Дата поступления</strong></td>
+                    <td><strong>Вид образования</strong></td>
                     <td><strong>Дата окончания</strong></td>
                 </tr>
                 <tr ng-repeat="education in educations">
@@ -24,7 +23,6 @@
                     <td>{{ education.serialnumber }}</td>
                     <td>{{ education.speciality }}</td>
                     <td>{{ (qualifications | filter: {id: education.qualification_id })[0].name }}</td>
-                    <td>{{ education.start_date  | date: 'yyyy' }}</td>
                     <td>{{ education.end_date |  date: 'yyyy' }}</td>
                     <td>
                         <a class="btn btn-xs btn-primary" ng-click="selectEducation(education)">
@@ -44,45 +42,45 @@
             @Messages("Создать новый учебу")
             </div>
             <div class="panel-body">
-                <form ng-submit="selectAction()" class="form-horizontal">
+                <form ng-submit="selectAction()" class="form-horizontal" name="educationFormElement" novalidate>
                     <fieldset>
                         <div class="form-group">
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="institution" class="control-label">Учебное заведение</label>
+                                <label for="institution" class="control-label">Учебное заведение:</label>
                                 <div class="input-group">
                                     <select required class="form-control" name="institution" ng-model="educationForm.institution_id"
-                                    ng-options="institution.id as institution.longname for institution in institutions"></select>
+                                    ng-options="institution.id as institution.longname for institution in institutions">
+                                        <option value="">Выберите ...</option>
+                                    </select>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default btn-add" ng-click="institutionModalOpen()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
                                     </span>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="serialnumber" class="control-label">Номер/серия диплома</label>
+                                <label for="serialnumber" class="control-label">Номер/серия диплома:</label>
                                 <input required class="form-control" type="text" name="startDate" ng-model="educationForm.serialnumber"/>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="speciality" class="control-label">Специальность</label>
+                                <label for="speciality" class="control-label">Специальность:</label>
                                 <input required class="form-control" type="text" name="speciality" ng-model="educationForm.speciality"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="qualification_id" class="control-label">Квалификация по диплому</label>
+                                <label for="qualification_id" class="control-label">Вид образования:</label>
                                 <div class="input-group">
                                     <select required class="form-control" name="qualification_id" ng-model="educationForm.qualification_id"
-                                    ng-options="qualification.id as qualification.name for qualification in qualifications"></select>
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications">
+                                        <option value="">Выберите ...</option>
+                                    </select>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default btn-add" ng-click="qualificationModalOpen()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
                                     </span>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="startDate" class="control-label">Дата поступления</label>
-                                <input required class="form-control" type="date" name="startDate" ng-model="educationForm.start_date"/>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4">
-                                <label for="endDate" class="control-label">Дата окончания</label>
+                                <label for="endDate" class="control-label">Дата окончания:</label>
                                 <input required class="form-control" type="date" name="endDate" ng-model="educationForm.end_date"/>
                             </div>
                         </div>
@@ -91,8 +89,8 @@
             </div>
             <div class="panel-footer">
                 <div class="pull-right">
-                    <a class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
-                        Сохранить</a>
+                    <a ng-disabled="!educationFormElement.$valid" class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
+                    Сохранить</a>
                     <input type="button" class="btn btn-default" value='@Messages("Отменить")' ng-click="isCollapsed=true">
                 </div>
                 <div class="clearfix"></div>
@@ -109,23 +107,21 @@
 <form ng-submit="saveInstitution()" class="form-horizontal">
 <div class="modal-body">
 <div class="form-group form-group-sm">
-<label for="name" class="col-sm-3 control-label">Короткое название</label>
-<div class="col-sm-9">
+<div class="col-sm-12 col-md-12 col-lg-12">
+<label for="name" class="control-label">Короткое название:</label>
 <input required class="form-control" type="text" ng-model="institutionForm.shortname"/>
 </div>
-<span class="help-inline"></span>
 </div>
 <div class="form-group form-group-sm">
-<label for="name" class="col-sm-3 control-label">Название</label>
-<div class="col-sm-9">
+<div class="col-sm-12 col-md-12 col-lg-12">
+<label for="name" class="control-label">Полное название:</label>
 <input required class="form-control" type="text" ng-model="institutionForm.longname"/>
 </div>
-<span class="help-inline"></span>
 </div>
 </div>
 <div class="modal-footer">
 <button class="btn btn-primary" ng-click="saveInstitution()">Создать</button>
-<button class="btn btn-warning" ng-click="cancel()">Отменить</button>
+<button class="btn btn-default" ng-click="cancel()">Отменить</button>
 </div>
 </form>
 </script>
@@ -139,16 +135,15 @@
 <fieldset>
 <div class="modal-body">
 <div class="form-group form-group-sm">
-<label for="name" class="col-sm-3 control-label">Название</label>
-<div class="col-sm-9">
+<div class="col-sm-12 col-md-12 col-lg-12">
+<label for="name" class="control-label">Название:</label>
 <input required class="form-control" type="text" ng-model="qualificationForm.name"/>
 </div>
-<span class="help-inline"></span>
 </div>
 </div>
 <div class="modal-footer">
 <button class="btn btn-primary" ng-click="saveQualification()">Создать</button>
-<button class="btn btn-warning" ng-click="cancel()">Отменить</button>
+<button class="btn btn-default" ng-click="cancel()">Отменить</button>
 </div>
 </fieldset>
 </form>

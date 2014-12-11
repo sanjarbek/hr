@@ -16,7 +16,6 @@ case class Education(
                       id: Long,
                       institution_id: Int,
                       employee_id: Long,
-                      start_date: Date,
                       end_date: Date,
                       serialnumber: String,
                       speciality: String,
@@ -31,7 +30,6 @@ object Education {
     (JsPath \ "id").write[Long] and
       (JsPath \ "institution_id").write[Int] and
       (JsPath \ "employee_id").write[Long] and
-      (JsPath \ "start_date").write[Date] and
       (JsPath \ "end_date").write[Date] and
       (JsPath \ "serialnumber").write[String] and
       (JsPath \ "speciality").write[String] and
@@ -42,7 +40,6 @@ object Education {
     (JsPath \ "id").read[Long] and
       (JsPath \ "institution_id").read[Int] and
       (JsPath \ "employee_id").read[Long] and
-      (JsPath \ "start_date").read[Date] and
       (JsPath \ "end_date").read[Date] and
       (JsPath \ "serialnumber").read[String] and
       (JsPath \ "speciality").read[String] and

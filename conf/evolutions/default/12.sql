@@ -7,7 +7,6 @@ CREATE TABLE educations (
   serialnumber     TEXT,
   speciality       TEXT,
   qualification_id INT,
-  start_date       DATE,
   end_date         DATE
 );
 

@@ -36,7 +36,6 @@ angular.module('app').controller('EducationController', function ($scope, $filte
             institution_id: null,
             qualification_id: null,
             speciality: null,
-            start_date: null,
             end_date: null,
             serialnumber: null
         };
