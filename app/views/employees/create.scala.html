@@ -3,14 +3,14 @@
         <label><h4 class="panel-title">Новая анкета</h4></label>
         <div class="pull-right">
             <button ng-disabled="!employeeForm.$valid" ng-click="saveEmployee()" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span>
-            Сохранить</button>
-                <button ng-click="$state.go('panel.employees.list')" class="btn btn-default"><span class="glyphicon glyphicon-step-backward"></span>
-                    Назад</button>
-            </div>
-            <div class="clearfix"></div>
+                Сохранить</button>
+            <button ng-click="$state.go('panel.employees.list')" class="btn btn-default"><span class="glyphicon glyphicon-step-backward"></span>
+                Назад</button>
+        </div>
+        <div class="clearfix"></div>
     </div>
     <div class="panel-body">
-        <form class="form-horizontal" name="employeeForm">
+        <form class="form-horizontal" name="employeeForm" novalidate>
             <fieldset>
                 <div class="form-group">
                     <div class="col-sm-3 col-md-3 col-lg-3">
@@ -37,13 +37,13 @@
                             <div class="radio-inline">
                                 <label>
                                     <input type="radio" class name="sex" ng-value=true ng-init="newEmployeeForm.sex=true" checked ng-model="newEmployeeForm.sex">
-                                Мужской
+                                    Мужской
                                 </label>
                             </div>
                             <div class="radio-inline">
                                 <label>
                                     <input type="radio" name="sex" ng-value=false ng-model="newEmployeeForm.sex">
-                                Женский
+                                    Женский
                                 </label>
                             </div>
                         </fieldset>
@@ -61,33 +61,33 @@
                         <input class="form-control" type="text" name="tax_number" ng-model="newEmployeeForm.tax_number" required />
                     </div>
                 </div>
-            <div class="form-group">
-                <div class="col-sm-3 col-md-3 col-lg-3">
-                    <label for="relationshipStatus" class="control-label">Семейное положение:</label>
-                    <div class="input-group">
-                        <select required class="form-control" name="relationshipStatus" ng-model="newEmployeeForm.relationshipStatus"
-                        ng-options="relationshipStatus.id as relationshipStatus.name for relationshipStatus in relationshipStatuses" required>
-                        <option value="">Выберите ...</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-add" ng-click="openRelationshipStatusModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-                        </span>
+                <div class="form-group">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="relationshipStatus" class="control-label">Семейное положение:</label>
+                        <div class="input-group">
+                            <select required class="form-control" name="relationshipStatus" ng-model="newEmployeeForm.relationshipStatus"
+                            ng-options="relationshipStatus.id as relationshipStatus.name for relationshipStatus in relationshipStatuses" required>
+                                <option value="">Выберите ...</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-add" ng-click="openRelationshipStatusModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="nationalityId" class="control-label">Национальность:</label>
+                        <div class="input-group">
+                            <select required class="form-control" name="nationalityId" ng-model="newEmployeeForm.nationalityId"
+                            ng-options="nationality.id as nationality.name for nationality in nationalities" required>
+                                <option value="">Выберите ...</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-add" ng-click="openNationalityModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3">
-                    <label for="nationalityId" class="control-label">Национальность:</label>
-                    <div class="input-group">
-                        <select required class="form-control" name="nationalityId" ng-model="newEmployeeForm.nationalityId"
-                        ng-options="nationality.id as nationality.name for nationality in nationalities" required>
-                        <option value="">Выберите ...</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-add" ng-click="openNationalityModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
+            </fieldset>
         </form>
     </div>
 </div>

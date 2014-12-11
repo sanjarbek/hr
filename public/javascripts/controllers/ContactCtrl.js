@@ -8,12 +8,12 @@ angular.module('app').controller('ContactCtrl', function ($scope, $filter, conta
             id: 0,
             employee_id: null,
             home_address: null,
-            reg_address: null,
+            living_address: null,
             email: null,
             home_phone: null,
             mobile_phone: null,
-            created_at: '2014-01-01',
-            updated_at: '2014-01-01'
+            created_at: '2014-01-01 00:00:00',
+            updated_at: '2014-01-01 00:00:00'
         };
         $scope.isNew = true;
     }
@@ -27,12 +27,12 @@ angular.module('app').controller('ContactCtrl', function ($scope, $filter, conta
             id: 0,
             employee_id: null,
             home_address: null,
-            reg_address: null,
+            living_address: null,
             email: null,
             home_phone: null,
             mobile_phone: null,
-            created_at: '2014-01-01',
-            updated_at: '2014-01-01'
+            created_at: '2014-01-01 00:00:00',
+            updated_at: '2014-01-01 00:00:00'
         };
     }
 

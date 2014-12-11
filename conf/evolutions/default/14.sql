@@ -2,7 +2,7 @@
 
 CREATE TABLE military_infos (
   id                BIGSERIAL PRIMARY KEY,
-  employee_id       BIGINT UNIQUE,
+  employee_id       BIGINT UNIQUE REFERENCES employees,
   category          TEXT,
   military_rank     TEXT,
   structure         TEXT,

@@ -2,7 +2,7 @@
 
 CREATE TABLE passports (
   id          BIGSERIAL PRIMARY KEY,
-  employee_id BIGINT UNIQUE,
+  employee_id BIGINT UNIQUE REFERENCES employees,
   serial      TEXT,
   number      TEXT,
   organ       TEXT,

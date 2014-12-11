@@ -2,7 +2,7 @@
 
 CREATE TABLE educations (
   id               BIGSERIAL PRIMARY KEY,
-  employee_id      BIGINT,
+  employee_id      BIGINT REFERENCES employees,
   institution_id   INT,
   serialnumber     TEXT,
   speciality       TEXT,

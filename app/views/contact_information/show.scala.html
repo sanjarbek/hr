@@ -3,46 +3,33 @@
             Контактные данные
     </div>
     <div class="panel-body">
-        <form ng-submit="selectAction()" class="form-horizontal">
+        <form ng-submit="selectAction()" novalidate name="contactForm">
             <fieldset ng-disabled="editMode">
                 <div class="form-group form-group-sm">
-                    <label for="home_address" class="col-sm-5 col-md-3 control-label">Адрес регистрации</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="email" class="control-label">Электронная почта:</label>
+                        <input class="form-control" type="email" name="email" ng-model="contactInformationForm.email" />
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="home_phone" class="control-label">Домашний телефон:</label>
+                        <input class="form-control" type="phone" name="home_phone" ng-model="contactInformationForm.home_phone" />
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label for="mobile_phone" class="control-label">Мобильный телефон:</label>
+                        <input class="form-control" type="text" name="mobile_phone" ng-model="contactInformationForm.mobile_phone" required />
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <label for="home_address" class="control-label">Место рождения:</label>
                         <textarea class="form-control" name="home_address" ng-model="contactInformationForm.home_address">
-
                         </textarea>
                     </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="reg_address" class="col-sm-5 col-md-3 control-label">Адрес прописки</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control" name="reg_address" ng-model="contactInformationForm.reg_address">
-
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <label for="living_address" class="control-label">Адрес фактического проживания:</label>
+                        <textarea class="form-control" name="living_address" ng-model="contactInformationForm.living_address" required>
                         </textarea>
                     </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="email" class="col-sm-5 col-md-3 control-label">Электронная почта</label>
-                    <div class="col-sm-7">
-                        <input required class="form-control" type="email" name="email" ng-model="contactInformationForm.email" />
-                    </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="home_phone" class="col-sm-5 col-md-3 control-label">Домашний телефон</label>
-                    <div class="col-sm-7">
-                        <input required class="form-control" type="phone" name="home_phone" ng-model="contactInformationForm.home_phone" />
-                    </div>
-                    <span class="help-inline"></span>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="mobile_phone" class="col-sm-5 col-md-3 control-label">Мобильный телефон</label>
-                    <div class="col-sm-7">
-                        <input required class="form-control" type="text" name="mobile_phone" ng-model="contactInformationForm.mobile_phone" />
-                    </div>
-                    <span class="help-inline"></span>
                 </div>
             </fieldset>
         </form>
@@ -51,8 +38,8 @@
         <div class="pull-right">
             <button class="btn btn-primary" ng-click="editMode=false" ng-show="editMode"><span class="glyphicon glyphicon-edit"></span>
                 Редактировать</button>
-            <button class="btn btn-info" ng-click="saveContactInformation()" ng-show="!editMode"><span class="glyphicon glyphicon-save"></span>
-                Сохранить</button>
+            <button ng-disabled="!contactForm.$valid" class="btn btn-primary" ng-click="saveContactInformation()" ng-show="!editMode"><span class="glyphicon glyphicon-save"></span>
+            Сохранить</button>
             <button class="btn btn-default" ng-click="editMode=true" ng-show="!editMode">Отменить</button>
         </div>
         <div class="clearfix"></div>

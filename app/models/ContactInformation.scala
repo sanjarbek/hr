@@ -10,10 +10,10 @@ import play.api.libs.functional.syntax._
 case class ContactInformation(
                                id: Long,
                                employee_id: Long,
-                               home_address: String,
-                               reg_address: String,
-                               email: String,
-                               home_phone: String,
+                               home_address: Option[String],
+                               living_address: String,
+                               email: Option[String],
+                               home_phone: Option[String],
                                mobile_phone: String,
                                override var created_at: TimeStamp,
                                override var updated_at: TimeStamp
@@ -37,25 +37,25 @@ object ContactInformation {
 
   import Database.{contactInformationTable}
 
-  implicit val employeeWrites: Writes[ContactInformation] = (
+  implicit val contactInformationWrites: Writes[ContactInformation] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "employee_id").write[Long] and
-      (JsPath \ "home_address").write[String] and
-      (JsPath \ "reg_address").write[String] and
-      (JsPath \ "email").write[String] and
-      (JsPath \ "home_phone").write[String] and
+      (JsPath \ "home_address").write[Option[String]] and
+      (JsPath \ "living_address").write[String] and
+      (JsPath \ "email").write[Option[String]] and
+      (JsPath \ "home_phone").write[Option[String]] and
       (JsPath \ "mobile_phone").write[String] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(ContactInformation.unapply))
 
-  implicit val employeeReads: Reads[ContactInformation] = (
+  implicit val contactInformationReads: Reads[ContactInformation] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "employee_id").read[Long] and
-      (JsPath \ "home_address").read[String] and
-      (JsPath \ "reg_address").read[String] and
-      (JsPath \ "email").read[String] and
-      (JsPath \ "home_phone").read[String] and
+      (JsPath \ "home_address").read[Option[String]] and
+      (JsPath \ "living_address").read[String] and
+      (JsPath \ "email").read[Option[String]] and
+      (JsPath \ "home_phone").read[Option[String]] and
       (JsPath \ "mobile_phone").read[String] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
