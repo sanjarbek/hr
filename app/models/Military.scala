@@ -15,13 +15,13 @@ import collection.Iterable
 case class Military(
                      id: Long,
                      employee_id: Long,
-                     category: String,
-                     military_rank: String,
-                     structure: String,
-                     full_code: String,
-                     validity_category: String,
+                     category: Option[String],
+                     military_rank: Option[String],
+                     structure: Option[String],
+                     full_code: Option[String],
+                     validity_category: Option[String],
                      commissariat: String,
-                     removal_mark: String
+                     removal_mark: Option[String]
                      ) extends KeyedEntity[Long]
 
 object Military {
@@ -31,25 +31,25 @@ object Military {
   implicit val militaryWrites: Writes[Military] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "employee_id").write[Long] and
-      (JsPath \ "category").write[String] and
-      (JsPath \ "military_rank").write[String] and
-      (JsPath \ "structure").write[String] and
-      (JsPath \ "full_code").write[String] and
-      (JsPath \ "validity_category").write[String] and
+      (JsPath \ "category").write[Option[String]] and
+      (JsPath \ "military_rank").write[Option[String]] and
+      (JsPath \ "structure").write[Option[String]] and
+      (JsPath \ "full_code").write[Option[String]] and
+      (JsPath \ "validity_category").write[Option[String]] and
       (JsPath \ "commissariat").write[String] and
-      (JsPath \ "removal_mark").write[String]
+      (JsPath \ "removal_mark").write[Option[String]]
     )(unlift(Military.unapply))
 
   implicit val militaryReads: Reads[Military] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "employee_id").read[Long] and
-      (JsPath \ "category").read[String] and
-      (JsPath \ "military_rank").read[String] and
-      (JsPath \ "structure").read[String] and
-      (JsPath \ "full_code").read[String] and
-      (JsPath \ "validity_category").read[String] and
+      (JsPath \ "category").read[Option[String]] and
+      (JsPath \ "military_rank").read[Option[String]] and
+      (JsPath \ "structure").read[Option[String]] and
+      (JsPath \ "full_code").read[Option[String]] and
+      (JsPath \ "validity_category").read[Option[String]] and
       (JsPath \ "commissariat").read[String] and
-      (JsPath \ "removal_mark").read[String]
+      (JsPath \ "removal_mark").read[Option[String]]
     )(Military.apply _)
 
   def allQ: Query[Military] = from(militaryTable) {
