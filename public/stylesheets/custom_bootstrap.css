@@ -66,3 +66,32 @@ div.pagination {
     margin-bottom: 5px;
     margin-top: 5px;
 }
+
+input.ng-invalid.ng-touched {
+    background-color: #FA787E;
+}
+
+input.ng-valid.ng-touched {
+    border-color: #2b542c;
+}
+
+input.ng-dirty.ng-invalid {
+    border-color: #843534;
+}
+
+select.ng-dirty.ng-invalid {
+    border-color: #843534;
+}
+
+.modal-footer {
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.modal-header {
+    padding: 10px;
+}
+
+.modal-body {
+    padding: 5px 20px;
+}

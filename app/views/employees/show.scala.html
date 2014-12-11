@@ -43,38 +43,40 @@
                     <strong>Форма личных данных сотрудника</strong>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" novalidate name="employeeForm">
                         <fieldset ng-disabled="!editMode">
                             <div class="form-group form-group-sm">
                                 <div class="col-sm-3 col-md-3 col-lg-3">
-                                    <label for="surname" class="control-label">Фамилия</label>
-                                    <input class="form-control" type="text" name="surname" ng-model="newEmployeeForm.surname" />
+                                    <label for="surname" class="control-label">Фамилия:</label>
+                                    <input class="form-control" type="text" name="surname" ng-model="newEmployeeForm.surname" required />
                                 </div>
                                 <div class="col-sm-3 col-md-3 col-lg-3">
-                                    <label for="firstname" class="control-label">Имя</label>
-                                    <input class="form-control" type="text" name="firstname" ng-model="newEmployeeForm.firstname" />
+                                    <label for="firstname" class="control-label">Имя:</label>
+                                    <input class="form-control" type="text" name="firstname" ng-model="newEmployeeForm.firstname" required />
                                 </div>
                                 <div class="col-sm-3 col-md-3 col-lg-3">
-                                    <label for="lastname" class="control-label">Отчество</label>
-                                    <input class="form-control" type="text" name="lastname" ng-model="newEmployeeForm.lastname" />
+                                    <label for="lastname" class="control-label">Отчество:</label>
+                                    <input class="form-control" type="text" name="lastname" ng-model="newEmployeeForm.lastname" required />
                                 </div>
                                 <div class="col-sm-3 col-md-3 col-lg-3">
-                                    <label for="birthday" class="control-label">Дата рождения</label>
-                                    <input class="form-control" type="date" name="birthday" ng-model="newEmployeeForm.birthday" class="input-sm form-control" min="1900-01-01" max="2014-01-01" />
+                                    <label for="birthday" class="control-label">Дата рождения:</label>
+                                    <input class="form-control" type="date" name="birthday"
+                                    ng-model="newEmployeeForm.birthday" class="input-sm form-control"
+                                    min="1900-01-01" max="2014-01-01" required />
                                 </div>
                             </div>
                             <div class="form-group form-group-sm">
                                 <div class="col-sm-2 col-md-2 col-lg-2">
-                                    <label for="citizenship" class="control-label">Гражданство</label>
-                                    <input class="form-control" type="text" name="citizenship" ng-model="newEmployeeForm.citizenship"/>
+                                    <label for="citizenship" class="control-label">Гражданство:</label>
+                                    <input class="form-control" type="text" name="citizenship" ng-model="newEmployeeForm.citizenship" required />
                                 </div>
                                 <div class="col-sm-5 col-md-5 col-lg-5">
-                                    <label for="insurance_number" class="control-label">№ страхового свидетельства</label>
-                                    <input class="form-control" type="text" name="insurance_number" ng-model="newEmployeeForm.insurance_number"/>
+                                    <label for="insurance_number" class="control-label">№ страхового свидетельства:</label>
+                                    <input class="form-control" type="text" name="insurance_number" ng-model="newEmployeeForm.insurance_number" required />
                                 </div>
                                 <div class="col-sm-5 col-md-5 col-lg-5">
-                                    <label for="tax_number" class="control-label">ИНН налогоплательщика</label>
-                                    <input class="form-control" type="text" name="tax_number" ng-model="newEmployeeForm.tax_number"/>
+                                    <label for="tax_number" class="control-label">ИНН:</label>
+                                    <input class="form-control" type="text" name="tax_number" ng-model="newEmployeeForm.tax_number" required />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -96,11 +98,12 @@
                                     </fieldset>
                                 </div>
                                 <div class="col-sm-4 col-md-4 col-lg-4">
-                                    <label for="relationshipStatus" class="control-label">Семейное положение</label>
+                                    <label for="relationshipStatus" class="control-label">Семейное положение:</label>
                                     <div class="input-group">
                                         <select required class="form-control" name="relationshipStatus" ng-model="newEmployeeForm.relationshipStatus"
-                                        ng-options="relationshipStatus.id as relationshipStatus.name for relationshipStatus in relationshipStatuses">
-                                            <option value="">Выберите ...</option>
+                                        ng-options="relationshipStatus.id as relationshipStatus.name for relationshipStatus in relationshipStatuses"
+                                        required>
+                                        <option value="">Выберите ...</option>
                                         </select>
                                         <span class="input-group-btn">
                                             <button class="btn btn-default btn-add" ng-click="openRelationshipStatusModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
@@ -108,11 +111,12 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-3 col-md-3 col-lg-3">
-                                    <label for="nationalityId" class="control-label">Национальность</label>
+                                    <label for="nationalityId" class="control-label">Национальность:</label>
                                     <div class="input-group">
                                         <select required class="form-control" name="nationalityId" ng-model="newEmployeeForm.nationalityId"
-                                        ng-options="nationality.id as nationality.name for nationality in nationalities">
-                                            <option value="">Выберите ...</option>
+                                        ng-options="nationality.id as nationality.name for nationality in nationalities"
+                                        required>
+                                        <option value="">Выберите ...</option>
                                         </select>
                                         <span class="input-group-btn">
                                             <button class="btn btn-default btn-add" ng-click="openNationalityModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
@@ -127,8 +131,8 @@
                     <div class="pull-right">
                         <button class="btn btn-primary" ng-click="editMode=true" ng-show="!editMode"><span class="glyphicon glyphicon-edit"></span>
                             Редактировать</button>
-                        <button class="btn btn-primary" ng-click="editMode=false; updateEmployee()" ng-show="editMode"><span class="glyphicon glyphicon-save"></span>
-                            Сохранить</button>
+                        <button ng-disabled="!employeeForm.$valid" class="btn btn-primary" ng-click="editMode=false; updateEmployee()" ng-show="editMode"><span class="glyphicon glyphicon-save"></span>
+                        Сохранить</button>
                         <button class="btn btn-default" ng-click="editMode=false" ng-show="editMode">Отменить</button>
                     </div>
                     <div class="clearfix"></div>
@@ -147,17 +151,16 @@
     <div class="modal-body">
     <form ng-submit="saveNationality()" class="form-horizontal">
     <div class="form-group form-group-sm">
-    <label for="name" class="col-sm-2 control-label">Название</label>
-    <div class="col-sm-10">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="name" class="control-label">Название:</label>
     <input required class="form-control" type="text" name="name" ng-model="newNationalityForm.name"/>
     </div>
-    <span class="help-inline"></span>
     </div>
     </form>
+    </div>
     <div class="modal-footer">
     <button class="btn btn-primary" ng-click="saveNationality()">Создать</button>
     <button class="btn btn-default" ng-click="cancel()">Отменить</button>
-    </div>
     </div>
     </script>
 </div>
@@ -170,17 +173,16 @@
     <div class="modal-body">
     <form ng-submit="saveRelationshipStatus()" class="form-horizontal">
     <div class="form-group form-group-sm">
-    <label for="name" class="col-sm-2 control-label">Название</label>
-    <div class="col-sm-10">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="name" class="control-label">Название:</label>
     <input required class="form-control" type="text" name="name" ng-model="newRelationshipStatusForm.name"/>
     </div>
-    <span class="help-inline"></span>
     </div>
     </form>
+    </div>
     <div class="modal-footer">
     <button class="btn btn-primary" ng-click="saveRelationshipStatus()">Создать</button>
     <button class="btn btn-default" ng-click="cancel()">Отменить</button>
-    </div>
     </div>
     </script>
 </div>
