@@ -26,7 +26,12 @@ trait Orders extends Controller with Security {
     Ok(views.html.order.list())
   }
 
-  def jsonList() = HasToken() { _ => currentId => implicit request =>
+  //  def jsonList() = HasToken() { _ => currentId => implicit request =>
+  //    val orders = Order.findAll.map { order => Json.toJson(order)}
+  //    Ok(Json.toJson(orders))
+  //  }
+
+  def jsonList() = Action { implicit request =>
     val orders = Order.findAll.map { order => Json.toJson(order)}
     Ok(Json.toJson(orders))
   }

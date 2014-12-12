@@ -13,11 +13,12 @@ CREATE TABLE educations (
 CREATE TABLE qualification_types (
   id   SERIAL PRIMARY KEY,
   name TEXT UNIQUE
-)
+);
 
-  # -- !Downs
-DROP TABLE IF EXISTS qualification_types;
+
+# -- !Downs
+DROP TABLE IF EXISTS qualification_types CASCADE;
 DROP SEQUENCE IF EXISTS qualification_types_id_seq;
 
-DROP TABLE IF EXISTS educations;
+DROP TABLE IF EXISTS educations CASCADE;
 DROP SEQUENCE IF EXISTS educations_id_seq;
