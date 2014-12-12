@@ -178,3 +178,100 @@ angular.module('app').controller('ModalQualificationController', function ($scop
     };
 });
 
+
+angular.module('app').controller('SeminarController', function ($scope, $filter, seminarsData, SeminarService) {
+    $scope.seminars = seminarsData;
+
+    $scope.isCollapsed = true;
+
+    $scope.saveSeminar = function () {
+        $scope.seminarForm.id = 0;
+        $scope.seminarForm.employee_id = $scope.activeEmployee.id;
+
+        SeminarService.save($scope.seminarForm).then(function (result) {
+            $scope.seminars.push(result.data);
+            $scope.resetSeminar();
+            PNotify.desktop.permission();
+            (new PNotify({
+                title: 'Статус сохранения',
+                text: 'Новая запись успешно сохранена.',
+                desktop: {
+                    desktop: true
+                }
+            })).get().click(function (e) {
+                    if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                });
+        });
+    }
+
+    $scope.resetSeminar = function () {
+        $scope.selectAction = $scope.saveSeminar;
+        $scope.isCollapsed = false;
+        $scope.seminarForm = {
+            id: null,
+            employee_id: null,
+            topic: null,
+            organizer: null,
+            event_date: null,
+            hasCertificate: false,
+            created_at: '2001-01-01 00:00:00',
+            updated_at: '2001-01-01 00:00:00'
+        };
+    }
+
+
+    $scope.resetSeminar();
+
+    $scope.selectSeminar = function (seminar) {
+        $scope.selectAction = $scope.updateSeminar;
+        $scope.seminarForm = seminar;
+        $scope.seminarForm.event_date = $filter("date")(seminar.event_date, 'yyyy-MM-dd');
+        $scope.isCollapsed = false;
+    };
+
+    $scope.updateSeminar = function () {
+
+        SeminarService.update($scope.seminarForm).then(function (result) {
+
+            for (i = 0; i < $scope.seminars.length; i++) {
+                if ($scope.seminars[i].id == $scope.seminarForm.id)
+                    $scope.seminars[i] = $scope.seminarForm;
+            }
+
+            PNotify.desktop.permission();
+            (new PNotify({
+                title: 'Статус изменений',
+                text: 'Изменения успешно сохранены.',
+                desktop: {
+                    desktop: true
+                }
+            })).get().click(function (e) {
+                    if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                });
+        });
+    }
+
+    $scope.deleteSeminar = function (seminar) {
+        var result = confirm("Вы действительно хотите удалить данную запись?");
+        if (result) {
+            SeminarService.delete(seminar).then(function (result) {
+                for (i = 0; i < $scope.seminars.length; i++) {
+                    if ($scope.seminars[i].id == seminar.id)
+                        $scope.seminars.splice(i, 1);
+                }
+                PNotify.desktop.permission();
+                (new PNotify({
+                    title: 'Статус удаления',
+                    text: 'Удаление успешно выполнен.',
+                    desktop: {
+                        desktop: true
+                    }
+                })).get().click(function (e) {
+                        if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                    });
+            });
+        }
+    }
+
+});
+

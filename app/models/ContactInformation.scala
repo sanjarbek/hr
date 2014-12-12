@@ -29,8 +29,6 @@ case class ContactInformation(
       tmp.save
     }
   }
-
-
 }
 
 object ContactInformation {

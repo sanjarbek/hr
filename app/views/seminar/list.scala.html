@@ -1,0 +1,80 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <label><h4>Список сертификатов/курсов</h4></label>
+                <div class="pull-right">
+                    <button type="button" ng-click="resetSeminar()" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus"></span> Добавить
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <table class="table table-condensed">
+                <tr>
+                    <td><strong>Тема семинара/курса</strong></td>
+                    <td><strong>Организатор</strong></td>
+                    <td><strong>Дата прохождения</strong></td>
+                    <td><strong>Наличие сертификата</strong></td>
+                </tr>
+                <tr ng-repeat="seminar in seminars">
+                    <td>{{ seminar.topic }}</td>
+                    <td>{{ seminar.organizer }}</td>
+                    <td>{{ seminar.event_date |  date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ seminar.hasCertificate ? 'Имеется' : 'Не имеется'  }} </td>
+                    <td>
+                        <a class="btn btn-xs btn-primary" ng-click="selectSeminar(seminar)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a class="btn btn-xs btn-danger" ng-click="deleteSeminar(seminar)"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row" collapse="isCollapsed">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            @Messages("Создать новый семинар/курс")
+            </div>
+            <div class="panel-body">
+                <form ng-submit="selectAction()" class="form-horizontal" name="seminarFormElement" novalidate>
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="topic" class="control-label">Тема семинара/курса:</label>
+                                <input required class="form-control" type="text" name="topic" ng-model="seminarForm.topic"/>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="organizer" class="control-label">Организатор:</label>
+                                <input required class="form-control" type="text" name="organizer" ng-model="seminarForm.organizer"/>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="event_date" class="control-label">Дата:</label>
+                                <input required class="form-control" type="date" name="event_date" ng-model="seminarForm.event_date"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label for="hasCertificate" class="checkbox">
+                                    <input type="checkbox" name="hasCertificate" ng-model="seminarForm.hasCertificate"/>
+                                    Имеется сертификат
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <div class="pull-right">
+                    <a ng-disabled="!seminarFormElement.$valid" class="btn btn-primary" ng-click="selectAction()"><span class="glyphicon glyphicon-save"></span>
+                        Сохранить</a>
+                    <input type="button" class="btn btn-default" value='@Messages("Отменить")' ng-click="isCollapsed=true">
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

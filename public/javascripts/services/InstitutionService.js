@@ -62,3 +62,33 @@ angular.module('app').service('EducationService', function ($http) {
             })
     }
 });
+
+angular.module('app').service('SeminarService', function ($http) {
+
+    this.save = function (seminar) {
+        return $http.post('/seminars/save', seminar)
+            .success(function (result) {
+                return result;
+            });
+    }
+
+    this.getEmployeeSeminars = function (employeeId) {
+        return $http.get('/seminars/json/list', {params: {employeeId: employeeId}}).then(function (result) {
+            return result.data;
+        });
+    }
+
+    this.update = function (seminar) {
+        return $http.put('/seminars/update', seminar)
+            .success(function (result) {
+                return result;
+            })
+    }
+
+    this.delete = function (seminar) {
+        return $http.delete('/seminars/delete', {params: {id: seminar.id}})
+            .success(function (result) {
+                return result;
+            })
+    }
+});

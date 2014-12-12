@@ -147,6 +147,12 @@ POST          /relationship_statuses/save             controllers.Entities.saveR
 GET           /nationalities/json/list                controllers.Entities.jsonNationalityList
 POST          /nationalities/save                     controllers.Entities.saveNationality
 
+GET           /seminars/list             controllers.Seminars.listTemplate
+GET           /seminars/json/list        controllers.Seminars.jsonList(employeeId: Long)
+POST          /seminars/save             controllers.Seminars.save
+PUT           /seminars/update           controllers.Seminars.update
+DELETE        /seminars/delete           controllers.Seminars.delete(id: Long)
+
 # Webjar plugin included.
 GET           /webjars/*file                          controllers.WebJarAssets.at(file)
 

@@ -93,6 +93,7 @@ object Database extends Schema {
   val dayTypeTable: Table[DayType] = table[DayType]("day_types")
   val relationshipStatusTable: Table[RelationshipStatus] = table[RelationshipStatus]("relationship_statuses")
   val nationalityTable: Table[Nationality] = table[Nationality]("nationalities")
+  val seminarTable: Table[Seminar] = table[Seminar]("seminars")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -206,6 +207,11 @@ object Database extends Schema {
 
   on(relationshipStatusTable) { relationshipStatus => declare {
     relationshipStatus.id is (autoIncremented("relationship_statuses_id_seq"))
+  }
+  }
+
+  on(seminarTable) { seminar => declare {
+    seminar.id is (autoIncremented("seminars_id_seq"))
   }
   }
 

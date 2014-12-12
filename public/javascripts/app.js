@@ -1095,6 +1095,21 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             },
             controller: 'MilitaryController'
         })
+        .state('panel.employees.detail.seminar', {
+            absract: true,
+            url: '/seminars',
+            template: '<div ui-view></div>'
+        })
+        .state('panel.employees.detail.seminar.list', {
+            url: '/list',
+            templateUrl: '/seminars/list',
+            resolve: {
+                seminarsData: function (SeminarService, activeEmployeeData) {
+                    return SeminarService.getEmployeeSeminars(activeEmployeeData.id);
+                }
+            },
+            controller: 'SeminarController'
+        })
         .state('panel.calendar_types', {
             abstract: true,
             url: '/calendar_types',
