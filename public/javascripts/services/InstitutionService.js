@@ -41,8 +41,8 @@ angular.module('app').service('EducationService', function ($http) {
             });
     }
 
-    this.list = function () {
-        return $http.get('/educations/json/list').then(function (result) {
+    this.list = function (employeeId) {
+        return $http.get('/educations/json/list', {params: {employeeId: employeeId}}).then(function (result) {
             return result.data;
         });
     }

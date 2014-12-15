@@ -96,7 +96,7 @@ POST          /institutions/save                      controllers.Institutions.s
 
 GET           /educations/create                      controllers.Educations.create
 GET           /educations/list                        controllers.Educations.list
-GET           /educations/json/list                   controllers.Educations.jsonList
+GET           /educations/json/list                   controllers.Educations.jsonList(employeeId: Long)
 POST          /educations/save                        controllers.Educations.save
 PUT           /educations/update                      controllers.Educations.update
 DELETE        /educations/delete                      controllers.Educations.delete(id: Long)
@@ -147,11 +147,11 @@ POST          /relationship_statuses/save             controllers.Entities.saveR
 GET           /nationalities/json/list                controllers.Entities.jsonNationalityList
 POST          /nationalities/save                     controllers.Entities.saveNationality
 
-GET           /seminars/list             controllers.Seminars.listTemplate
-GET           /seminars/json/list        controllers.Seminars.jsonList(employeeId: Long)
-POST          /seminars/save             controllers.Seminars.save
-PUT           /seminars/update           controllers.Seminars.update
-DELETE        /seminars/delete           controllers.Seminars.delete(id: Long)
+GET           /seminars/list                          controllers.Seminars.listTemplate
+GET           /seminars/json/list                     controllers.Seminars.jsonList(employeeId: Long)
+POST          /seminars/save                          controllers.Seminars.save
+PUT           /seminars/update                        controllers.Seminars.update
+DELETE        /seminars/delete                        controllers.Seminars.delete(id: Long)
 
 # Webjar plugin included.
 GET           /webjars/*file                          controllers.WebJarAssets.at(file)

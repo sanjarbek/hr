@@ -14,8 +14,8 @@ object Educations extends Controller {
     Ok(views.html.education.list())
   }
 
-  def jsonList = Action {
-    val educations = Education.findAll.map { education => Json.toJson(education)}
+  def jsonList(employeeId: Long) = Action {
+    val educations = Education.findEmployeeEducations(employeeId).map { education => Json.toJson(education)}
     Ok(Json.toJson(educations))
   }
 
