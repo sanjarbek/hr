@@ -30,8 +30,8 @@ object Institution {
 
   implicit val institutionReads: Reads[Institution] = (
     (JsPath \ "id").read[Int] and
-      (JsPath \ "shortname").read[String](minLength[String](2) keepAnd maxLength[String](50)) and
-      (JsPath \ "longname").read[String](minLength[String](2) keepAnd maxLength[String](50))
+      (JsPath \ "shortname").read[String](minLength[String](2) keepAnd maxLength[String](100)) and
+      (JsPath \ "longname").read[String](minLength[String](2) keepAnd maxLength[String](350))
     )(Institution.apply _)
 
   def allQ: Query[Institution] = from(institutionTable) {
