@@ -14,7 +14,6 @@ import sun.util.calendar.LocalGregorianCalendar.Date
 object Contracts extends Controller {
 
   def list = Action { implicit request =>
-    play.Logger.info("I am here")
     Ok(views.html.contract.list())
   }
 
@@ -68,7 +67,7 @@ object Contracts extends Controller {
 
             val keywords = Map(
               "$СОТРУДНИК.ИМЯ" -> employee.firstname,
-              "$СОТРУДНИК.ФАМИЛИЯ" -> "<strong>employee.surname</strong>",
+              "$СОТРУДНИК.ФАМИЛИЯ" -> s"${employee.surname}",
               "$СОТРУДНИК.ОТЧЕСТВО" -> employee.lastname,
               "$СОТРУДНИК.АДРЕС.ПРОЖИВАНИЯ" -> "г. Бишкек, пр. Чуй 57/12",
               "$СОТРУДНИК.АДРЕС.РЕГИСТРАЦИИ" -> "г. Бишкек, пр. Чуй 57/12",
@@ -82,7 +81,7 @@ object Contracts extends Controller {
               "$ДОГОВОР.ИСПЫТАТЕЛЬНЫЙ.СРОК.НАЧАЛА" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.trial_period_open.get).toString,
               "$ДОГОВОР.ИСПЫТАТЕЛЬНЫЙ.СРОК.ОКОНЧАНИЯ" -> new SimpleDateFormat("dd MMMM yyyy").format(contract.trial_period_end.get).toString,
               "$ДОГОВОР.ОКЛАД" -> contract.salary.toString(),
-              "$РУКОВОДИТЕЛЬ.ДОЛЖНОСТЬ" -> "и.о Председатель Правления",
+              "$РУКОВОДИТЕЛЬ.ДОЛЖНОСТЬ" -> "Председатель Правления",
               "$РУКОВОДИТЕЛЬ.ФИО" -> "Бапа уулу Кубанычбек"
             )
             keywords.foreach {
@@ -96,7 +95,6 @@ object Contracts extends Controller {
           }.getOrElse(NotFound("Заполните паспортные данные сотрудника."))
         }.getOrElse(NotFound("Не найден шаблон."))
       }.getOrElse(NotFound("Не установлен вид шаблона."))
-
     }.getOrElse(NotFound("Не найден договор."))
 
   }
