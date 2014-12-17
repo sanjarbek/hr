@@ -66,10 +66,119 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('panel.orders', {
             url: '/orders',
             abstract: true,
+            templateUrl: '/orders/tabTemplate',
+            controller: function ($scope, $state) {
+                $scope.tabs = [
+                    { heading: 'Прием на работу', route: 'panel.orders.employmentOrders.list', active: true},
+                    { heading: 'Перемещение', route: 'panel.orders.list', active: false },
+                    { heading: 'Увольнение', route: 'panel.orders.list1', active: false }
+                ];
+
+                $scope.go = function (t) {
+                    $scope.tabs.forEach(function (tab) {
+                        tab.active = $scope.active(t.route);
+                    });
+                    $state.go(t.route);
+                };
+
+                $scope.active = function (route) {
+                    return $state.is(route);
+                };
+            }
+        })
+        .state('panel.orders.employmentOrders', {
+            url: '/employments',
+            abstract: true,
             template: '<div ui-view></div>'
         })
-        .state('panel.orders.list', {
+        .state('panel.orders.employmentOrders.list', {
             url: '/list',
+            templateUrl: '/orders/employment/list',
+            resolve: {
+                ordersData: function (EmploymentOrderService) {
+                    return EmploymentOrderService.list();
+                }
+            },
+            controller: function ($scope, ordersData) {
+                $scope.items = ordersData;
+                $scope.itemsByPage = 20;
+            }
+        })
+        .state('panel.orders.employmentOrders.create', {
+            url: '/create',
+            templateUrl: '/orders/employment/create',
+            resolve: {
+                contractTypesData: function (ContractTypeService) {
+                    return ContractTypeService.list();
+                },
+                calendarTypesData: function (CalendarTypeService) {
+                    return CalendarTypeService.list();
+                },
+                employeesData: function (EmployeeService) {
+                    return EmployeeService.list();
+                }
+            },
+            controller: function ($scope, $modal, $log, EmploymentOrderService, contractTypesData, calendarTypesData, employeesData) {
+
+                $scope.contractTypes = contractTypesData;
+                $scope.calendarTypes = calendarTypesData;
+                $scope.employees = employeesData;
+
+                $scope.newEmploymentOrderForm = {
+                    id: 0,
+                    employee_id: null,
+                    order_type_id: 1,
+                    end_date: null,
+                    close_date: null,
+                    created_at: '2014-01-01 00:00:00',
+                    updated_at: '2014-01-01 00:00:00',
+                    trial_period_end: null,
+                    trial_period_start: null
+                }
+
+                $scope.selected = null;
+
+                $scope.saveEmploymentOrderForm = function () {
+                    $scope.newEmploymentOrderForm.employee_id = $scope.selected.id;
+                    EmploymentOrderService.save($scope.newEmploymentOrderForm).then(function (result) {
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус сохранения',
+                            text: 'Новая запись успешно сохранена.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                                alert('Hey! You clicked the desktop notification!');
+                            });
+                    });
+                }
+
+                $scope.openPositionModal = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'positionModal.html',
+                        resolve: {
+                            structuresData: function (StructureService) {
+                                return StructureService.freepositions();
+                            }
+                        },
+                        controller: 'ModalStructuresCtrl',
+                        size: size
+                    });
+
+                    modalInstance.result.then(function (result) {
+//                        $scope.temp.position = result.name;
+                        $scope.newEmploymentOrderForm.position_id = result.id;
+                    }, function () {
+                        console.info('Modal dismissed at: ' + new Date());
+                    });
+                }
+            }
+        })
+        .state('panel.orders.list', {
+            url: '/list1',
             templateUrl: '/orders/list',
             resolve: {
                 ordersData: function (OrderService) {

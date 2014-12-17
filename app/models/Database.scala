@@ -6,7 +6,8 @@ import java.time.{ZoneId, Instant, LocalDate, LocalDateTime}
 import org.joda.time.DateTime
 import java.util.Date
 import org.squeryl.customtypes.{DateField, TimestampField}
-import org.squeryl.{Table, Schema}
+import org.squeryl.dsl.ast.TypedExpressionNode
+import org.squeryl.{PrimitiveTypeMode, Table, Schema}
 import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.libs.json._
@@ -18,9 +19,17 @@ object Database extends Schema {
     override def toString = this.value.toString
   }
 
-  implicit def jodaToTimeStamp(dateTime: LocalDateTime): TimeStamp = new TimeStamp(Timestamp.valueOf(dateTime))
+  implicit def LDTToTimeStamp(dateTime: LocalDateTime): TimeStamp = new TimeStamp(Timestamp.valueOf(dateTime))
+
+  implicit def optionLDTToTimeStamp(dateTime: Option[LocalDateTime]): Option[TimeStamp] = {
+    dateTime.map(tmp => Some(new TimeStamp(Timestamp.valueOf(tmp)))).getOrElse(None)
+  }
 
   implicit def timeStampToJoda(timeStamp: TimeStamp): LocalDateTime = timeStamp.value.toLocalDateTime
+
+  implicit def optionTimeStampToJoda(timeStamp: Option[TimeStamp]): Option[LocalDateTime] = {
+    timeStamp.map(tmp => Some(tmp.value.toLocalDateTime)).getOrElse(None)
+  }
 
 
   implicit val formatTimeStamp = new Format[TimeStamp] {
@@ -36,7 +45,6 @@ object Database extends Schema {
   }
 
   class MyLocalDate(d: Date) extends DateField(d) {
-    override def toString = d.toString
   }
 
   implicit def myLocalDateToLocalDate(date: MyLocalDate): LocalDate = {
@@ -44,16 +52,34 @@ object Database extends Schema {
     LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate
   }
 
+  implicit def optionMyLocalDateToLocalDate(date: Option[MyLocalDate]): Option[LocalDate] = {
+    date.map { tmp =>
+      val instant = Instant.ofEpochMilli(tmp.value.getTime)
+      Some(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate)
+    }.getOrElse(null)
+  }
+
   implicit def localDateToMyLocalDate(date: LocalDate): MyLocalDate = {
     val instant = date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
     new MyLocalDate(Date.from(instant))
   }
 
+  implicit def optionLocalDateToMyLocalDate(date: Option[LocalDate]): Option[MyLocalDate] = {
+    date.map { tmp =>
+      val instant = tmp.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
+      Some(new MyLocalDate(Date.from(instant)))
+    }.getOrElse(null)
+  }
+
   implicit val formatMyLocalDate = new Format[MyLocalDate] {
     def writes(mld: MyLocalDate): JsValue = {
-      val instant = Instant.ofEpochMilli(mld.value.getTime)
-      val localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate.toString
-      Json.toJson(localDate)
+      if (mld == null) {
+        Json.toJson("")
+      } else {
+        val instant = Instant.ofEpochMilli(mld.value.getTime)
+        val localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate.toString
+        Json.toJson(localDate)
+      }
     }
 
     def reads(ts: JsValue): JsResult[MyLocalDate] = {
@@ -94,6 +120,8 @@ object Database extends Schema {
   val relationshipStatusTable: Table[RelationshipStatus] = table[RelationshipStatus]("relationship_statuses")
   val nationalityTable: Table[Nationality] = table[Nationality]("nationalities")
   val seminarTable: Table[Seminar] = table[Seminar]("seminars")
+  val employmentOrderTable: Table[EmploymentOrder] = table[EmploymentOrder]("employment_orders")
+  val dismissalOrderTable: Table[DismissalOrder] = table[DismissalOrder]("dismissal_orders")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -212,6 +240,16 @@ object Database extends Schema {
 
   on(seminarTable) { seminar => declare {
     seminar.id is (autoIncremented("seminars_id_seq"))
+  }
+  }
+
+  on(employmentOrderTable) { employmentOrder => declare {
+    employmentOrder.id is (autoIncremented("orders_id_seq"))
+  }
+  }
+
+  on(dismissalOrderTable) { dismissalOrder => declare {
+    dismissalOrder.id is (autoIncremented("orders_id_seq"))
   }
   }
 

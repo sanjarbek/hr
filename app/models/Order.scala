@@ -2,6 +2,7 @@ package models
 
 import java.util.Date
 
+import models.Database.{MyLocalDate, TimeStamp}
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
@@ -14,36 +15,33 @@ import collection.Iterable
 
 case class Order(
                   id: Long,
-                  order_category: Int,
-                  name: String,
+                  order_type_id: Int,
                   nomer: Int,
-                  date_of_order: Date,
-                  content: String,
-                  tags: Option[String]
-                  ) extends KeyedEntity[Long]
+                  date_of_order: MyLocalDate,
+                  override var created_at: TimeStamp,
+                  override var updated_at: TimeStamp
+                  ) extends Entity[Long]
 
 object Order {
 
-  import Database.{orderTable}
+  import Database.{orderTable, localDateToMyLocalDate, myLocalDateToLocalDate}
 
-  implicit val contractWrites: Writes[Order] = (
+  implicit val orderWrites: Writes[Order] = (
     (JsPath \ "id").write[Long] and
-      (JsPath \ "order_category").write[Int] and
-      (JsPath \ "name").write[String] and
+      (JsPath \ "order_type_id").write[Int] and
       (JsPath \ "nomer").write[Int] and
-      (JsPath \ "date_of_order").write[Date] and
-      (JsPath \ "content").write[String] and
-      (JsPath \ "tags").write[Option[String]]
+      (JsPath \ "date_of_order").write[MyLocalDate] and
+      (JsPath \ "created_at").write[TimeStamp] and
+      (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(Order.unapply))
 
-  implicit val contractReads: Reads[Order] = (
+  implicit val orderReads: Reads[Order] = (
     (JsPath \ "id").read[Long] and
-      (JsPath \ "order_category").read[Int] and
-      (JsPath \ "name").read[String] and
+      (JsPath \ "order_type_id").read[Int] and
       (JsPath \ "nomer").read[Int] and
-      (JsPath \ "date_of_order").read[Date] and
-      (JsPath \ "content").read[String] and
-      (JsPath \ "tags").read[Option[String]]
+      (JsPath \ "date_of_order").read[MyLocalDate] and
+      (JsPath \ "created_at").read[TimeStamp] and
+      (JsPath \ "updated_at").read[TimeStamp]
     )(Order.apply _)
 
   def allQ: Query[Order] = from(orderTable) {
@@ -58,19 +56,5 @@ object Order {
     from(orderTable) {
       order => where(order.id === id) select (order)
     }.headOption
-  }
-
-  def insert(order: Order): Order = inTransaction {
-    orderTable.insert(order)
-  }
-
-  def update(order: Order) {
-    inTransaction {
-      orderTable.update(order)
-    }
-  }
-
-  def delete(id: Long) = inTransaction {
-    orderTable.deleteWhere(order => order.id === id)
   }
 }

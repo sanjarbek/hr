@@ -1,17 +1,21 @@
 package controllers
 
+import java.time.{LocalDateTime, LocalDate}
 import java.util.Date
 
+import org.joda.time.Instant
 import play.api._
 import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
-import models.{OrderTag, Order}
+import models._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import io.github.cloudify.scala.spdf._
 import java.io._
 import java.net._
 import play.api.templates.Html
+import models.Database.MyLocalDate
+import java.util.Date
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -22,8 +26,44 @@ trait Orders extends Controller with Security {
     Ok(views.html.order.create())
   }
 
+  def createEmployment = Action { implicit request =>
+    Ok(views.html.order.employment.create())
+  }
+
+  def saveEmployment = Action(parse.json) { implicit request =>
+    val orderJson = request.body
+    orderJson.validate[EmploymentOrder].fold(
+      valid = { order =>
+        val newOrder = order.save
+        Ok(Json.toJson(order))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def tabTemplate = Action {
+    Ok(views.html.order.tabTemplate())
+  }
+
   def list = Action { implicit request =>
     Ok(views.html.order.list())
+  }
+
+  def listEmployment = Action { implicit request =>
+    Ok(views.html.order.employment.list())
+  }
+
+  def addEmploymentOrder = Action {
+    import models.Database.localDateToMyLocalDate
+    val temp = EmploymentOrder(0, 1, 1, Instant.now().toDate, 1, 1, 1, 1, 30000, 1, Some(Instant.now().toDate), Some(Instant.now.toDate), Instant.now.toDate, None, None, LocalDateTime.now, LocalDateTime.now).save
+    val tmp = DismissalOrder(0, 1, 3, Instant.now().toDate, 1, 1, "Test", Instant.now().toDate, null, null).save
+    Ok("Saved")
+    //    Ok(Json.toJson(temp))
+    //    EmploymentOrder.findById(1).map{ employmentOrder =>
+    //      Ok(Json.toJson(employmentOrder))
+    //    }.getOrElse(NotFound(Json.toJson("Не найден")))
   }
 
   //  def jsonList() = HasToken() { _ => currentId => implicit request =>
@@ -34,6 +74,26 @@ trait Orders extends Controller with Security {
   def jsonList() = Action { implicit request =>
     val orders = Order.findAll.map { order => Json.toJson(order)}
     Ok(Json.toJson(orders))
+  }
+
+  def jsonEmploymentList() = Action { implicit request =>
+    case class EmploymentOrderFull(order: EmploymentOrder, employee: Employee, calendarType: CalendarType, contractType: ContractType)
+    implicit val testWrites: Writes[EmploymentOrderFull] = (
+      (JsPath \ "order").write[EmploymentOrder] and
+        (JsPath \ "employee").write[Employee] and
+        (JsPath \ "calendarType").write[CalendarType] and
+        (JsPath \ "contractType").write[ContractType]
+      )(unlift(EmploymentOrderFull.unapply))
+
+    implicit val testReads: Reads[EmploymentOrderFull] = (
+      (JsPath \ "order").read[EmploymentOrder] and
+        (JsPath \ "employee").read[Employee] and
+        (JsPath \ "calendarType").read[CalendarType] and
+        (JsPath \ "contractType").read[ContractType]
+      )(EmploymentOrderFull.apply _)
+
+    val employees = EmploymentOrder.findFull.map { order => Json.toJson(EmploymentOrderFull(order._1, order._2, order._3, order._4))}
+    Ok(Json.toJson(employees))
   }
 
   def jsonGet(id: Long) = Action {
@@ -50,17 +110,8 @@ trait Orders extends Controller with Security {
     val orderJson = request.body
     orderJson.validate[Order].fold(
       valid = { order =>
-        val newOrder = Order.insert(order)
-        newOrder.tags.map(tags =>
-          tags.split(',').foreach(tag =>
-            OrderTag.findById(tag).map { order_tag =>
-              OrderTag.update(OrderTag(order_tag.id, order_tag.count + 1))
-            }.getOrElse {
-              OrderTag.insert(OrderTag(tag, 1))
-            }
-          )
-        )
-        Ok(Json.toJson(newOrder))
+        //        val newOrder = Order.insert(order)
+        Ok(Json.toJson(order))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))
@@ -73,25 +124,7 @@ trait Orders extends Controller with Security {
     orderJson.validate[Order].fold(
       valid = { order =>
         Order.findById(order.id).map { order_old =>
-          Order.update(order)
-          val tagsListOld = order_old.tags.map { t1 => t1.split(",").toList}.getOrElse(List())
-          val tagsListNew = order.tags.map { t1 => t1.split(",").toList}.getOrElse(List())
-          val diffOld = tagsListOld.diff(tagsListNew)
-          val diffNew = tagsListNew.diff(tagsListOld)
-
-          diffOld.foreach(tag =>
-            OrderTag.findById(tag).map { order_tag =>
-              OrderTag.update(OrderTag(order_tag.id, order_tag.count - 1))
-            }
-          )
-          diffNew.foreach(tag =>
-            OrderTag.findById(tag).map { order_tag =>
-              OrderTag.update(OrderTag(order_tag.id, order_tag.count + 1))
-            }.getOrElse {
-              OrderTag.insert(OrderTag(tag, 1))
-            }
-          )
-
+          //          Order.update(order)
           Ok(Json.toJson("Updated"))
         }.getOrElse(NotFound("Не найдена такая запись."))
       },
@@ -102,7 +135,7 @@ trait Orders extends Controller with Security {
   }
 
   def delete(id: Long) = Action { implicit request =>
-    Order.delete(id)
+    //    Order.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
@@ -137,4 +170,6 @@ trait Orders extends Controller with Security {
 
 }
 
-object Orders extends Orders
+object Orders extends Orders {
+
+}

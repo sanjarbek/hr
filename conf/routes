@@ -118,14 +118,19 @@ POST          /militaries/save                        controllers.Militaries.sav
 PUT           /militaries/update                      controllers.Militaries.update
 DELETE        /militaries/delete                      controllers.Militaries.delete(id: Long)
 
+GET           /orders/tabTemplate                     controllers.Orders.tabTemplate
 GET           /orders/create                          controllers.Orders.create
 GET           /orders/list                            controllers.Orders.list
 GET           /orders/json/list                       controllers.Orders.jsonList
 GET           /orders/json/get                        controllers.Orders.jsonGet(id: Long)
-POST          /orders/save                            controllers.Orders.save
+GET           /orders/save                            controllers.Orders.addEmploymentOrder
 PUT           /orders/update                          controllers.Orders.update
 GET           /orders/generate                        controllers.Orders.generate(id: Long)
 GET           /orders/json/listByName                 controllers.Orders.tagsList(query: String)
+GET           /orders/employment/list                 controllers.Orders.listEmployment
+GET           /orders/employment/create               controllers.Orders.createEmployment
+GET           /orders/employment/json/list            controllers.Orders.jsonEmploymentList
+POST          /orders/employment/save                 controllers.Orders.saveEmployment
 
 GET           /contact_informations/show              controllers.ContactInformations.show
 GET           /contact_informations/json/get          controllers.ContactInformations.jsonEmployeeContact(employeeId: Long)

@@ -1,30 +1,21 @@
-<div class="row">
-    <div class="col-sm-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <label><h4 class="panel-title">Список кадровых приказов</h4></label>
-                <a ui-sref='panel.orders.create' class="pull-right btn btn-primary"><span class="glyphicon glyphicon-plus"></span>
-                    Добавить</a>
-                <div class="clearfix"></div>
+<table class="table table-condensed">
+    <tr>
+        <td><strong>ID</strong></td>
+        <td><strong>Название</strong></td>
+        <td><strong>Дата приказа</strong></td>
+        <td><a ui-sref='panel.orders.create' class="pull-right btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span>
+            Добавить</a>
+        </td>
+    </tr>
+    <tr ng-repeat="order in orders">
+        <td>{{ order.id }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ order.date_of_order |  date: 'dd.MM.yyyy' }}</td>
+        <td>
+            <div class="pull-right">
+                <a ui-sref='panel.orders.edit({orderId: order.id})' class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                <a href="/orders/generate?id={{order.id}}" target="_blank" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-download-alt"></span></a>
             </div>
-            <table class="table table-condensed">
-                <tr>
-                    <td><strong>ID</strong></td>
-                    <td><strong>Название</strong></td>
-                    <td><strong>Дата приказа</strong></td>
-                </tr>
-                <tr ng-repeat="order in orders">
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.name }}</td>
-                    <td>{{ order.date_of_order |  date: 'dd.MM.yyyy' }}</td>
-                    <td>
-                        <div class="pull-right">
-                            <a ui-sref='panel.orders.edit({orderId: order.id})' class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a href="/orders/generate?id={{order.id}}" target="_blank" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-download-alt"></span></a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
+        </td>
+    </tr>
+</table>

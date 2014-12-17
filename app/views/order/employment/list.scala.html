@@ -1,0 +1,44 @@
+<table st-table="items" class="table table-condensed">
+    <thead>
+        <tr>
+            <td><strong>№<br>приказа</strong></td>
+            <td><strong>Дата<br>приказа</strong></td>
+            <td><strong>Тип<br>договора</strong></td>
+            <td><strong>Номер<br>договора</strong></td>
+            <td><strong>Сотрудник</strong></td>
+            <td><strong>Зарплата</strong></td>
+            <td><strong>Вид<br>графика</strong></td>
+            <td><strong>Начала<br>договора</strong></td>
+            <td><strong>Окончание<br>договора</strong></td>
+            <td><a ui-sref='panel.orders.employmentOrders.create' class="pull-right btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span>
+                Добавить</a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in items">
+            <td>{{ item.order.id }}</td>
+            <td>{{ item.order.date_of_order |  date: 'dd.MM.yyyy' }}</td>
+            <td>{{ item.contractType.name }}</td>
+            <td>{{ item.order.contract_number }}</td>
+            <td>{{ item.employee.surname }}</td>
+            <td>{{ item.order.salary }}</td>
+            <td>{{ item.calendarType.name }}</td>
+            <td>{{ item.order.start_date |  date: 'dd.MM.yyyy'  }}</td>
+            <td>{{ item.order.end_date |  date: 'dd.MM.yyyy'  }}</td>
+            <td>
+                <div class="pull-right">
+                    <a ui-sref='panel.orders.edit({orderId: order.id})' class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a href="/orders/generate?id={{order.id}}" target="_blank" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-download-alt"></span></a>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-center">
+                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
