@@ -87,6 +87,7 @@
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/LoginCtrl.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/ContactCtrl.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/CalendarCtrl.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/controllers/OrderController.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/filters/filters.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/directives/ngModelOnblur.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/libs/ng-tags-input/ng-tags-input.min.js")'></script>
@@ -99,7 +100,7 @@
         $ ( function ( ) {
             @*var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");*@
             @*var ws = new ReconnectingWebSocket ( "ws://192.168.0.128:9001/connection/status" ) ;*@
-        var ws = new ReconnectingWebSocket ( "         @routes.Application.serverStatus.webSocketURL() " );
+        var ws = new ReconnectingWebSocket ( "          @routes.Application.serverStatus.webSocketURL() " );
         ws.onmessage = function ( msg ) {
         $ ( '#server-status' ).text ( msg.data ) ;
         $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;

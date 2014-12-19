@@ -1,8 +1,4 @@
 angular.module('app').service('EmployeeService', function ($http, $state) {
-    //employees array to hold list of all employees
-    var employees = [];
-
-    var activeEmployee = {};
 
     this.save = function (employee) {
         $http.post('/employees/save', employee)
@@ -26,14 +22,16 @@ angular.module('app').service('EmployeeService', function ($http, $state) {
 
     }
 
-    //iterate through employees list and delete
-    //contact if found
-    this.delete = function (id) {
-        for (i in employees) {
-            if (employees[i].id == id) {
-                employees.splice(i, 1);
-            }
-        }
+    this.unemployedList = function () {
+        return $http.get('/employees/json/list', {params: {'status': false}}).then(function (result) {
+            return result.data;
+        });
+    }
+
+    this.employedList = function () {
+        return $http.get('/employees/json/list', {params: {'status': true}}).then(function (result) {
+            return result.data;
+        });
     }
 
     //simply returns the employees list

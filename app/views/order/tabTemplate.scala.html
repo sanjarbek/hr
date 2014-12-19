@@ -1,28 +1,28 @@
-<div class='nav-tabs-custom'>
-    <tabset>
-        <tab
-        ng-repeat="t in tabs"
+@*<div class='nav-tabs-custom'>*@
+<tabset>
+    <tab
+    ng-repeat="t in tabs"
 
-        heading="{{t.heading}}"
+    heading="{{t.heading}}"
 
-        select="go(t)"
+    select="go(t)"
 
-        active="t.active">
+    active="t.active">
 
       </tab>
-    </tabset>
-    @*<ul class='nav nav-tabs'>*@
-    @*<li role='presentation' class='active'>*@
-    @*<a ui-sref='panel.orders.list'>Прием на работу</a>*@
-    @*</li>*@
-    @*<li role='presentation'>*@
-    @*<a ui-sref='panel.orders.list1'>Перемещение</a>*@
-    @*</li>*@
-    @*<li role='presentation'>*@
-    @*<a href='#'>Увольнение</a>*@
-    @*</li>*@
-    @*</ul>*@
-    @*<div class='tab-content'>*@
-    <div ui-view></div>
-    @*</div>*@
-</div>
+</tabset>
+@*<ul class='nav nav-tabs'>*@
+@*<li role='presentation' class='active'>*@
+@*<a ui-sref='panel.orders.list'>Прием на работу</a>*@
+@*</li>*@
+@*<li role='presentation'>*@
+@*<a ui-sref='panel.orders.list1'>Перемещение</a>*@
+@*</li>*@
+@*<li role='presentation'>*@
+@*<a href='#'>Увольнение</a>*@
+@*</li>*@
+@*</ul>*@
+@*<div class='tab-content'>*@
+<div ui-view></div>
+@*</div>*@
+@*</div>*@

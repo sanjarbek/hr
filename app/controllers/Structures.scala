@@ -61,4 +61,9 @@ object Structures extends Controller {
     Ok(views.html.structures.show())
   }
 
+  def jsonGet(structureId: Long) = Action {
+    Structure.findById(structureId).map { structure =>
+      Ok(Json.toJson(structure))
+    }.getOrElse(NotFound(Json.toJson("Не найден")))
+  }
 }

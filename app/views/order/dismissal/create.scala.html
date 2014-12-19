@@ -1,0 +1,79 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label><h4 class="panel-title">{{ title }}</h4></label>
+        <div class="pull-right">
+            <button ng-disabled="!dismissalOrderForm.$valid" ng-click="selectAction()" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-floppy-saved"></span>
+                Сохранить</button>
+            <button ng-click="$state.go('panel.orders.dismissalOrders.list')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-step-backward"></span>
+                Назад</button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" name="dismissalOrderForm" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="date_of_order" class="control-label">Дата приказа:</label>
+                        <input class="form-control" type="date" name="date_of_order" ng-model="newDismissalOrderForm.date_of_order" required />
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="employee_id" class="control-label">Сотрудник:</label>
+                        <input type="text" ng-model="selected" typeahead-editable=false typeahead="employee as (employee.surname + ' ' + employee.firstname + ' ' + employee.lastname) for employee in employees | filter:$viewValue | limitTo:8"
+                        class="form-control">
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="leaving_date" class="control-label">Дата увольнения:</label>
+                        <input class="form-control" type="date" name="leaving_date" ng-model="newDismissalOrderForm.leaving_date" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="leaving_reason_id" class="control-label">Статья увольнения:</label>
+                        <div class="input-group">
+                            <select required class="form-control" name="leaving_reason_id" ng-model="newDismissalOrderForm.leaving_reason_id"
+                            ng-options="leavingReason.id as leavingReason.punkt for leavingReason in leavingReasons" required>
+                                <option value="">Выберите ...</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-add" ng-click="openLeavingReasonModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="comment" class="control-label">Причина увольнения:</label>
+                        <textarea class="form-control" name="comment" ng-model="newDismissalOrderForm.comment" required></textarea>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div>
+    <script type="text/ng-template" id="leavingReasonModal.html">
+    <div class="modal-header">
+    <h4 class="modal-title">Добавить новую статью увольнения</h4>
+    </div>
+    <div class="modal-body">
+    <form ng-submit="saveLeavingReason()" name="leavingReasonForm" class="form-horizontal" novalidate>
+    <div class="form-group">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="punkt" class="control-label">Статья/Пункт:</label>
+    <input required class="form-control" type="text" name="punkt" ng-model="newLeavingReasonForm.punkt"/>
+    </div>
+    </div>
+    <div class="form-group">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="name" class="control-label">Наименование:</label>
+    <textarea required class="form-control" type="text" name="name" ng-model="newLeavingReasonForm.name"></textarea>
+    </div>
+    </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+    <button ng-disabled="!leavingReasonForm.$valid" class="btn btn-primary" ng-click="saveLeavingReason()">Создать</button>
+    <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+    </script>
+</div>

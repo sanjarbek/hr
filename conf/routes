@@ -20,7 +20,7 @@ GET           /generatepoi                            controllers.Application.ge
 # Сотрудники
 GET           /employees/template                     controllers.Employees.template
 GET           /employees/list                         controllers.Employees.list
-GET           /employees/json/list                    controllers.Employees.jsonList
+GET           /employees/json/list                    controllers.Employees.jsonEmployeesList(status: Option[Boolean])
 GET           /employees/json/get                     controllers.Employees.jsonGet(id: Long)
 GET           /employees/create                       controllers.Employees.newEmployee
 GET           /employees/show                         controllers.Employees.show
@@ -72,6 +72,7 @@ POST          /departments/save                       controllers.Departments.sa
 
 GET           /structures/list                        controllers.Structures.list
 GET           /structures/json/list                   controllers.Structures.jsonList
+GET           /structures/json/get                    controllers.Structures.jsonGet(structureId: Long)
 GET           /structures/json/freepositions          controllers.Structures.jsonFreePositionsList
 POST          /structures/save                        controllers.Structures.save
 PUT           /structures/update                      controllers.Structures.update
@@ -131,6 +132,16 @@ GET           /orders/employment/list                 controllers.Orders.listEmp
 GET           /orders/employment/create               controllers.Orders.createEmployment
 GET           /orders/employment/json/list            controllers.Orders.jsonEmploymentList
 POST          /orders/employment/save                 controllers.Orders.saveEmployment
+PUT           /orders/employment/update               controllers.Orders.updateEmployment
+GET           /orders/employment/json/get             controllers.Orders.jsonEmploymentOrderGet(employmentOrderId: Long)
+GET           /orders/dismissal/list                  controllers.Orders.listDismissal
+GET           /orders/dismissal/create                controllers.Orders.createDismissal
+GET           /orders/dismissal/json/list             controllers.Orders.jsonDismissalList
+POST          /orders/dismissal/save                  controllers.Orders.saveDismissal
+PUT           /orders/dismissal/update                controllers.Orders.updateDismissal
+GET           /orders/dismissal/json/get              controllers.Orders.jsonDismissalOrderGet(dismissalOrderId: Long)
+GET           /orders/leaving_reason/json/list        controllers.Orders.jsonLeavingReasonList
+POST          /orders/leaving_reason/save             controllers.Orders.saveLeavingReason
 
 GET           /contact_informations/show              controllers.ContactInformations.show
 GET           /contact_informations/json/get          controllers.ContactInformations.jsonEmployeeContact(employeeId: Long)

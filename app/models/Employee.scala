@@ -24,6 +24,7 @@ case class Employee(
                      sex: Boolean,
                      @Column("relationship_status_id") val relationshipStatus: Int,
                      @Column("nationality_id") val nationalityId: Int,
+                     @Column("employment_order_id") val employmentOrderId: Option[Long],
                      override var created_at: TimeStamp,
                      override var updated_at: TimeStamp
                      ) extends Entity[Long] {
@@ -55,6 +56,7 @@ object Employee {
       (JsPath \ "sex").write[Boolean] and
       (JsPath \ "relationshipStatus").write[Int] and
       (JsPath \ "nationalityId").write[Int] and
+      (JsPath \ "employmentOrderId").write[Option[Long]] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(Employee.unapply))
@@ -71,6 +73,7 @@ object Employee {
       (JsPath \ "sex").read[Boolean] and
       (JsPath \ "relationshipStatus").read[Int] and
       (JsPath \ "nationalityId").read[Int] and
+      (JsPath \ "employmentOrderId").read[Option[Long]] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
     )(Employee.apply _)
@@ -102,6 +105,19 @@ object Employee {
       family => where(family.employee_id === employee.id).compute(count)
     }.toLong
   }
+
+  def findAllUnemployed = inTransaction {
+    from(employeeTable) {
+      employee => where(employee.employmentOrderId.isNull) select (employee)
+    }.toList
+  }
+
+  def findAllEmployed = inTransaction {
+    from(employeeTable) { employee =>
+      where(employee.employmentOrderId.isNotNull) select (employee)
+    }.toList
+  }
+
 }
 
 

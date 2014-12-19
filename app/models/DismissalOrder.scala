@@ -2,7 +2,7 @@ package models
 
 import java.util.Date
 
-import models.Database.{MyLocalDate, TimeStamp}
+import models.Database._
 import org.squeryl.{Query}
 import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.functional.syntax._
@@ -12,7 +12,6 @@ import scala.collection.Iterable
 case class DismissalOrder(
                            id: Long,
                            order_type_id: Int,
-                           nomer: Int,
                            date_of_order: Date,
                            leaving_reason_id: Int,
                            employee_id: Long,
@@ -41,7 +40,6 @@ object DismissalOrder {
   implicit val dismissalWrites: Writes[DismissalOrder] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "order_type_id").write[Int] and
-      (JsPath \ "nomer").write[Int] and
       (JsPath \ "date_of_order").write[Date] and
       (JsPath \ "leaving_reason_id").write[Int] and
       (JsPath \ "employee_id").write[Long] and
@@ -54,7 +52,6 @@ object DismissalOrder {
   implicit val dismissalReads: Reads[DismissalOrder] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "order_type_id").read[Int] and
-      (JsPath \ "nomer").read[Int] and
       (JsPath \ "date_of_order").read[Date] and
       (JsPath \ "leaving_reason_id").read[Int] and
       (JsPath \ "employee_id").read[Long] and
@@ -77,4 +74,70 @@ object DismissalOrder {
       dismissalOrder => where(dismissalOrder.id === id) select (dismissalOrder)
     }.headOption
   }
+
+  def findFull = inTransaction {
+    from(dismissalOrderTable, employeeTable, positionTable, structureTable) {
+      (dismissalOrder, employee, position, structure) =>
+        where(dismissalOrder.id === position.dismissal_order_id
+          and (employee.id === dismissalOrder.employee_id)
+          and (position.position_id === structure.id)) select(dismissalOrder, employee, structure)
+    }.toList
+  }
 }
+
+case class LeavingReason(
+                          id: Int,
+                          punkt: String,
+                          name: String,
+                          override var created_at: TimeStamp,
+                          override var updated_at: TimeStamp
+                          ) extends Entity[Int] {
+
+  override def save = inTransaction {
+    super.save.asInstanceOf[LeavingReason]
+  }
+
+  def update = inTransaction {
+    LeavingReason.findById(this.id).map { leavingReason =>
+      val tmp = this.copy(created_at = leavingReason.created_at, updated_at = leavingReason.updated_at)
+      tmp.save
+    }
+  }
+}
+
+object LeavingReason {
+
+  import Database.{leavingReasonTable}
+
+  implicit val leavingReasonWrites: Writes[LeavingReason] = (
+    (JsPath \ "id").write[Int] and
+      (JsPath \ "punkt").write[String] and
+      (JsPath \ "name").write[String] and
+      (JsPath \ "created_at").write[TimeStamp] and
+      (JsPath \ "updated_at").write[TimeStamp]
+    )(unlift(LeavingReason.unapply))
+
+  implicit val leavingReasonReads: Reads[LeavingReason] = (
+    (JsPath \ "id").read[Int] and
+      (JsPath \ "punkt").read[String] and
+      (JsPath \ "name").read[String] and
+      (JsPath \ "created_at").read[TimeStamp] and
+      (JsPath \ "updated_at").read[TimeStamp]
+    )(LeavingReason.apply _)
+
+  def allQ: Query[LeavingReason] = from(leavingReasonTable) {
+    leavingReason => select(leavingReason)
+  }
+
+  def findAll: Iterable[LeavingReason] = inTransaction {
+    allQ.toList
+  }
+
+  def findById(id: Long) = inTransaction {
+    from(leavingReasonTable) {
+      leavingReason => where(leavingReason.id === id) select (leavingReason)
+    }.headOption
+  }
+
+}
+

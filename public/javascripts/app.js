@@ -70,8 +70,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             controller: function ($scope, $state) {
                 $scope.tabs = [
                     { heading: 'Прием на работу', route: 'panel.orders.employmentOrders.list', active: true},
-                    { heading: 'Перемещение', route: 'panel.orders.list', active: false },
-                    { heading: 'Увольнение', route: 'panel.orders.list1', active: false }
+                    { heading: 'Перемещение', route: 'panel.orders.dismissalOrders.list', active: false },
+                    { heading: 'Увольнение', route: 'panel.orders.dismissalOrders.list', active: false }
                 ];
 
                 $scope.go = function (t) {
@@ -82,7 +82,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 };
 
                 $scope.active = function (route) {
-                    return $state.is(route);
+                    return $state.includes(route);
                 };
             }
         })
@@ -115,10 +115,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return CalendarTypeService.list();
                 },
                 employeesData: function (EmployeeService) {
-                    return EmployeeService.list();
+                    return EmployeeService.unemployedList();
                 }
             },
             controller: function ($scope, $modal, $log, EmploymentOrderService, contractTypesData, calendarTypesData, employeesData) {
+
+                $scope.title = 'Новый приказ приема на работу';
 
                 $scope.contractTypes = contractTypesData;
                 $scope.calendarTypes = calendarTypesData;
@@ -137,6 +139,10 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
 
                 $scope.selected = null;
+
+                $scope.selectAction = function () {
+                    $scope.saveEmploymentOrderForm();
+                }
 
                 $scope.saveEmploymentOrderForm = function () {
                     $scope.newEmploymentOrderForm.employee_id = $scope.selected.id;
@@ -171,10 +177,183 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     modalInstance.result.then(function (result) {
 //                        $scope.temp.position = result.name;
                         $scope.newEmploymentOrderForm.position_id = result.id;
+                        $scope.tempPosition = result.name;
                     }, function () {
                         console.info('Modal dismissed at: ' + new Date());
                     });
                 }
+            }
+        })
+        .state('panel.orders.employmentOrders.edit', {
+            url: '/{employmentOrderId:[0-9]{1,6}}',
+            templateUrl: '/orders/employment/create',
+            resolve: {
+                employmentOrderData: function (EmploymentOrderService, $stateParams) {
+                    return EmploymentOrderService.get($stateParams.employmentOrderId);
+                },
+                contractTypesData: function (ContractTypeService) {
+                    return ContractTypeService.list();
+                },
+                calendarTypesData: function (CalendarTypeService) {
+                    return CalendarTypeService.list();
+                },
+                employeesData: function (EmployeeService) {
+                    return EmployeeService.list();
+                }
+            },
+            controller: function ($scope, $filter, $modal, $log, StructureService, EmployeeService, EmploymentOrderService, contractTypesData, calendarTypesData, employeesData, employmentOrderData) {
+
+                $scope.contractTypes = contractTypesData;
+                $scope.calendarTypes = calendarTypesData;
+                $scope.employees = employeesData;
+
+                $scope.title = 'Редактировать приказ приема на работу';
+
+                $scope.formInit = function () {
+                    $scope.newEmploymentOrderForm = employmentOrderData;
+                    $scope.newEmploymentOrderForm.date_of_order = $filter("date")(employmentOrderData.date_of_order, 'yyyy-MM-dd');
+                    $scope.newEmploymentOrderForm.trial_period_start = $filter("date")(employmentOrderData.trial_period_start, 'yyyy-MM-dd');
+                    $scope.newEmploymentOrderForm.trial_period_end = $filter("date")(employmentOrderData.trial_period_end, 'yyyy-MM-dd');
+                    $scope.newEmploymentOrderForm.start_date = $filter("date")(employmentOrderData.start_date, 'yyyy-MM-dd');
+                    $scope.newEmploymentOrderForm.end_date = $filter("date")(employmentOrderData.end_date, 'yyyy-MM-dd');
+                    StructureService.get($scope.newEmploymentOrderForm.position_id).then(function (result) {
+                        $scope.tempPosition = result.name;
+                    });
+                    $scope.selected = EmployeeService.get($scope.newEmploymentOrderForm.employee_id).then(function (result) {
+                        $scope.selected = result;
+                    });
+                }
+
+                $scope.formInit();
+
+                $scope.updateEmploymentOrderForm = function () {
+                    $scope.newEmploymentOrderForm.employee_id = $scope.selected.id;
+                    EmploymentOrderService.update($scope.newEmploymentOrderForm).then(function (result) {
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус обновления',
+                            text: 'Запись успешно обновилась.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                                alert('Hey! You clicked the desktop notification!');
+                            });
+                    });
+                }
+
+                $scope.selectAction = function () {
+                    $scope.updateEmploymentOrderForm();
+                }
+
+                $scope.openPositionModal = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'positionModal.html',
+                        resolve: {
+                            structuresData: function (StructureService) {
+                                return StructureService.freepositions();
+                            }
+                        },
+                        controller: 'ModalStructuresCtrl',
+                        size: size
+                    });
+
+                    modalInstance.result.then(function (result) {
+//                        $scope.temp.position = result.name;
+                        $scope.newEmploymentOrderForm.position_id = result.id;
+                        $scope.tempPosition = result.name;
+                    }, function () {
+                        console.info('Modal dismissed at: ' + new Date());
+                    });
+                }
+            }
+        })
+        .state('panel.orders.dismissalOrders', {
+            url: '/dismissals',
+            abstract: true,
+            template: '<div ui-view></div>'
+        })
+        .state('panel.orders.dismissalOrders.list', {
+            url: '/list',
+            templateUrl: '/orders/dismissal/list',
+            resolve: {
+                ordersData: function (DismissalOrderService) {
+                    return DismissalOrderService.list();
+                }
+            },
+            controller: function ($scope, ordersData) {
+                $scope.items = ordersData;
+                $scope.itemsByPage = 20;
+            }
+        })
+        .state('panel.orders.dismissalOrders.create', {
+            url: '/create',
+            templateUrl: '/orders/dismissal/create',
+            resolve: {
+                employeesData: function (EmployeeService) {
+                    return EmployeeService.employedList();
+                },
+                leavingReasonsData: function (LeavingReasonService) {
+                    return LeavingReasonService.list();
+                }
+            },
+            controller: function ($scope, $modal, $log, DismissalOrderService, employeesData, leavingReasonsData) {
+
+                $scope.title = 'Новый приказ увольнения';
+
+                $scope.employees = employeesData;
+                $scope.leavingReasons = leavingReasonsData;
+
+                $scope.newDismissalOrderForm = {
+                    id: 0,
+                    employee_id: null,
+                    order_type_id: 1,
+                    end_date: null,
+                    close_date: null,
+                    created_at: '2014-01-01 00:00:00',
+                    updated_at: '2014-01-01 00:00:00'
+                }
+
+                $scope.selected = null;
+
+                $scope.selectAction = function () {
+                    $scope.saveDismissalOrderForm();
+                }
+
+                $scope.saveDismissalOrderForm = function () {
+                    $scope.newDismissalOrderForm.employee_id = $scope.selected.id;
+                    DismissalOrderService.save($scope.newDismissalOrderForm).then(function (result) {
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус сохранения',
+                            text: 'Новая запись успешно сохранена.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                                alert('Hey! You clicked the desktop notification!');
+                            });
+                    });
+                }
+
+                $scope.openLeavingReasonModal = function (size) {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'leavingReasonModal.html',
+                        controller: 'ModalLeavingReasonController',
+                        size: size
+
+                    });
+
+                    modalInstance.result.then(function (result) {
+                        $scope.leavingReasons.push(result.data);
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+
             }
         })
         .state('panel.orders.list', {

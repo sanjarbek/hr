@@ -23,7 +23,6 @@ object Positions extends Controller {
     val positionJson = request.body
     positionJson.validate[Position].fold(
       valid = { position =>
-        Position.insert(position)
         Ok("Saved")
       },
       invalid = { errors =>
@@ -33,7 +32,6 @@ object Positions extends Controller {
   }
 
   def delete(id: Long) = Action { implicit request =>
-    Position.delete(id)
     Ok(Json.toJson("Removed"))
   }
 

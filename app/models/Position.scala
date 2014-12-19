@@ -2,6 +2,7 @@ package models
 
 import java.util.Date
 
+import models.Database.TimeStamp
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
@@ -13,25 +14,57 @@ import play.api.libs.json.Reads._
 import collection.Iterable
 
 case class Position(
-                     id: Int,
-                     category_id: Int,
-                     name: String
-                     ) extends KeyedEntity[Int]
+                     id: Long,
+                     employment_order_id: Long,
+                     position_id: Int,
+                     employee_id: Long,
+                     dismissal_order_id: Option[Long],
+                     start_date: Date,
+                     end_date: Option[Date],
+                     close_date: Option[Date],
+                     override var created_at: TimeStamp,
+                     override var updated_at: TimeStamp
+                     ) extends Entity[Long] {
+  override def save = inTransaction {
+    super.save.asInstanceOf[Position]
+  }
+
+  def update = inTransaction {
+    Position.findById(this.id).map { position =>
+      val tmp = this.copy(created_at = position.created_at, updated_at = position.updated_at)
+      tmp.save
+    }
+  }
+}
 
 object Position {
 
-  import Database.{positionTable}
+  import Database.{positionTable, formatTimeStamp}
 
   implicit val positionWrites: Writes[Position] = (
-    (JsPath \ "id").write[Int] and
-      (JsPath \ "category_id").write[Int] and
-      (JsPath \ "name").write[String]
+    (JsPath \ "id").write[Long] and
+      (JsPath \ "employment_order_id").write[Long] and
+      (JsPath \ "position_id").write[Int] and
+      (JsPath \ "employee_id").write[Long] and
+      (JsPath \ "dismissal_order_id").write[Option[Long]] and
+      (JsPath \ "start_date").write[Date] and
+      (JsPath \ "end_date").write[Option[Date]] and
+      (JsPath \ "close_date").write[Option[Date]] and
+      (JsPath \ "created_at").write[TimeStamp] and
+      (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(Position.unapply))
 
   implicit val positionReads: Reads[Position] = (
-    (JsPath \ "id").read[Int] and
-      (JsPath \ "category_id").read[Int] and
-      (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](20))
+    (JsPath \ "id").read[Long] and
+      (JsPath \ "employment_order_id").read[Long] and
+      (JsPath \ "position_id").read[Int] and
+      (JsPath \ "employee_id").read[Long] and
+      (JsPath \ "dismissal_order_id").read[Option[Long]] and
+      (JsPath \ "start_date").read[Date] and
+      (JsPath \ "end_date").read[Option[Date]] and
+      (JsPath \ "close_date").read[Option[Date]] and
+      (JsPath \ "created_at").read[TimeStamp] and
+      (JsPath \ "updated_at").read[TimeStamp]
     )(Position.apply _)
 
   def allQ: Query[Position] = from(positionTable) {
@@ -48,17 +81,22 @@ object Position {
     }.headOption
   }
 
-  def insert(position: Position): Position = inTransaction {
-    positionTable.insert(position)
+  def findByEmploymentOrderId(employmentOrderId: Long) = inTransaction {
+    from(positionTable) {
+      position => where(position.employment_order_id === employmentOrderId) select (position)
+    }.headOption
   }
 
-  def update(position: Position) {
-    inTransaction {
-      positionTable.update(position)
-    }
+  def findByEmployeeId(employeeId: Long) = inTransaction {
+    from(positionTable) {
+      position => where(position.employee_id === employeeId) select (position)
+    }.toList
   }
 
-  def delete(id: Long) = inTransaction {
-    positionTable.deleteWhere(position => position.id === id)
+  def findByDismissalOrderId(dismissalOrderId: Long) = inTransaction {
+    from(positionTable) {
+      position => where(position.dismissal_order_id === dismissalOrderId) select (position)
+    }.headOption
   }
+
 }

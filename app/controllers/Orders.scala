@@ -30,12 +30,155 @@ trait Orders extends Controller with Security {
     Ok(views.html.order.employment.create())
   }
 
+  def listEmployment = Action { implicit request =>
+    Ok(views.html.order.employment.list())
+  }
+
+  def jsonEmploymentList() = Action { implicit request =>
+    case class EmploymentOrderFull(order: EmploymentOrder, employee: Employee, calendarType: CalendarType, contractType: ContractType, position: Structure)
+    implicit val testWrites: Writes[EmploymentOrderFull] = (
+      (JsPath \ "order").write[EmploymentOrder] and
+        (JsPath \ "employee").write[Employee] and
+        (JsPath \ "calendarType").write[CalendarType] and
+        (JsPath \ "contractType").write[ContractType] and
+        (JsPath \ "position").write[Structure]
+      )(unlift(EmploymentOrderFull.unapply))
+
+    implicit val testReads: Reads[EmploymentOrderFull] = (
+      (JsPath \ "order").read[EmploymentOrder] and
+        (JsPath \ "employee").read[Employee] and
+        (JsPath \ "calendarType").read[CalendarType] and
+        (JsPath \ "contractType").read[ContractType] and
+        (JsPath \ "position").read[Structure]
+      )(EmploymentOrderFull.apply _)
+
+    val employees = EmploymentOrder.findFull.map { order => Json.toJson(EmploymentOrderFull(order._1, order._2, order._3, order._4, order._5))}
+    Ok(Json.toJson(employees))
+  }
+
+  def jsonEmploymentOrderGet(employmentOrderId: Long) = Action {
+    EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
+      Ok(Json.toJson(employmentOrder))
+    }.getOrElse(NotFound(Json.toJson("Not found")))
+  }
+
   def saveEmployment = Action(parse.json) { implicit request =>
     val orderJson = request.body
     orderJson.validate[EmploymentOrder].fold(
       valid = { order =>
         val newOrder = order.save
-        Ok(Json.toJson(order))
+        val position = Position(0, newOrder.id, newOrder.position_id, newOrder.employee_id, None,
+          newOrder.start_date, newOrder.end_date, newOrder.close_date, null, null).save
+        Ok(Json.toJson(newOrder))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def updateEmployment = Action(parse.json) { implicit request =>
+    val orderJson = request.body
+    orderJson.validate[EmploymentOrder].fold(
+      valid = { order =>
+        order.update.map { new_order =>
+          Position.findByEmploymentOrderId(new_order.id).map { position =>
+            position.copy(position_id = new_order.position_id,
+              employee_id = new_order.employee_id, start_date = new_order.start_date,
+              end_date = new_order.end_date, close_date = new_order.close_date
+            ).update
+          }
+          Ok(Json.toJson(new_order))
+        }.getOrElse(NotFound(Json.toJson("Не найден")))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def createDismissal = Action { implicit request =>
+    Ok(views.html.order.dismissal.create())
+  }
+
+  def listDismissal = Action { implicit request =>
+    Ok(views.html.order.dismissal.list())
+  }
+
+
+  def jsonDismissalList() = Action { implicit request =>
+
+    case class DismissalOrderFull(order: DismissalOrder, employee: Employee, position: Structure)
+
+    implicit val testWrites: Writes[DismissalOrderFull] = (
+      (JsPath \ "order").write[DismissalOrder] and
+        (JsPath \ "employee").write[Employee] and
+        (JsPath \ "position").write[Structure]
+      )(unlift(DismissalOrderFull.unapply))
+
+    implicit val testReads: Reads[DismissalOrderFull] = (
+      (JsPath \ "order").read[DismissalOrder] and
+        (JsPath \ "employee").read[Employee] and
+        (JsPath \ "position").read[Structure]
+      )(DismissalOrderFull.apply _)
+
+    val dismissals = DismissalOrder.findFull.map { order => Json.toJson(DismissalOrderFull(order._1, order._2, order._3))}
+    Ok(Json.toJson(dismissals))
+  }
+
+  def jsonDismissalOrderGet(employmentOrderId: Long) = Action {
+    EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
+      Ok(Json.toJson(employmentOrder))
+    }.getOrElse(NotFound(Json.toJson("Not found")))
+  }
+
+  def saveDismissal = Action(parse.json) { implicit request =>
+    val orderJson = request.body
+    orderJson.validate[DismissalOrder].fold(
+      valid = { order =>
+        val newOrder = order.save
+        Position.findByEmployeeId(newOrder.employee_id).reduceLeftOption {
+          (maxElement, element) => if (maxElement.start_date.after(element.start_date)) maxElement else element
+        } match {
+          case Some(position) => position.copy(end_date = Some(newOrder.leaving_date), dismissal_order_id = Some(newOrder.id)).update
+          case None => Logger.info("Сотрудник и так не принят на работу.")
+        }
+        Ok(Json.toJson(newOrder))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def jsonLeavingReasonList = Action {
+    val leavingReasons = LeavingReason.findAll.map(leavingReason => Json.toJson(leavingReason))
+    Ok(Json.toJson(leavingReasons))
+  }
+
+  def saveLeavingReason = Action(parse.json) { implicit request =>
+    val leavingReasonJson = request.body
+    leavingReasonJson.validate[LeavingReason].fold(
+      valid = { leavingReason =>
+        val tmp = leavingReason.save
+        Ok(Json.toJson(tmp))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def updateDismissal = Action(parse.json) { implicit request =>
+    val orderJson = request.body
+    orderJson.validate[DismissalOrder].fold(
+      valid = { order =>
+        order.update.map { new_order =>
+          Position.findByDismissalOrderId(new_order.id).map { position =>
+            position.copy(close_date = Some(new_order.leaving_date), employee_id = new_order.employee_id).update
+          }
+          Ok(Json.toJson(new_order))
+        }.getOrElse(NotFound(Json.toJson("Не найден")))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))
@@ -51,19 +194,9 @@ trait Orders extends Controller with Security {
     Ok(views.html.order.list())
   }
 
-  def listEmployment = Action { implicit request =>
-    Ok(views.html.order.employment.list())
-  }
-
   def addEmploymentOrder = Action {
-    import models.Database.localDateToMyLocalDate
-    val temp = EmploymentOrder(0, 1, 1, Instant.now().toDate, 1, 1, 1, 1, 30000, 1, Some(Instant.now().toDate), Some(Instant.now.toDate), Instant.now.toDate, None, None, LocalDateTime.now, LocalDateTime.now).save
-    val tmp = DismissalOrder(0, 1, 3, Instant.now().toDate, 1, 1, "Test", Instant.now().toDate, null, null).save
+    //    Position.findByEmployeeId(7).max
     Ok("Saved")
-    //    Ok(Json.toJson(temp))
-    //    EmploymentOrder.findById(1).map{ employmentOrder =>
-    //      Ok(Json.toJson(employmentOrder))
-    //    }.getOrElse(NotFound(Json.toJson("Не найден")))
   }
 
   //  def jsonList() = HasToken() { _ => currentId => implicit request =>
@@ -74,26 +207,6 @@ trait Orders extends Controller with Security {
   def jsonList() = Action { implicit request =>
     val orders = Order.findAll.map { order => Json.toJson(order)}
     Ok(Json.toJson(orders))
-  }
-
-  def jsonEmploymentList() = Action { implicit request =>
-    case class EmploymentOrderFull(order: EmploymentOrder, employee: Employee, calendarType: CalendarType, contractType: ContractType)
-    implicit val testWrites: Writes[EmploymentOrderFull] = (
-      (JsPath \ "order").write[EmploymentOrder] and
-        (JsPath \ "employee").write[Employee] and
-        (JsPath \ "calendarType").write[CalendarType] and
-        (JsPath \ "contractType").write[ContractType]
-      )(unlift(EmploymentOrderFull.unapply))
-
-    implicit val testReads: Reads[EmploymentOrderFull] = (
-      (JsPath \ "order").read[EmploymentOrder] and
-        (JsPath \ "employee").read[Employee] and
-        (JsPath \ "calendarType").read[CalendarType] and
-        (JsPath \ "contractType").read[ContractType]
-      )(EmploymentOrderFull.apply _)
-
-    val employees = EmploymentOrder.findFull.map { order => Json.toJson(EmploymentOrderFull(order._1, order._2, order._3, order._4))}
-    Ok(Json.toJson(employees))
   }
 
   def jsonGet(id: Long) = Action {
@@ -171,5 +284,6 @@ trait Orders extends Controller with Security {
 }
 
 object Orders extends Orders {
+
 
 }

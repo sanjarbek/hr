@@ -73,4 +73,14 @@ object Employees extends Controller {
   def template = Action {
     Ok(views.html.employees.default())
   }
+
+  def jsonEmployeesList(status: Option[Boolean]) = Action {
+    val employees = (status match {
+      case Some(true) => Employee.findAllEmployed
+      case Some(false) => Employee.findAllUnemployed
+      case None => Employee.findAll
+    }).map(employee => Json.toJson(employee))
+    Ok(Json.toJson(employees))
+  }
+
 }

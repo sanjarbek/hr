@@ -26,6 +26,12 @@ angular.module('app').service('StructureService', function ($http) {
         });
     }
 
+    this.get = function (id) {
+        return $http.get('/structures/json/get', {params: {'structureId': id}}).then(function (result) {
+            return result.data;
+        });
+    }
+
 });
 
 angular.module('app').service('StructureTypeService', function ($http) {

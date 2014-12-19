@@ -11,7 +11,6 @@ import java.util.Date
 case class EmploymentOrder(
                             id: Long,
                             order_type_id: Int,
-                            nomer: Int,
                             date_of_order: Date,
                             position_id: Int,
                             contract_type_id: Int,
@@ -42,12 +41,11 @@ case class EmploymentOrder(
 
 object EmploymentOrder {
 
-  import Database.{employmentOrderTable, employeeTable, calendarTypeTable, contractTypeTable}
+  import Database.{employmentOrderTable, employeeTable, calendarTypeTable, contractTypeTable, structureTable}
 
   implicit val employmentOrderWrites: Writes[EmploymentOrder] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "order_type_id").write[Int] and
-      (JsPath \ "nomer").write[Int] and
       (JsPath \ "date_of_order").write[Date] and
       (JsPath \ "position_id").write[Int] and
       (JsPath \ "contract_type_id").write[Int] and
@@ -67,7 +65,6 @@ object EmploymentOrder {
   implicit val employmentOrderReads: Reads[EmploymentOrder] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "order_type_id").read[Int] and
-      (JsPath \ "nomer").read[Int] and
       (JsPath \ "date_of_order").read[Date] and
       (JsPath \ "position_id").read[Int] and
       (JsPath \ "contract_type_id").read[Int] and
@@ -93,11 +90,12 @@ object EmploymentOrder {
   }
 
   def findFull = inTransaction {
-    from(employmentOrderTable, employeeTable, contractTypeTable, calendarTypeTable) {
-      (employmentOrder, employee, contractType, calendarType) =>
+    from(employmentOrderTable, employeeTable, contractTypeTable, calendarTypeTable, structureTable) {
+      (employmentOrder, employee, contractType, calendarType, position) =>
         where(employmentOrder.employee_id === employee.id
           and (employmentOrder.calendar_type_id === calendarType.id)
-          and (employmentOrder.contract_type_id === contractType.id)) select(employmentOrder, employee, calendarType, contractType)
+          and (employmentOrder.position_id === position.id)
+          and (employmentOrder.contract_type_id === contractType.id)) select(employmentOrder, employee, calendarType, contractType, position)
     }.toList
   }
 
