@@ -246,6 +246,7 @@ object Database extends Schema {
 
   on(employmentOrderTable) { employmentOrder => declare {
     employmentOrder.id is (autoIncremented("orders_id_seq"))
+    //    employmentOrder.contract_number is (autoIncremented("employment_orders_contract_number_seq"))
   }
   }
 
@@ -254,9 +255,8 @@ object Database extends Schema {
   }
   }
 
-  on(leavingReasonTable) { leavingReason => declare {
-    leavingReason.id is (autoIncremented("leaving_reasons_id_seq"))
-  }
+  on(leavingReasonTable) { leavingReason => declare(
+    leavingReason.id is (autoIncremented("leaving_reasons_id_seq")))
   }
 
 }

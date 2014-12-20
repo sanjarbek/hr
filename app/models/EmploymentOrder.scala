@@ -14,7 +14,7 @@ case class EmploymentOrder(
                             date_of_order: Date,
                             position_id: Int,
                             contract_type_id: Int,
-                            contract_number: Int,
+                            contract_number: Long,
                             employee_id: Long,
                             salary: BigDecimal,
                             calendar_type_id: Int,
@@ -49,7 +49,7 @@ object EmploymentOrder {
       (JsPath \ "date_of_order").write[Date] and
       (JsPath \ "position_id").write[Int] and
       (JsPath \ "contract_type_id").write[Int] and
-      (JsPath \ "contract_number").write[Int] and
+      (JsPath \ "contract_number").write[Long] and
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "salary").write[BigDecimal] and
       (JsPath \ "calendar_type_id").write[Int] and
@@ -68,7 +68,7 @@ object EmploymentOrder {
       (JsPath \ "date_of_order").read[Date] and
       (JsPath \ "position_id").read[Int] and
       (JsPath \ "contract_type_id").read[Int] and
-      (JsPath \ "contract_number").read[Int] and
+      (JsPath \ "contract_number").read[Long] and
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "salary").read[BigDecimal] and
       (JsPath \ "calendar_type_id").read[Int] and

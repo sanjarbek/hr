@@ -130,6 +130,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     id: 0,
                     employee_id: null,
                     order_type_id: 1,
+                    contract_number: 0,
                     end_date: null,
                     close_date: null,
                     created_at: '2014-01-01 00:00:00',
@@ -551,9 +552,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             resolve: {
                 employeesData: function (EmployeeService) {
                     return EmployeeService.list();
-                },
-                contractsData: function (ContractService) {
-                    return ContractService.list();
                 },
                 structuresData: function (StructureService) {
                     return StructureService.list();

@@ -68,10 +68,7 @@ object Structure {
 
   def findFreePositions = inTransaction {
     from(structureTable)(structure =>
-      where(structure.id notIn
-        from(contractTable)(contract => select(contract.position_id))
-      )
-        select (structure)
+      select(structure)
     ).toList
   }
 

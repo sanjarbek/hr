@@ -66,10 +66,11 @@ CREATE TABLE orders (
   updated_at    TIMESTAMP NOT NULL
 );
 
+
 CREATE TABLE employment_orders (
   position_id        INT,
   contract_type_id   INT,
-  contract_number INT,
+  contract_number BIGSERIAL UNIQUE NOT NULL,
   employee_id        BIGINT,
   salary             NUMERIC(14, 2),
   calendar_type_id   SMALLINT,
@@ -111,10 +112,8 @@ CREATE OR REPLACE FUNCTION set_employee_employment_order()
     UPDATE employees
     SET employment_order_id = NEW.id
     WHERE employees.id = NEW.employee_id;;
-  RETURN NEW;
-  ;
-  END;
-  ;
+  RETURN NEW;;
+  END;;
   $body$ LANGUAGE plpgsql;
 
 CREATE TRIGGER new_employment_order AFTER INSERT ON employment_orders
@@ -131,10 +130,8 @@ CREATE OR REPLACE FUNCTION set_employee_dismissal_order()
     UPDATE employees
     SET employment_order_id = NULL
     WHERE employees.id = NEW.employee_id;;
-  RETURN NEW;
-  ;
-  END;
-  ;
+  RETURN NEW;;
+  END;;
   $body$ LANGUAGE plpgsql;
 
 CREATE TRIGGER new_dismissal_order AFTER INSERT ON dismissal_orders

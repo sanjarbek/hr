@@ -3,6 +3,9 @@ package controllers
 import java.time.{LocalDateTime, LocalDate}
 import java.util.Date
 
+import org.apache.poi.hwpf.HWPFDocument
+import org.apache.poi.poifs.filesystem.POIFSFileSystem
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.joda.time.Instant
 import play.api._
 import play.api.libs.iteratee.Enumerator
@@ -62,6 +65,40 @@ trait Orders extends Controller with Security {
     }.getOrElse(NotFound(Json.toJson("Not found")))
   }
 
+  def getEmploymentOrderDocument(employmentOrderId: Long) = Action {
+    val fileName = "employment_order.xlsx"
+    val filePath = s"./uploaded/documents/$fileName"
+    //    val fs = new FileInputStream(filePath)
+    //    var xlsxFile = new XSSFWorkbook(fs)
+    //
+    //    var file = new File("test.xlsx")
+    //    var out = new FileOutputStream(file)
+    //    xlsxFile.write(out)
+    //    Ok.sendFile(file)
+
+    //    val file = new java.io.File(filePath)
+    //    val fileContent: Enumerator[Array[Byte]] = Enumerator.fromFile(file)
+    //    SimpleResult(
+    //      header = ResponseHeader(200, Map(CONTENT_LENGTH -> file.length.toString)),
+    //      body = fileContent
+    //    )
+
+    Ok.sendFile(
+      content = new File(filePath),
+      fileName = _ => "termsOfService.xlsx",
+      inline = true
+    )
+  }
+
+  def comet = Action {
+    val events = Enumerator(
+      """<script>console.log('kiki')</script>""",
+      """<script>console.log('foo')</script>""",
+      """<script>console.log('bar')</script>"""
+    )
+    Ok.stream(events >>> Enumerator.eof).as(HTML)
+  }
+
   def saveEmployment = Action(parse.json) { implicit request =>
     val orderJson = request.body
     orderJson.validate[EmploymentOrder].fold(
@@ -104,7 +141,6 @@ trait Orders extends Controller with Security {
   def listDismissal = Action { implicit request =>
     Ok(views.html.order.dismissal.list())
   }
-
 
   def jsonDismissalList() = Action { implicit request =>
 
