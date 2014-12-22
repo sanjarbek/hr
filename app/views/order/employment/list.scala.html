@@ -31,7 +31,8 @@
             <td>
                 <div class="pull-right">
                     <a ui-sref='panel.orders.employmentOrders.edit({employmentOrderId: item.order.id})' class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
-                    <a href="/orders/generate?id={{order.id}}" target="_blank" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-download-alt"></span></a>
+                    <a href="/orders/employment/order?employmentOrderId={{item.order.id}}" target="_blank" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-download-alt"></span></a>
+                    <a href="/orders/employment/contract?employmentOrderId={{item.order.id}}" target="_blank" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-print"></span></a>
                 </div>
             </td>
         </tr>

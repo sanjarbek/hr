@@ -19,9 +19,10 @@ case class Structure(
                       name: String,
                       fullname: String,
                       salary: Float,
-                      bonus: Float,
+                      coefficient: Float,
                       structure_type: Int,
                       position_type: Option[Int],
+                      employment_order_id: Option[Long],
                       status: Int
                       ) extends KeyedEntity[Int] {
   def contract: Option[Contract] = {
@@ -39,9 +40,10 @@ object Structure {
       (JsPath \ "name").write[String] and
       (JsPath \ "fullname").write[String] and
       (JsPath \ "salary").write[Float] and
-      (JsPath \ "bonus").write[Float] and
+      (JsPath \ "coefficient").write[Float] and
       (JsPath \ "structure_type").write[Int] and
       (JsPath \ "position_type").write[Option[Int]] and
+      (JsPath \ "employment_order_id").write[Option[Long]] and
       (JsPath \ "status").write[Int]
     )(unlift(Structure.unapply))
 
@@ -51,9 +53,10 @@ object Structure {
       (JsPath \ "name").read[String](minLength[String](2) keepAnd maxLength[String](50)) and
       (JsPath \ "fullname").read[String](minLength[String](2) keepAnd maxLength[String](250)) and
       (JsPath \ "salary").read[Float] and
-      (JsPath \ "bonus").read[Float] and
+      (JsPath \ "coefficient").read[Float] and
       (JsPath \ "structure_type").read[Int] and
       (JsPath \ "position_type").read[Option[Int]] and
+      (JsPath \ "employment_order_id").read[Option[Long]] and
       (JsPath \ "status").read[Int]
     )(Structure.apply _)
 
@@ -68,7 +71,7 @@ object Structure {
 
   def findFreePositions = inTransaction {
     from(structureTable)(structure =>
-      select(structure)
+      where(structure.employment_order_id.isNull) select (structure)
     ).toList
   }
 

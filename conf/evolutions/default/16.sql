@@ -70,7 +70,7 @@ CREATE TABLE orders (
 CREATE TABLE employment_orders (
   position_id        INT,
   contract_type_id   INT,
-  contract_number BIGSERIAL UNIQUE NOT NULL,
+  contract_number BIGINT UNIQUE NOT NULL,
   employee_id        BIGINT,
   salary             NUMERIC(14, 2),
   calendar_type_id   SMALLINT,
@@ -84,6 +84,7 @@ CREATE TABLE employment_orders (
 
 CREATE TABLE dismissal_orders (
   employee_id       BIGINT    NOT NULL,
+  position_id INT,
   leaving_reason_id INT       NOT NULL,
   comment           TEXT,
   leaving_date DATE
@@ -109,9 +110,8 @@ CREATE OR REPLACE FUNCTION set_employee_employment_order()
   RETURNS TRIGGER AS
   $body$
   BEGIN
-    UPDATE employees
-    SET employment_order_id = NEW.id
-    WHERE employees.id = NEW.employee_id;;
+    UPDATE employees SET employment_order_id = NEW.id WHERE employees.id = NEW.employee_id;;
+    UPDATE structures SET employment_order_id = NEW.id WHERE structures.id=NEW.position_id;;
   RETURN NEW;;
   END;;
   $body$ LANGUAGE plpgsql;
@@ -127,9 +127,8 @@ CREATE OR REPLACE FUNCTION set_employee_dismissal_order()
   RETURNS TRIGGER AS
   $body$
   BEGIN
-    UPDATE employees
-    SET employment_order_id = NULL
-    WHERE employees.id = NEW.employee_id;;
+    UPDATE employees SET employment_order_id = NULL WHERE employees.id = NEW.employee_id;;
+    UPDATE structures SET employment_order_id = NULL WHERE structures.id = NEW.position_id;;
   RETURN NEW;;
   END;;
   $body$ LANGUAGE plpgsql;

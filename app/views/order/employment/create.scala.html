@@ -3,7 +3,7 @@
         <label><h4 class="panel-title">{{ title }}</h4></label>
         <div class="pull-right">
             <button ng-disabled="!employmentOrderForm.$valid" ng-click="selectAction()" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-floppy-saved"></span>
-            Сохранить</button>
+                Сохранить</button>
             <button ng-click="$state.go('panel.orders.employmentOrders.list')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-step-backward"></span>
                 Назад</button>
         </div>
@@ -39,8 +39,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <div class="col-lg-3 col-md-3 col-sm-3 ">
+                        <label for="contract_number" class="control-label">№ договора:</label>
+                        <input class="form-control" type="number" name="contract_number" ng-model="newEmploymentOrderForm.contract_number" required />
+                    </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
-                    <label for="contract_type_id" class="control-label">Тип договора:</label>
+                        <label for="contract_type_id" class="control-label">Тип договора:</label>
                         <select required class="form-control" name="contract_type_id" ng-model="newEmploymentOrderForm.contract_type_id" ng-options="contractType.id as contractType.name for contractType in contractTypes" required>
                             <option value="">Выберите ...</option>
                         </select>

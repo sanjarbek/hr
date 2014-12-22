@@ -11,26 +11,29 @@ VALUES ('Филиал', TRUE),
   ('Должность', FALSE);
 
 CREATE TABLE structures (
-  id             SERIAL PRIMARY KEY,
-  parent_id      INTEGER,
-  name           TEXT NOT NULL,
-  fullname       TEXT,
-  salary         NUMERIC DEFAULT 0,
-  bonus          NUMERIC DEFAULT 0,
-  structure_type INT,
-  position_type  INT,
-  status         SMALLINT
+  id                  SERIAL PRIMARY KEY,
+  parent_id           INTEGER,
+  name                TEXT NOT NULL,
+  fullname            TEXT,
+  salary              NUMERIC DEFAULT 0,
+  coefficient         NUMERIC DEFAULT 0,
+  structure_type      INT,
+  position_type       INT,
+  employment_order_id BIGINT,
+  status              SMALLINT
 );
-INSERT INTO structures (parent_id, name, fullname, salary, bonus, structure_type, position_type, status)
+INSERT INTO structures (parent_id, name, fullname, salary, coefficient, structure_type, position_type, status)
 VALUES (NULL, 'Головной', 'Головной филиал', 0, 0, 1, NULL, 1),
-  (NULL, 'Филиал Берекет', 'Филиал Берекет', 0, 0, 1, NULL, 1),
-  (NULL, 'Ошский филиал', 'Ошский филиал', 0, 0, 1, NULL, 1),
-  (NULL, 'Джалалабадский филиал', 'Джалалабадский филиал', 0, 0, 1, NULL, 1),
-  (NULL, 'Талаский филиал', 'Талаский филиал', 0, 0, 1, NULL, 1),
-  (NULL, 'Нарынский филиал', 'Нарынский филиал', 0, 0, 1, NULL, 1),
-  (NULL, 'Кочкорский филиал', 'Кочкорский филиал', 0, 0, 1, NULL, 1),
-  (NULL, 'Чолпонатинский филиал', 'Чолпонатинский филиал', 0, 0, 1, NULL, 1),
-  (NULL, 'Каракольский филиал', 'Каракольский филиал', 0, 0, 1, NULL, 1);
+(NULL, 'Филиал Берекет', 'Филиал Берекет', 0, 0, 1, NULL, 1),
+(NULL, 'Ошский филиал', 'Ошский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Джалалабадский филиал', 'Джалалабадский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Талаский филиал', 'Талаский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Токмокский филиал', 'Токмокский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Карабалтинский филиал', 'Карабалтинский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Нарынский филиал', 'Нарынский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Кочкорский филиал', 'Кочкорский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Чолпонатинский филиал', 'Чолпонатинский филиал', 0, 0, 1, NULL, 1),
+(NULL, 'Каракольский филиал', 'Каракольский филиал', 0, 0, 1, NULL, 1);
 
 # -- !Downs
 DROP TABLE IF EXISTS structures CASCADE;

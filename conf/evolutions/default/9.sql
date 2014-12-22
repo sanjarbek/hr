@@ -7,8 +7,10 @@ CREATE TABLE contract_types (
 );
 
 INSERT INTO contract_types (name, file_path)
-VALUES ('Штатный', 'work_contract_unlimited'),
-  ('Внештатный', 'work_contract_limited');
+VALUES ('На неопределенный срок (с испытательным)', './uploaded/documents/work_contract_unlimited.doc'),
+  ('На неопределенный срок (без испытательного)', './uploaded/documents/work_contract_unlimited.doc'),
+  ('На определенный срок (с испытательным)', './uploaded/documents/work_contract_limited.doc'),
+  ('На определенный срок (без испытательного)', './uploaded/documents/work_contract_limited.doc');
 
 # -- !Downs
 DROP TABLE IF EXISTS contract_types;

@@ -130,7 +130,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     id: 0,
                     employee_id: null,
                     order_type_id: 1,
-                    contract_number: 0,
                     end_date: null,
                     close_date: null,
                     created_at: '2014-01-01 00:00:00',
@@ -300,7 +299,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return LeavingReasonService.list();
                 }
             },
-            controller: function ($scope, $modal, $log, DismissalOrderService, employeesData, leavingReasonsData) {
+            controller: function ($scope, $modal, $log, EmployeeService, DismissalOrderService, employeesData, leavingReasonsData) {
 
                 $scope.title = 'Новый приказ увольнения';
 
@@ -310,6 +309,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.newDismissalOrderForm = {
                     id: 0,
                     employee_id: null,
+                    position_id: null,
                     order_type_id: 1,
                     end_date: null,
                     close_date: null,
@@ -322,6 +322,14 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.selectAction = function () {
                     $scope.saveDismissalOrderForm();
                 }
+
+                $scope.onSelect = function ($item, $model, $label) {
+
+                    EmployeeService.getPosition($item.id).then(function (result) {
+                        $scope.newDismissalOrderForm.position_id = result.id;
+                        $scope.position_name = result.name;
+                    });
+                };
 
                 $scope.saveDismissalOrderForm = function () {
                     $scope.newDismissalOrderForm.employee_id = $scope.selected.id;

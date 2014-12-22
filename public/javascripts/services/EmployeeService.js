@@ -3,7 +3,6 @@ angular.module('app').service('EmployeeService', function ($http, $state) {
     this.save = function (employee) {
         $http.post('/employees/save', employee)
             .success(function (employee) {
-                console.log(employee)
                 $state.go('panel.employees.detail', {employeeId: employee.id});
             });
     }
@@ -30,6 +29,12 @@ angular.module('app').service('EmployeeService', function ($http, $state) {
 
     this.employedList = function () {
         return $http.get('/employees/json/list', {params: {'status': true}}).then(function (result) {
+            return result.data;
+        });
+    }
+
+    this.getPosition = function (id) {
+        return $http.get('/employees/json/position', {params: {'id': id}}).then(function (result) {
             return result.data;
         });
     }

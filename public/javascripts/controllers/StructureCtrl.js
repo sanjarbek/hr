@@ -1,4 +1,4 @@
-angular.module('app').controller('StructureCtrl', function ($scope, structuresData, StructureService, FunctionsService, structureTypesData, positionTypesData) {
+angular.module('app').controller('StructureCtrl', function ($scope, $modal, $log, structuresData, StructureService, FunctionsService, structureTypesData, positionTypesData) {
     $scope.dataForTheTree = FunctionsService.getTree(structuresData, 'id', 'parent_id');
     $scope.position_types = positionTypesData;
     $scope.structure_types = structureTypesData;
@@ -35,7 +35,7 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
             name: null,
             fullname: null,
             salary: 0,
-            bonus: 0,
+            coefficient: 0,
             structure_type: null,
             position_type: null,
             status: null
@@ -46,6 +46,7 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
         console.log($scope.newStructureForm);
 
         $scope.newStructureForm.id = 0;
+        $scope.newStructureForm.employment_order_id = null;
 
         if ($scope.parentStructure != null)
             $scope.newStructureForm.parent_id = $scope.parentStructure.id;
@@ -120,4 +121,41 @@ angular.module('app').controller('StructureCtrl', function ($scope, structuresDa
         }
     };
 
+    $scope.openPositionTypeModal = function (size) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'positionTypeModalContent.html',
+            controller: 'ModalPositionTypeController',
+            size: size
+        });
+
+        modalInstance.result.then(function (result) {
+            console.log(result.data);
+            $scope.position_types.push(result.data);
+        }, function () {
+            console.info('Modal dismissed at: ' + new Date());
+        });
+    }
+
+});
+
+
+angular.module('app').controller('ModalPositionTypeController', function ($scope, $modalInstance, PositionCategoryService) {
+
+    $scope.newPositionTypeForm = {
+        id: 0,
+        name: null
+    };
+
+    $scope.savePositionType = function () {
+        $scope.ok(PositionCategoryService.save($scope.newPositionTypeForm));
+    }
+
+    $scope.ok = function (result) {
+        $modalInstance.close(result);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
 });

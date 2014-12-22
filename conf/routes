@@ -27,6 +27,7 @@ GET           /employees/show                         controllers.Employees.show
 GET           /employees/edit                         controllers.Employees.edit
 POST          /employees/save                         controllers.Employees.save
 PUT           /employees/update                       controllers.Employees.update
+GET           /employees/json/position                controllers.Employees.position(id: Long)
 
 GET           /employees/json/family                  controllers.Relationships.jsonEmployeeFamily(employeeId: Long)
 GET           /employees/json/passports               controllers.Passports.jsonEmployeePassport(employeeId: Long)
@@ -130,6 +131,7 @@ GET           /orders/generate                        controllers.Orders.generat
 GET           /orders/json/listByName                 controllers.Orders.tagsList(query: String)
 GET           /orders/employment/list                 controllers.Orders.listEmployment
 GET           /orders/employment/order                controllers.Orders.getEmploymentOrderDocument(employmentOrderId: Long)
+GET           /orders/employment/contract             controllers.Orders.getEmploymentOrderContract(employmentOrderId: Long)
 GET           /orders/employment/create               controllers.Orders.createEmployment
 GET           /orders/employment/json/list            controllers.Orders.jsonEmploymentList
 POST          /orders/employment/save                 controllers.Orders.saveEmployment

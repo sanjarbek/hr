@@ -1,7 +1,8 @@
 package controllers
 
+import java.text.SimpleDateFormat
 import java.time.{LocalDateTime, LocalDate}
-import java.util.Date
+import java.util.{Calendar, Date}
 
 import org.apache.poi.hwpf.HWPFDocument
 import org.apache.poi.poifs.filesystem.POIFSFileSystem
@@ -18,10 +19,6 @@ import java.io._
 import java.net._
 import play.api.templates.Html
 import models.Database.MyLocalDate
-import java.util.Date
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 trait Orders extends Controller with Security {
 
@@ -68,26 +65,68 @@ trait Orders extends Controller with Security {
   def getEmploymentOrderDocument(employmentOrderId: Long) = Action {
     val fileName = "employment_order.xlsx"
     val filePath = s"./uploaded/documents/$fileName"
-    //    val fs = new FileInputStream(filePath)
-    //    var xlsxFile = new XSSFWorkbook(fs)
-    //
-    //    var file = new File("test.xlsx")
-    //    var out = new FileOutputStream(file)
-    //    xlsxFile.write(out)
-    //    Ok.sendFile(file)
+    val fs = new FileInputStream(new File(filePath))
 
-    //    val file = new java.io.File(filePath)
-    //    val fileContent: Enumerator[Array[Byte]] = Enumerator.fromFile(file)
-    //    SimpleResult(
-    //      header = ResponseHeader(200, Map(CONTENT_LENGTH -> file.length.toString)),
-    //      body = fileContent
-    //    )
+    var xlsxFile = new XSSFWorkbook(fs)
 
-    Ok.sendFile(
-      content = new File(filePath),
-      fileName = _ => "termsOfService.xlsx",
-      inline = true
-    )
+    var file = new File("test.xlsx")
+    var out = new FileOutputStream(file)
+    xlsxFile.write(out)
+    Ok.sendFile(file)
+  }
+
+  def getEmploymentOrderContract(employmentOrderId: Long) = Action {
+    EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
+      ContractType.findById(employmentOrder.contract_type_id).map { contractType =>
+        contractType.file_path match {
+          case Some(filePath) => {
+            Employee.findById(employmentOrder.employee_id).map { employee =>
+              Passport.findEmployeePassport(employee.id).map { passport =>
+                ContactInformation.findEmployeeInformation(employee.id).map { contact_information =>
+                  val fs = new POIFSFileSystem(new FileInputStream(filePath))
+                  var doc = new HWPFDocument(fs)
+                  val dateFormatter = new SimpleDateFormat("dd.MM.yyyy")
+
+                  val position = Structure.findById(employmentOrder.position_id).get
+
+                  val department = Structure.findById(position.parent_id.get).get
+
+                  val keywords = Map(
+                    "$СОТРУДНИК.ИМЯ" -> employee.firstname,
+                    "$СОТРУДНИК.ФАМИЛИЯ" -> employee.surname,
+                    "$СОТРУДНИК.ОТЧЕСТВО" -> employee.lastname,
+                    "$СОТРУДНИК.АДРЕС.РЕГИСТРАЦИИ" -> passport.reg_address,
+                    "$СОТРУДНИК.АДРЕС.ПРОЖИВАНИЯ" -> contact_information.living_address,
+                    "$ПАСПОРТ.СЕРИЯ" -> passport.serial,
+                    "$ПАСПОРТ.ДАТА.ВЫДАЧИ" -> (dateFormatter.format(passport.open_date).toString + " г."),
+                    "$ПАСПОРТ.ДАТА.ОКОНЧАНИЯ" -> (dateFormatter.format(passport.end_date).toString + " г."),
+                    "$ДОГОВОР.ДАТА.НАЧАЛА" -> (dateFormatter.format(employmentOrder.start_date).toString),
+                    "$ДОГОВОР.ДАТА.КОНЕЦ" -> "",
+                    "$РУКОВОДИТЕЛЬ.ФИО" -> "Бапа уулу Кубанычбек",
+                    "$РУКОВОДИТЕЛЬ.ДОЛЖНОСТЬ" -> "Председатель правления",
+                    "$СОТРУДНИК.ДОЛЖНОСТЬ" -> position.fullname,
+                    "$СОТРУДНИК.ОТДЕЛ" -> department.fullname
+                  )
+                  keywords.foreach {
+                    case (key, value) => doc.getRange().replaceText(key, value)
+                  }
+                  //    saveWord(filePath, doc)
+                  var file = new File("test.doc")
+                  var out = new FileOutputStream(file)
+                  doc.write(out)
+                  Ok.sendFile(file)
+                }.getOrElse(NotFound(s"Не указаные контактные данные сотрудника ${employee.surname} ${employee.firstname}."))
+              }.getOrElse(NotFound(s"Для сотрудника ${employee.surname} ${employee.firstname} не указаны паспортные данные."))
+            }.getOrElse(NotFound("Указанный в данном приказе сотрудник не найден в базе."))
+          }
+          case _ => NotFound("Не указан путь к файлу шаблона, данного типа договора.")
+        }
+      }.getOrElse(NotFound("В данном приказе не указан тип договора."))
+    }.getOrElse(NotFound("Не найдент такой приказ."))
+
+    //    val fileName = "contract_stajer.doc"
+    //    val filePath = s"./uploaded/documents/$fileName"
+
   }
 
   def comet = Action {

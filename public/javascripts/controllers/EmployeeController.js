@@ -1,4 +1,4 @@
-angular.module('app').controller('EmployeeController', function ($scope, EmployeeService, ngTableParams, employeesData, contractsData, structuresData) {
+angular.module('app').controller('EmployeeController', function ($scope, EmployeeService, employeesData, structuresData) {
 
     $scope.employees = employeesData;
     $scope.structures = structuresData;
@@ -12,8 +12,6 @@ angular.module('app').controller('EmployeeController', function ($scope, Employe
     }
 
     $scope.searchedOffice = {id: 1, name: 'test'};
-
-    $scope.contracts = contractsData;
 
     $scope.officeChildrens = [];
 
@@ -49,17 +47,6 @@ angular.module('app').controller('EmployeeController', function ($scope, Employe
         }
         return false;
     }
-
-    $scope.employeeTableParams = new ngTableParams({
-        page: 1,            // show first page
-        count: 10           // count per page
-    }, {
-        total: $scope.employees.length, // length of data
-        getData: function ($defer, params) {
-            $defer.resolve($scope.employees.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-    });
-
 });
 
 angular.module('app').directive('stringToTimestamp', function () {

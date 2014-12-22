@@ -70,7 +70,9 @@
                             <label for="structure_type" class="col-sm-5 col-md-4 control-label">Тип</label>
                             <div class="col-sm-7">
                                 <select class="form-control" name="structure_type" ng-model="newStructureForm.structure_type"
-                                ng-options="structure_item.id as structure_item.name for structure_item in structure_types"></select>
+                                ng-options="structure_item.id as structure_item.name for structure_item in structure_types">
+                                    <option value="">Выберите ...</option>
+                                </select>
                             </div>
                             <span class="help-inline"></span>
                         </div>
@@ -81,18 +83,25 @@
                             </div>
                             <span class="help-inline"></span>
                         </div>
-                        <div class="form-group form-group-sm" ng-show="newStructureForm.structure_type==4">
-                            <label for="bonus" class="col-sm-5 col-md-4 control-label">Премия</label>
+                        <div class="form-group form-group-sm" ng-show="newStructureForm.structure_type==1 || newStructureForm.structure_type==2 ">
+                            <label for="coefficient" class="col-sm-5 col-md-4 control-label">Районный коэффициент</label>
                             <div class="col-sm-7">
-                                <input class="form-control" type="number" min="0" value="0" name="bonus" ng-model="newStructureForm.bonus"/>
+                                <input class="form-control" type="number" min="0" value="0" name="coefficient" ng-model="newStructureForm.coefficient"/>
                             </div>
                             <span class="help-inline"></span>
                         </div>
                         <div class="form-group form-group-sm" ng-show="newStructureForm.structure_type==4">
                             <label for="position_type" class="col-sm-5 col-md-4 control-label">Категория должности</label>
                             <div class="col-sm-7">
-                                <select class="form-control" name="position_type" ng-model="newStructureForm.position_type"
-                                ng-options="position.id as position.name for position in position_types"></select>
+                                <div class="input-group">
+                                    <select class="form-control" name="position_type" ng-model="newStructureForm.position_type"
+                                    ng-options="position.id as position.name for position in position_types">
+                                        <option value="">Выберите ...</option>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-add" ng-click="openPositionTypeModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                                    </span>
+                                </div>
                             </div>
                             <span class="help-inline"></span>
                         </div>
@@ -112,3 +121,23 @@
     </div>
 </div>
 
+
+<script type="text/ng-template" id="positionTypeModalContent.html">
+<div class="modal-header">
+<h4 class="modal-title">Новая категория должности</h4>
+</div>
+<form name="positionTypeForm" class="form-horizontal" novalidate>
+<div class="modal-body">
+<div class="form-group">
+<div class="col-sm-12 col-md-12 col-lg-12">
+<label for="name" class="control-label">Название категории:</label>
+<input required class="form-control" type="text" ng-model="newPositionTypeForm.name"/>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button ng-disabled="!positionTypeForm.$valid" class="btn btn-primary" ng-click="savePositionType()">Создать</button>
+<button class="btn btn-default" ng-click="cancel()">Отменить</button>
+</div>
+</form>
+</script>

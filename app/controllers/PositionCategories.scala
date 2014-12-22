@@ -23,8 +23,8 @@ object PositionCategories extends Controller {
     val positionCategoryJson = request.body
     positionCategoryJson.validate[PositionType].fold(
       valid = { positionCategory =>
-        PositionType.insert(positionCategory)
-        Ok("Saved")
+        val pc = PositionType.insert(positionCategory)
+        Ok(Json.toJson(pc))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))

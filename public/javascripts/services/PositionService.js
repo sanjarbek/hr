@@ -18,9 +18,9 @@ angular.module('app').service('PositionService', function ($http) {
 angular.module('app').service('PositionCategoryService', function ($http) {
 
     this.save = function (position_category) {
-        $http.post('/position_categories/save', position_category)
+        return $http.post('/position_categories/save', position_category)
             .success(function (result) {
-                console.log(result);
+                return result;
             });
     }
 

@@ -83,4 +83,10 @@ object Employees extends Controller {
     Ok(Json.toJson(employees))
   }
 
+  def position(id: Long) = Action {
+    Employee.getPosition(id).map { order =>
+      Ok(Json.toJson(order))
+    }.getOrElse(NotFound(Json.toJson("NotFound")))
+  }
+
 }

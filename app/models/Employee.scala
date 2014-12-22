@@ -118,6 +118,16 @@ object Employee {
     }.toList
   }
 
+  def getPosition(id: Long) = inTransaction {
+    //    org.squeryl.Session.currentSession.setLogger( s => println(s) )
+    from(employeeTable, Database.employmentOrderTable, Database.structureTable) {
+      (employee, employmentOrder, structure) =>
+        where(employee.id === id
+          and employee.employmentOrderId === employmentOrder.id
+          and employmentOrder.position_id === structure.id) select (structure)
+    }.headOption
+  }
+
 }
 
 

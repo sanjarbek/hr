@@ -14,6 +14,7 @@ case class DismissalOrder(
                            order_type_id: Int,
                            date_of_order: Date,
                            leaving_reason_id: Int,
+                           position_id: Int,
                            employee_id: Long,
                            comment: String,
                            leaving_date: Date,
@@ -42,6 +43,7 @@ object DismissalOrder {
       (JsPath \ "order_type_id").write[Int] and
       (JsPath \ "date_of_order").write[Date] and
       (JsPath \ "leaving_reason_id").write[Int] and
+      (JsPath \ "position_id").write[Int] and
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "comment").write[String] and
       (JsPath \ "leaving_date").write[Date] and
@@ -54,6 +56,7 @@ object DismissalOrder {
       (JsPath \ "order_type_id").read[Int] and
       (JsPath \ "date_of_order").read[Date] and
       (JsPath \ "leaving_reason_id").read[Int] and
+      (JsPath \ "position_id").read[Int] and
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "comment").read[String] and
       (JsPath \ "leaving_date").read[Date] and
@@ -76,11 +79,10 @@ object DismissalOrder {
   }
 
   def findFull = inTransaction {
-    from(dismissalOrderTable, employeeTable, positionTable, structureTable) {
-      (dismissalOrder, employee, position, structure) =>
-        where(dismissalOrder.id === position.dismissal_order_id
-          and (employee.id === dismissalOrder.employee_id)
-          and (position.position_id === structure.id)) select(dismissalOrder, employee, structure)
+    from(dismissalOrderTable, employeeTable, structureTable) {
+      (dismissalOrder, employee, structure) =>
+        where((employee.id === dismissalOrder.employee_id)
+          and (dismissalOrder.position_id === structure.id)) select(dismissalOrder, employee, structure)
     }.toList
   }
 }
