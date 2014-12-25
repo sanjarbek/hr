@@ -19,7 +19,7 @@ CREATE TABLE structures (
   coefficient         NUMERIC DEFAULT 0,
   structure_type      INT,
   position_type       INT,
-  employment_order_id BIGINT,
+  position_history_id BIGINT,
   status              SMALLINT
 );
 INSERT INTO structures (parent_id, name, fullname, salary, coefficient, structure_type, position_type, status)

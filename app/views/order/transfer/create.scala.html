@@ -2,26 +2,26 @@
     <div class="panel-heading">
         <label><h4 class="panel-title">{{ title }}</h4></label>
         <div class="pull-right">
-            <button ng-disabled="!employmentOrderForm.$valid" ng-click="selectAction()" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-floppy-saved"></span>
+            <button ng-disabled="!transferOrderForm.$valid" ng-click="selectAction()" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-floppy-saved"></span>
                 Сохранить</button>
-            <button ng-click="$state.go('panel.orders.employmentOrders.list')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-step-backward"></span>
+            <button ng-click="$state.go('panel.orders.transferOrders.list')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-step-backward"></span>
                 Назад</button>
         </div>
         <div class="clearfix"></div>
     </div>
     <div class="panel-body">
-        <form class="form-horizontal" name="employmentOrderForm" novalidate>
+        <form class="form-horizontal" name="transferOrderForm" novalidate>
             <fieldset>
                 <div class="form-group">
                     <div class="col-sm-3 col-md-3 col-lg-3">
                         <label for="date_of_order" class="control-label">Дата приказа:</label>
-                        <input class="form-control" type="date" name="date_of_order" ng-model="newEmploymentOrderForm.date_of_order" required />
+                        <input class="form-control" type="date" name="date_of_order" ng-model="newTransferOrderForm.date_of_order" required />
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
 
                         <label for="tempPosition" class="control-label">Должность:</label>
                         <div class="input-group">
-                            <input class="form-control" type="hidden" name="position_id" ng-model="newEmploymentOrderForm.position_id" required />
+                            <input class="form-control" type="hidden" name="position_id" ng-model="newTransferOrderForm.position_id" required />
                             <input readonly class="form-control" type="text" name="tempPosition" ng-model="tempPosition" required />
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-add" ng-click="openPositionModal()" type="button"><span class="glyphicon glyphicon-list"></span></button>
@@ -30,53 +30,51 @@
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
                         <label for="employee_id" class="control-label">Сотрудник:</label>
-                        <input type="text" ng-model="selected" typeahead-editable=false typeahead="employee as (employee.surname + ' ' + employee.firstname + ' ' + employee.lastname) for employee in employees | filter:$viewValue | limitTo:8"
+                        <input type="text" ng-model="selected" typeahead-editable=false typeahead="employee as (employee.surname + ' ' + employee.firstname + ' ' + employee.lastname) for employee in employees | filter:$viewValue | limitTo:15"
                         class="form-control">
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
                         <label for="salary" class="control-label">Оклад:</label>
-                        <input class="form-control" type="number" name="salary" ng-model="newEmploymentOrderForm.salary" required />
+                        <input class="form-control" type="number" name="salary" ng-model="newTransferOrderForm.salary" required />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-lg-3 col-md-3 col-sm-3 ">
                         <label for="contract_number" class="control-label">№ договора:</label>
-                        <input class="form-control" type="number" name="contract_number" ng-model="newEmploymentOrderForm.contract_number" required />
+                        <input class="form-control" type="number" name="contract_number" ng-model="newTransferOrderForm.contract_number" required />
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
                         <label for="contract_type_id" class="control-label">Тип договора:</label>
-                        <select required class="form-control" name="contract_type_id" ng-model="newEmploymentOrderForm.contract_type_id" ng-options="contractType.id as contractType.name for contractType in contractTypes" required>
+                        <select required class="form-control" name="contract_type_id" ng-model="newTransferOrderForm.contract_type_id" ng-options="contractType.id as contractType.name for contractType in contractTypes" required>
+                            <option value="">Выберите ...</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="calendar_type_id" class="control-label">Вид графика:</label>
+                        <select required class="form-control" name="calendar_type_id" ng-model="newTransferOrderForm.calendar_type_id" ng-options="calendarType.id as calendarType.name for calendarType in calendarTypes" required>
                             <option value="">Выберите ...</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 ">
                         <label for="start_date" class="control-label">Дата начала договора:</label>
-                        <input class="form-control" type="date" name="start_date" ng-model="newEmploymentOrderForm.start_date" required />
+                        <input class="form-control" type="date" name="start_date" ng-model="newTransferOrderForm.start_date" required />
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 ">
                         <label for="end_date" class="control-label">Дата окончания договора:</label>
-                        <input class="form-control" type="date" name="end_date" ng-model="newEmploymentOrderForm.end_date" />
+                        <input class="form-control" type="date" name="end_date" ng-model="newTransferOrderForm.end_date" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-3 col-md-3 col-lg-3">
-                        <label for="calendar_type_id" class="control-label">Вид графика:</label>
-                        <select required class="form-control" name="calendar_type_id" ng-model="newEmploymentOrderForm.calendar_type_id" ng-options="calendarType.id as calendarType.name for calendarType in calendarTypes" required>
-                            <option value="">Выберите ...</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3">
-                        <label for="trial_period" class="control-label">Испытательный срок:</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="checkbox" name="trial_period" ng-model="trial_period" ng-change="trialPeriodChanged()" />
-                            </span>
-                            <input ng-disabled="!trial_period" class="form-control" type="date" name="trial_period_start" ng-model="newEmploymentOrderForm.trial_period_start" />
-                            <input ng-disabled="!trial_period" class="form-control" type="date" name="trial_period_end" ng-model="newEmploymentOrderForm.trial_period_end" />
-                        </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 ">
+                        <label for="trial_period_start" class="control-label">Начала испытательного срока:</label>
+                        <input class="form-control" type="date" name="trial_period_start" ng-model="newTransferOrderForm.trial_period_start" />
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 ">
-                        <input type="checkbox" name="is_combined_work" ng-model="newEmploymentOrderForm.is_combined_work" />
+                        <label for="trial_period_end" class="control-label">Конец испытательного срока:</label>
+                        <input class="form-control" type="date" name="trial_period_end" ng-model="newTransferOrderForm.trial_period_end" />
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 ">
+                        <input type="checkbox" name="is_combined_work" ng-model="newTransferOrderForm.is_combined_work" />
                         <label for="is_combined_work" class="control-label">По совместительству</label>
                     </div>
                 </div>

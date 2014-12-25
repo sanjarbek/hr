@@ -2,11 +2,12 @@ package controllers
 
 import java.text.SimpleDateFormat
 import java.time.{LocalDateTime, LocalDate}
-import java.util.{Calendar, Date}
+import java.util.{UUID, Calendar, Date}
 
 import org.apache.poi.hwpf.HWPFDocument
 import org.apache.poi.poifs.filesystem.POIFSFileSystem
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.joda.time.Instant
 import play.api._
 import play.api.libs.iteratee.Enumerator
@@ -19,6 +20,7 @@ import java.io._
 import java.net._
 import play.api.templates.Html
 import models.Database.MyLocalDate
+
 
 trait Orders extends Controller with Security {
 
@@ -63,16 +65,57 @@ trait Orders extends Controller with Security {
   }
 
   def getEmploymentOrderDocument(employmentOrderId: Long) = Action {
-    val fileName = "employment_order.xlsx"
-    val filePath = s"./uploaded/documents/$fileName"
-    val fs = new FileInputStream(new File(filePath))
 
-    var xlsxFile = new XSSFWorkbook(fs)
+    EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
+      ContractType.findById(employmentOrder.contract_type_id).map { contractType =>
+        contractType.file_path match {
+          case Some(filePath) => {
+            Employee.findById(employmentOrder.employee_id).map { employee =>
+              val fileName = "testx.doc"
+              val filePath = s"./uploaded/documents/$fileName"
+              val fs = new POIFSFileSystem(new FileInputStream(filePath))
+              var docx = new HWPFDocument(fs)
+              val dateFormatter = new SimpleDateFormat("dd.MM.yyyy")
 
-    var file = new File("test.xlsx")
-    var out = new FileOutputStream(file)
-    xlsxFile.write(out)
-    Ok.sendFile(file)
+              val position = Structure.findById(employmentOrder.position_id).get
+
+              val department = Structure.findById(position.parent_id.get).get
+
+              val current_date = Instant.now().toDate
+              val trial_start = employmentOrder.trial_period_start.getOrElse(current_date)
+              val trial_end = employmentOrder.trial_period_end.getOrElse(current_date)
+              val trial_period = (trial_end.getTime - trial_start.getTime) / (1000 * 60 * 60 * 24) / 28
+
+              val keywords = Map(
+                "<Работник>" -> s"${employee.surname} ${employee.firstname} ${employee.lastname}",
+                "<Подразделение>" -> department.name,
+                "<Должность>" -> position.name,
+                "<Условия приема на работу>" -> contractType.name,
+                "<Испытательный cрок>" -> "",
+                "<Трудовой договор дата>" -> (dateFormatter.format(employmentOrder.start_date).toString),
+                "<Трудовой договор номер>" -> employmentOrder.contract_number.toString,
+                "<ФИО Руководителя>" -> "Бапа уулу Кубанычбек",
+                "<Табельный номер>" -> employee.id.toString,
+                "<Испытательный cрок>" -> trial_period.toString,
+                //                "<Дата окончания>" -> (dateFormatter.format(employmentOrder.end_date.get).toString),
+                "<Дата приема>" -> (dateFormatter.format(employmentOrder.start_date).toString),
+                "<Номер документа>" -> employmentOrder.id.toString,
+                "<Дата документа>" -> (dateFormatter.format(employmentOrder.date_of_order).toString)
+              )
+              keywords.foreach {
+                case (key, value) => docx.getRange().replaceText(key, value)
+              }
+
+              var file = new File("tmp/" + UUID.randomUUID().toString + ".doc")
+              var out = new FileOutputStream(file)
+              docx.write(out)
+              Ok.sendFile(file)
+            }.getOrElse(NotFound("Указанный в данном приказе сотрудник не найден в базе."))
+          }
+          case _ => NotFound("Не указан путь к файлу шаблона, данного типа договора.")
+        }
+      }.getOrElse(NotFound("В данном приказе не указан тип договора."))
+    }.getOrElse(NotFound("Не найдент приказ с таким номером."))
   }
 
   def getEmploymentOrderContract(employmentOrderId: Long) = Action {
@@ -123,10 +166,6 @@ trait Orders extends Controller with Security {
         }
       }.getOrElse(NotFound("В данном приказе не указан тип договора."))
     }.getOrElse(NotFound("Не найдент такой приказ."))
-
-    //    val fileName = "contract_stajer.doc"
-    //    val filePath = s"./uploaded/documents/$fileName"
-
   }
 
   def comet = Action {
@@ -143,8 +182,7 @@ trait Orders extends Controller with Security {
     orderJson.validate[EmploymentOrder].fold(
       valid = { order =>
         val newOrder = order.save
-        val position = Position(0, newOrder.id, newOrder.position_id, newOrder.employee_id, None,
-          newOrder.start_date, newOrder.end_date, newOrder.close_date, null, null).save
+
         Ok(Json.toJson(newOrder))
       },
       invalid = { errors =>
@@ -161,7 +199,7 @@ trait Orders extends Controller with Security {
           Position.findByEmploymentOrderId(new_order.id).map { position =>
             position.copy(position_id = new_order.position_id,
               employee_id = new_order.employee_id, start_date = new_order.start_date,
-              end_date = new_order.end_date, close_date = new_order.close_date
+              end_date = new_order.end_date
             ).update
           }
           Ok(Json.toJson(new_order))
@@ -215,7 +253,7 @@ trait Orders extends Controller with Security {
         Position.findByEmployeeId(newOrder.employee_id).reduceLeftOption {
           (maxElement, element) => if (maxElement.start_date.after(element.start_date)) maxElement else element
         } match {
-          case Some(position) => position.copy(end_date = Some(newOrder.leaving_date), dismissal_order_id = Some(newOrder.id)).update
+          case Some(position) => position.copy(close_date = Some(newOrder.leaving_date), dismissal_order_id = Some(newOrder.id)).update
           case None => Logger.info("Сотрудник и так не принят на работу.")
         }
         Ok(Json.toJson(newOrder))
@@ -260,6 +298,71 @@ trait Orders extends Controller with Security {
       }
     )
   }
+
+
+  def createTransfer = Action { implicit request =>
+    Ok(views.html.order.transfer.create())
+  }
+
+  def listTransfer = Action { implicit request =>
+    Ok(views.html.order.transfer.list())
+  }
+
+  def jsonTransferList() = Action { implicit request =>
+    case class TransferOrderFull(order: TransferOrder, employee: Employee, calendarType: CalendarType, contractType: ContractType, position: Structure)
+    implicit val testWrites: Writes[TransferOrderFull] = (
+      (JsPath \ "order").write[TransferOrder] and
+        (JsPath \ "employee").write[Employee] and
+        (JsPath \ "calendarType").write[CalendarType] and
+        (JsPath \ "contractType").write[ContractType] and
+        (JsPath \ "position").write[Structure]
+      )(unlift(TransferOrderFull.unapply))
+
+    implicit val testReads: Reads[TransferOrderFull] = (
+      (JsPath \ "order").read[TransferOrder] and
+        (JsPath \ "employee").read[Employee] and
+        (JsPath \ "calendarType").read[CalendarType] and
+        (JsPath \ "contractType").read[ContractType] and
+        (JsPath \ "position").read[Structure]
+      )(TransferOrderFull.apply _)
+
+    val employees = TransferOrder.findFull.map { order => Json.toJson(TransferOrderFull(order._1, order._2, order._3, order._4, order._5))}
+    Ok(Json.toJson(employees))
+  }
+
+
+  def saveTransfer = Action(parse.json) { implicit request =>
+    val orderJson = request.body
+    orderJson.validate[TransferOrder].fold(
+      valid = { order =>
+        Ok(Json.toJson(order.save))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
+  def updateTransfer = Action(parse.json) { implicit request =>
+    val orderJson = request.body
+    orderJson.validate[TransferOrder].fold(
+      valid = { order =>
+        order.update.map { new_order =>
+          //          Position.findByTransferOrderId(new_order.id).map { position =>
+          //            position.copy(position_id = new_order.position_id,
+          //              employee_id = new_order.employee_id, start_date = new_order.start_date,
+          //              end_date = new_order.end_date, close_date = new_order.close_date
+          //            ).update
+          //          }
+          Ok(Json.toJson(new_order))
+        }.getOrElse(NotFound(Json.toJson("Не найден")))
+      },
+      invalid = { errors =>
+        BadRequest(JsError.toFlatJson(errors))
+      }
+    )
+  }
+
 
   def tabTemplate = Action {
     Ok(views.html.order.tabTemplate())

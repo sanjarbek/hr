@@ -34,7 +34,7 @@ CREATE TABLE employees (
   sex                    BOOLEAN   NOT NULL,
   relationship_status_id INTEGER REFERENCES relationship_statuses,
   nationality_id         INTEGER REFERENCES nationalities,
-  employment_order_id    BIGINT,
+  position_history_id    BIGINT,
   created_at             TIMESTAMP NOT NULL,
   updated_at             TIMESTAMP NOT NULL
 );

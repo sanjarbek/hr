@@ -15,10 +15,11 @@ import collection.Iterable
 
 case class Position(
                      id: Long,
-                     employment_order_id: Long,
+                     employment_order_id: Option[Long],
                      position_id: Int,
                      employee_id: Long,
                      dismissal_order_id: Option[Long],
+                     transfer_order_id: Option[Long],
                      start_date: Date,
                      end_date: Option[Date],
                      close_date: Option[Date],
@@ -43,10 +44,11 @@ object Position {
 
   implicit val positionWrites: Writes[Position] = (
     (JsPath \ "id").write[Long] and
-      (JsPath \ "employment_order_id").write[Long] and
+      (JsPath \ "employment_order_id").write[Option[Long]] and
       (JsPath \ "position_id").write[Int] and
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "dismissal_order_id").write[Option[Long]] and
+      (JsPath \ "transfer_order_id").write[Option[Long]] and
       (JsPath \ "start_date").write[Date] and
       (JsPath \ "end_date").write[Option[Date]] and
       (JsPath \ "close_date").write[Option[Date]] and
@@ -56,10 +58,11 @@ object Position {
 
   implicit val positionReads: Reads[Position] = (
     (JsPath \ "id").read[Long] and
-      (JsPath \ "employment_order_id").read[Long] and
+      (JsPath \ "employment_order_id").read[Option[Long]] and
       (JsPath \ "position_id").read[Int] and
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "dismissal_order_id").read[Option[Long]] and
+      (JsPath \ "transfer_order_id").read[Option[Long]] and
       (JsPath \ "start_date").read[Date] and
       (JsPath \ "end_date").read[Option[Date]] and
       (JsPath \ "close_date").read[Option[Date]] and
@@ -96,6 +99,18 @@ object Position {
   def findByDismissalOrderId(dismissalOrderId: Long) = inTransaction {
     from(positionTable) {
       position => where(position.dismissal_order_id === dismissalOrderId) select (position)
+    }.headOption
+  }
+
+  def findByTransferEmploymentOrderId(transferOrderId: Long) = inTransaction {
+    from(positionTable) { position =>
+      where(position.transfer_order_id === transferOrderId and position.employment_order_id.isNull) select (position)
+    }.headOption
+  }
+
+  def findByTransferDismissalOrderId(transferOrderId: Long) = inTransaction {
+    from(positionTable) { position =>
+      where(position.transfer_order_id === transferOrderId and position.dismissal_order_id.isNull) select (position)
     }.headOption
   }
 

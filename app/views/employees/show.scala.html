@@ -30,8 +30,8 @@
                     <a ui-sref='panel.employees.detail.passports.show' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.passports')}">Паспортные данные</a>
                     <a ui-sref='panel.employees.detail.educations.list' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.educations')}">Образование</a>
                     <a ui-sref='panel.employees.detail.seminar.list' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.seminar')}">Сертификаты</a>
-                    <a ui-sref='panel.employees.detail.contract.list' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.contract')}">Договора</a>
-                    <a href="#" class="list-group-item" ui-sref-active="active">Штатный табель</a>
+                    @*<a ui-sref='panel.employees.detail.contract.list' class="list-group-item" ng-class="{active: $state.includes('panel.employees.detail.contract')}">Договора</a>*@
+                    @*<a href="#" class="list-group-item" ui-sref-active="active">Штатный табель</a>*@
                 </div>
             </div>
         </div>
@@ -103,7 +103,7 @@
                                         <select required class="form-control" name="relationshipStatus" ng-model="newEmployeeForm.relationshipStatus"
                                         ng-options="relationshipStatus.id as relationshipStatus.name for relationshipStatus in relationshipStatuses"
                                         required>
-                                        <option value="">Выберите ...</option>
+                                            <option value="">Выберите ...</option>
                                         </select>
                                         <span class="input-group-btn">
                                             <button class="btn btn-default btn-add" ng-click="openRelationshipStatusModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
@@ -116,7 +116,7 @@
                                         <select required class="form-control" name="nationalityId" ng-model="newEmployeeForm.nationalityId"
                                         ng-options="nationality.id as nationality.name for nationality in nationalities"
                                         required>
-                                        <option value="">Выберите ...</option>
+                                            <option value="">Выберите ...</option>
                                         </select>
                                         <span class="input-group-btn">
                                             <button class="btn btn-default btn-add" ng-click="openNationalityModal()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
@@ -132,7 +132,7 @@
                         <button class="btn btn-primary" ng-click="editMode=true" ng-show="!editMode"><span class="glyphicon glyphicon-edit"></span>
                             Редактировать</button>
                         <button ng-disabled="!employeeForm.$valid" class="btn btn-primary" ng-click="editMode=false; updateEmployee()" ng-show="editMode"><span class="glyphicon glyphicon-save"></span>
-                        Сохранить</button>
+                            Сохранить</button>
                         <button class="btn btn-default" ng-click="editMode=false" ng-show="editMode">Отменить</button>
                     </div>
                     <div class="clearfix"></div>

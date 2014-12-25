@@ -3,7 +3,7 @@ package models
 import java.util.Date
 
 import models.Database._
-import org.squeryl.{Query}
+import org.squeryl.{Session, Query}
 import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, JsPath, Writes}
@@ -22,8 +22,19 @@ case class DismissalOrder(
                            override var updated_at: TimeStamp
                            ) extends Entity[Long] {
 
-  override def save = inTransaction {
-    super.save.asInstanceOf[DismissalOrder]
+  override def save = transaction {
+    val dismissalOrder = super.save.asInstanceOf[DismissalOrder]
+    Employee.findById(dismissalOrder.employee_id).map { employee =>
+      Position.findById(employee.positionHistoryId.get).map { position =>
+        Structure.findById(position.position_id).map { structure =>
+          employee.copy(positionHistoryId = None).update
+          structure.copy(positionHistoryId = None).update
+          position.copy(close_date = Some(dismissalOrder.leaving_date),
+            dismissal_order_id = Some(dismissalOrder.id)).update
+        }
+      }
+    }
+    dismissalOrder
   }
 
   def update = inTransaction {

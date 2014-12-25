@@ -37,6 +37,7 @@ angular.module('app').controller('StructureCtrl', function ($scope, $modal, $log
             salary: 0,
             coefficient: 0,
             structure_type: null,
+            positionHistoryId: null,
             position_type: null,
             status: null
         }

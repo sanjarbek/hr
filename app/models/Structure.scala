@@ -3,6 +3,7 @@ package models
 import java.util.Date
 
 import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.annotations.Column
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
 import org.squeryl._
@@ -22,7 +23,7 @@ case class Structure(
                       coefficient: Float,
                       structure_type: Int,
                       position_type: Option[Int],
-                      employment_order_id: Option[Long],
+                      @Column("position_history_id") val positionHistoryId: Option[Long],
                       status: Int
                       ) extends KeyedEntity[Int] {
   def contract: Option[Contract] = {
@@ -43,7 +44,7 @@ object Structure {
       (JsPath \ "coefficient").write[Float] and
       (JsPath \ "structure_type").write[Int] and
       (JsPath \ "position_type").write[Option[Int]] and
-      (JsPath \ "employment_order_id").write[Option[Long]] and
+      (JsPath \ "positionHistoryId").write[Option[Long]] and
       (JsPath \ "status").write[Int]
     )(unlift(Structure.unapply))
 
@@ -56,7 +57,7 @@ object Structure {
       (JsPath \ "coefficient").read[Float] and
       (JsPath \ "structure_type").read[Int] and
       (JsPath \ "position_type").read[Option[Int]] and
-      (JsPath \ "employment_order_id").read[Option[Long]] and
+      (JsPath \ "positionHistoryId").read[Option[Long]] and
       (JsPath \ "status").read[Int]
     )(Structure.apply _)
 
@@ -71,7 +72,7 @@ object Structure {
 
   def findFreePositions = inTransaction {
     from(structureTable)(structure =>
-      where(structure.employment_order_id.isNull) select (structure)
+      where(structure.positionHistoryId.isNull) select (structure) orderBy (structure.id asc)
     ).toList
   }
 

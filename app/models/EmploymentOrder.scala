@@ -18,17 +18,22 @@ case class EmploymentOrder(
                             employee_id: Long,
                             salary: BigDecimal,
                             calendar_type_id: Int,
+                            is_combined_work: Boolean,
                             trial_period_start: Option[Date],
                             trial_period_end: Option[Date],
                             start_date: Date,
                             end_date: Option[Date],
-                            close_date: Option[Date],
                             override var created_at: TimeStamp,
                             override var updated_at: TimeStamp
                             ) extends Entity[Long] {
 
-  override def save = inTransaction {
-    super.save.asInstanceOf[EmploymentOrder]
+  override def save = transaction {
+    val employmentOrder = super.save.asInstanceOf[EmploymentOrder]
+    val position = Position(0, Some(employmentOrder.id), employmentOrder.position_id, employmentOrder.employee_id, None, None,
+      employmentOrder.start_date, employmentOrder.end_date, None, null, null).save
+    Employee.findById(employmentOrder.employee_id).get.copy(positionHistoryId = Some(position.id)).update
+    Structure.update(Structure.findById(employmentOrder.position_id).get.copy(positionHistoryId = Some(position.id)))
+    employmentOrder
   }
 
   def update = inTransaction {
@@ -53,11 +58,11 @@ object EmploymentOrder {
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "salary").write[BigDecimal] and
       (JsPath \ "calendar_type_id").write[Int] and
+      (JsPath \ "is_combined_work").write[Boolean] and
       (JsPath \ "trial_period_start").write[Option[Date]] and
       (JsPath \ "trial_period_end").write[Option[Date]] and
       (JsPath \ "start_date").write[Date] and
       (JsPath \ "end_date").write[Option[Date]] and
-      (JsPath \ "close_date").write[Option[Date]] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(EmploymentOrder.unapply))
@@ -72,11 +77,11 @@ object EmploymentOrder {
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "salary").read[BigDecimal] and
       (JsPath \ "calendar_type_id").read[Int] and
+      (JsPath \ "is_combined_work").read[Boolean] and
       (JsPath \ "trial_period_start").read[Option[Date]] and
       (JsPath \ "trial_period_end").read[Option[Date]] and
       (JsPath \ "start_date").read[Date] and
       (JsPath \ "end_date").read[Option[Date]] and
-      (JsPath \ "close_date").read[Option[Date]] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
     )(EmploymentOrder.apply _)

@@ -58,6 +58,7 @@ INSERT INTO order_types (name, created_at, updated_at) VALUES
   ('Перемещение', localtimestamp, localtimestamp),
   ('Увольнение', localtimestamp, localtimestamp);
 
+
 CREATE TABLE orders (
   id             BIGSERIAL PRIMARY KEY,
   order_type_id INT REFERENCES order_types (id),
@@ -74,11 +75,11 @@ CREATE TABLE employment_orders (
   employee_id        BIGINT,
   salary             NUMERIC(14, 2),
   calendar_type_id   SMALLINT,
+  is_combined_work BOOLEAN DEFAULT FALSE,
   trial_period_start DATE,
   trial_period_end   DATE,
   start_date         DATE,
-  end_date           DATE,
-  close_date      DATE
+  end_date         DATE
 )
   INHERITS (orders);
 
@@ -91,12 +92,28 @@ CREATE TABLE dismissal_orders (
 )
   INHERITS (orders);
 
+CREATE TABLE transfer_orders (
+  position_id        INT,
+  contract_type_id   INT,
+  contract_number    BIGINT UNIQUE NOT NULL,
+  employee_id        BIGINT,
+  salary             NUMERIC(14, 2),
+  calendar_type_id   SMALLINT,
+  is_combined_work   BOOLEAN DEFAULT FALSE,
+  trial_period_start DATE,
+  trial_period_end   DATE,
+  start_date         DATE,
+  end_date           DATE
+)
+  INHERITS (orders);
+
 CREATE TABLE positions (
   id                  BIGSERIAL PRIMARY KEY,
   employment_order_id BIGINT,
   position_id         INT,
   employee_id         BIGINT,
   dismissal_order_id  BIGINT,
+  transfer_order_id BIGINT,
   start_date          DATE,
   end_date            DATE,
   close_date          DATE,
@@ -106,36 +123,36 @@ CREATE TABLE positions (
 
 --------------------------------------------------------------------------------------
 -- Обновление инфы сотрудника о принятие его на работу.
-CREATE OR REPLACE FUNCTION set_employee_employment_order()
-  RETURNS TRIGGER AS
-  $body$
-  BEGIN
-    UPDATE employees SET employment_order_id = NEW.id WHERE employees.id = NEW.employee_id;;
-    UPDATE structures SET employment_order_id = NEW.id WHERE structures.id=NEW.position_id;;
-  RETURN NEW;;
-  END;;
-  $body$ LANGUAGE plpgsql;
-
-CREATE TRIGGER new_employment_order AFTER INSERT ON employment_orders
-FOR EACH ROW
-EXECUTE PROCEDURE set_employee_employment_order();
+-- CREATE OR REPLACE FUNCTION set_employee_employment_order()
+--   RETURNS TRIGGER AS
+--   $body$
+--   BEGIN
+--     UPDATE employees SET employment_order_id = NEW.id WHERE employees.id = NEW.employee_id;;
+--     UPDATE structures SET employment_order_id = NEW.id WHERE structures.id=NEW.position_id;;
+--   RETURN NEW;;
+--   END;;
+--   $body$ LANGUAGE plpgsql;
+--
+-- CREATE TRIGGER new_employment_order AFTER INSERT ON employment_orders
+-- FOR EACH ROW
+-- EXECUTE PROCEDURE set_employee_employment_order();
 --------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------
 -- Обновление инфы сотрудника об увольнение его с работы.
-CREATE OR REPLACE FUNCTION set_employee_dismissal_order()
-  RETURNS TRIGGER AS
-  $body$
-  BEGIN
-    UPDATE employees SET employment_order_id = NULL WHERE employees.id = NEW.employee_id;;
-    UPDATE structures SET employment_order_id = NULL WHERE structures.id = NEW.position_id;;
-  RETURN NEW;;
-  END;;
-  $body$ LANGUAGE plpgsql;
-
-CREATE TRIGGER new_dismissal_order AFTER INSERT ON dismissal_orders
-FOR EACH ROW
-EXECUTE PROCEDURE set_employee_dismissal_order();
+-- CREATE OR REPLACE FUNCTION set_employee_dismissal_order()
+--   RETURNS TRIGGER AS
+--   $body$
+--   BEGIN
+--     UPDATE employees SET employment_order_id = NULL WHERE employees.id = NEW.employee_id;;
+--     UPDATE structures SET employment_order_id = NULL WHERE structures.id = NEW.position_id;;
+--   RETURN NEW;;
+--   END;;
+--   $body$ LANGUAGE plpgsql;
+--
+-- CREATE TRIGGER new_dismissal_order AFTER INSERT ON dismissal_orders
+-- FOR EACH ROW
+-- EXECUTE PROCEDURE set_employee_dismissal_order();
 --------------------------------------------------------------------------------------
 
   # -- !Downs

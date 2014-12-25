@@ -122,6 +122,7 @@ object Database extends Schema {
   val seminarTable: Table[Seminar] = table[Seminar]("seminars")
   val employmentOrderTable: Table[EmploymentOrder] = table[EmploymentOrder]("employment_orders")
   val dismissalOrderTable: Table[DismissalOrder] = table[DismissalOrder]("dismissal_orders")
+  val transferOrderTable: Table[TransferOrder] = table[TransferOrder]("transfer_orders")
   val leavingReasonTable: Table[LeavingReason] = table[LeavingReason]("leaving_reasons")
 
   on(employeeTable) { emp => declare {
@@ -252,6 +253,11 @@ object Database extends Schema {
 
   on(dismissalOrderTable) { dismissalOrder => declare {
     dismissalOrder.id is (autoIncremented("orders_id_seq"))
+  }
+  }
+
+  on(transferOrderTable) { transferOrder => declare {
+    transferOrder.id is (autoIncremented("orders_id_seq"))
   }
   }
 

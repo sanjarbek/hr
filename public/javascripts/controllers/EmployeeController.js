@@ -81,7 +81,7 @@ angular.module('app').controller('EmployeeCreateController', function ($scope, $
         sex: true,
         relationshipStatus: null,
         nationalityId: null,
-        employmentOrderId: null,
+        positionHistoryId: null,
         created_at: '2011-01-01 00:00:00',
         updated_at: '2011-01-01 00:00:00'
     };
@@ -100,7 +100,7 @@ angular.module('app').controller('EmployeeCreateController', function ($scope, $
             sex: true,
             relationshipStatus: null,
             nationalityId: null,
-            employmentOrderId: null,
+            positionHistoryId: null,
             created_at: '2011-01-01 00:00:00',
             updated_at: '2011-01-01 00:00:00'
         };

@@ -70,7 +70,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             controller: function ($scope, $state) {
                 $scope.tabs = [
                     { heading: 'Прием на работу', route: 'panel.orders.employmentOrders.list', active: true},
-                    { heading: 'Перемещение', route: 'panel.orders.dismissalOrders.list', active: false },
+                    { heading: 'Перемещение', route: 'panel.orders.transferOrders.list', active: false },
                     { heading: 'Увольнение', route: 'panel.orders.dismissalOrders.list', active: false }
                 ];
 
@@ -125,13 +125,14 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.contractTypes = contractTypesData;
                 $scope.calendarTypes = calendarTypesData;
                 $scope.employees = employeesData;
+                $scope.trial_period = false;
 
                 $scope.newEmploymentOrderForm = {
                     id: 0,
                     employee_id: null,
                     order_type_id: 1,
+                    is_combined_work: false,
                     end_date: null,
-                    close_date: null,
                     created_at: '2014-01-01 00:00:00',
                     updated_at: '2014-01-01 00:00:00',
                     trial_period_end: null,
@@ -146,6 +147,12 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 
                 $scope.saveEmploymentOrderForm = function () {
                     $scope.newEmploymentOrderForm.employee_id = $scope.selected.id;
+
+                    if (!$scope.trial_period) {
+                        $scope.newEmploymentOrderForm.trial_period_start = null;
+                        $scope.newEmploymentOrderForm.trial_period_end = null;
+                    }
+
                     EmploymentOrderService.save($scope.newEmploymentOrderForm).then(function (result) {
                         PNotify.desktop.permission();
                         (new PNotify({
@@ -159,6 +166,13 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                                 alert('Hey! You clicked the desktop notification!');
                             });
                     });
+                }
+
+                $scope.trialPeriodChanged = function () {
+                    if (!$scope.trial_period) {
+                        $scope.newEmploymentOrderForm.trial_period_start = null;
+                        $scope.newEmploymentOrderForm.trial_period_end = null;
+                    }
                 }
 
                 $scope.openPositionModal = function (size) {
@@ -310,7 +324,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     id: 0,
                     employee_id: null,
                     position_id: null,
-                    order_type_id: 1,
+                    order_type_id: 2,
                     end_date: null,
                     close_date: null,
                     created_at: '2014-01-01 00:00:00',
@@ -363,6 +377,104 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     });
                 };
 
+            }
+        })
+        .state('panel.orders.transferOrders', {
+            url: '/transfers',
+            abstract: true,
+            template: '<div ui-view></div>'
+        })
+        .state('panel.orders.transferOrders.list', {
+            url: '/list',
+            templateUrl: '/orders/transfer/list',
+            resolve: {
+                ordersData: function (TransferOrderService) {
+                    return TransferOrderService.list();
+                }
+            },
+            controller: function ($scope, ordersData) {
+                $scope.items = ordersData;
+                $scope.itemsByPage = 20;
+            }
+        })
+        .state('panel.orders.transferOrders.create', {
+            url: '/create',
+            templateUrl: '/orders/transfer/create',
+            resolve: {
+                contractTypesData: function (ContractTypeService) {
+                    return ContractTypeService.list();
+                },
+                calendarTypesData: function (CalendarTypeService) {
+                    return CalendarTypeService.list();
+                },
+                employeesData: function (EmployeeService) {
+                    return EmployeeService.employedList();
+                }
+            },
+            controller: function ($scope, $modal, $log, TransferOrderService, contractTypesData, calendarTypesData, employeesData) {
+
+                $scope.title = 'Перемещение';
+
+                $scope.contractTypes = contractTypesData;
+                $scope.calendarTypes = calendarTypesData;
+                $scope.employees = employeesData;
+
+                $scope.newTransferOrderForm = {
+                    id: 0,
+                    employee_id: null,
+                    order_type_id: 3,
+                    is_combined_work: false,
+                    end_date: null,
+                    created_at: '2014-01-01 00:00:00',
+                    updated_at: '2014-01-01 00:00:00',
+                    trial_period_end: null,
+                    trial_period_start: null
+                }
+
+                $scope.selected = null;
+
+                $scope.selectAction = function () {
+                    $scope.saveTransferOrderForm();
+                }
+
+                $scope.saveTransferOrderForm = function () {
+                    $scope.newTransferOrderForm.employee_id = $scope.selected.id;
+                    TransferOrderService.save($scope.newTransferOrderForm).then(function (result) {
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Статус сохранения',
+                            text: 'Новая запись успешно сохранена.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                                alert('Hey! You clicked the desktop notification!');
+                            });
+                    });
+                }
+
+                $scope.openPositionModal = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'positionModal.html',
+                        resolve: {
+                            structuresData: function (StructureService) {
+                                return StructureService.freepositions();
+                            }
+                        },
+                        controller: 'ModalStructuresCtrl',
+                        size: size
+                    });
+
+                    modalInstance.result.then(function (result) {
+//                        $scope.temp.position = result.name;
+                        $scope.newTransferOrderForm.position_id = result.id;
+                        $scope.tempPosition = result.name;
+                    }, function () {
+                        console.info('Modal dismissed at: ' + new Date());
+                    });
+                }
             }
         })
         .state('panel.orders.list', {
