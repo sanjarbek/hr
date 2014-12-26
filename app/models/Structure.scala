@@ -95,4 +95,20 @@ object Structure {
   def delete(id: Long) = inTransaction {
     structureTable.deleteWhere(structure => structure.id === id)
   }
+
+  def findChilds(structureId: Int) = {
+    val structures = Structure.findAll.toList
+    var results = scala.collection.mutable.ListBuffer[Structure]()
+
+    def scanStructure(id: Int): Unit = {
+      for (st <- structures) {
+        if (st.parent_id == Some(id)) {
+          results += st
+          scanStructure(st.id)
+        }
+      }
+    }
+    scanStructure(structureId)
+    results
+  }
 }

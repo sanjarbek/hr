@@ -150,6 +150,10 @@ GET           /orders/transfer/create                 controllers.Orders.createT
 POST          /orders/transfer/save                   controllers.Orders.saveTransfer
 GET           /orders/transfer/json/list              controllers.Orders.jsonTransferList
 
+GET           /worksheets/day/list                    controllers.WorkingSheets.workingDayList
+GET           /worksheets/day/json/list               controllers.WorkingSheets.workingDayListJson(structureId: Option[Int])
+GET           /worksheets/day/generate                controllers.WorkingSheets.generateWorkingMonth
+
 GET           /contact_informations/show              controllers.ContactInformations.show
 GET           /contact_informations/json/get          controllers.ContactInformations.jsonEmployeeContact(employeeId: Long)
 POST          /contact_informations/save              controllers.ContactInformations.save

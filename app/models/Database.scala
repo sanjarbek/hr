@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 import java.util.Date
 import org.squeryl.customtypes.{DateField, TimestampField}
 import org.squeryl.dsl.ast.TypedExpressionNode
-import org.squeryl.{PrimitiveTypeMode, Table, Schema}
+import org.squeryl.{Table, Schema}
 import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.libs.json._
@@ -45,6 +45,9 @@ object Database extends Schema {
   }
 
   class MyLocalDate(d: Date) extends DateField(d) {
+    override def toString = {
+      this.value.toString
+    }
   }
 
   implicit def myLocalDateToLocalDate(date: MyLocalDate): LocalDate = {
@@ -124,6 +127,7 @@ object Database extends Schema {
   val dismissalOrderTable: Table[DismissalOrder] = table[DismissalOrder]("dismissal_orders")
   val transferOrderTable: Table[TransferOrder] = table[TransferOrder]("transfer_orders")
   val leavingReasonTable: Table[LeavingReason] = table[LeavingReason]("leaving_reasons")
+  val workingSheetDayTable: Table[WorkingSheetDay] = table[WorkingSheetDay]("sheet_working_days")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -263,6 +267,10 @@ object Database extends Schema {
 
   on(leavingReasonTable) { leavingReason => declare(
     leavingReason.id is (autoIncremented("leaving_reasons_id_seq")))
+  }
+
+  on(workingSheetDayTable) { workingSheetDay => declare(
+    workingSheetDay.id is (autoIncremented("sheet_working_days_id_seq")))
   }
 
 }

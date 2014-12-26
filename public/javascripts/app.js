@@ -302,6 +302,38 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 $scope.itemsByPage = 20;
             }
         })
+        .state('panel.worksheet', {
+            url: '/worksheet',
+            abstract: true,
+            template: '<div ui-view></div>'
+        })
+        .state('panel.worksheet.list', {
+            url: '/list',
+            templateUrl: '/worksheets/day/list',
+            resolve: {
+                workingSheetDaysData: function (WorkSheetDayService) {
+                    return WorkSheetDayService.list();
+//                    return WorkSheetDayService.list(1);
+                }
+            },
+            controller: function ($scope, workingSheetDaysData) {
+                $scope.items = workingSheetDaysData;
+//                $scope.items = [];
+                $scope.monthDays = [
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+                ];
+
+                $scope.changedValue = function (item, workingSheetDay) {
+                    alert(workingSheetDay.hours);
+                }
+
+//                $scope.getWorkSheetDays = function() {
+//                    WorkSheetDayService.list(1).then(function(result){
+//                        $scope.items = result
+//                    });
+//                }
+            }
+        })
         .state('panel.orders.dismissalOrders.create', {
             url: '/create',
             templateUrl: '/orders/dismissal/create',
