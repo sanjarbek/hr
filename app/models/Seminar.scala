@@ -1,6 +1,8 @@
 package models
 
-import models.Database.{MyLocalDate, TimeStamp}
+import java.time.LocalDate
+
+import models.Database.{TimeStamp}
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.Query
 import org.squeryl.annotations.Column
@@ -14,7 +16,7 @@ case class Seminar(
                     employee_id: Long,
                     topic: String,
                     organizer: String,
-                    event_date: MyLocalDate,
+                    event_date: LocalDate,
                     @Column("has_certificate") val hasCertificate: Boolean,
                     override var created_at: TimeStamp,
                     override var updated_at: TimeStamp
@@ -40,7 +42,7 @@ object Seminar {
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "topic").write[String] and
       (JsPath \ "organizer").write[String] and
-      (JsPath \ "event_date").write[MyLocalDate] and
+      (JsPath \ "event_date").write[LocalDate] and
       (JsPath \ "hasCertificate").write[Boolean] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
@@ -51,7 +53,7 @@ object Seminar {
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "topic").read[String] and
       (JsPath \ "organizer").read[String] and
-      (JsPath \ "event_date").read[MyLocalDate] and
+      (JsPath \ "event_date").read[LocalDate] and
       (JsPath \ "hasCertificate").read[Boolean] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]

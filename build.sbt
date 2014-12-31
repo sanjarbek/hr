@@ -7,7 +7,7 @@ version := "1.0"
 libraryDependencies ++= Seq(
   jdbc,
   cache,
-  "org.squeryl" %% "squeryl" % "0.9.5-6",
+  "org.squeryl" %% "squeryl" % "0.9.6-RC3",
   "postgresql" % "postgresql" % "9.2-1002.jdbc4",
   "org.webjars" %% "webjars-play" % "2.2.1",
   "org.webjars" % "bootstrap" % "3.1.1-2",

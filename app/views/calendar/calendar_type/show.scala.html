@@ -62,7 +62,8 @@
         <div class="row" ng-show="calendarForm.type">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <table class="table table-bordered table-condensed">
-                    <tr ng-repeat="calendarDay in calendarDays | filter: {calendar_date: calendarForm.year} | filter: filterByMonth(calendarForm.month) | orderBy: calendar_date" contextmenu-item="calendarDay" contextmenu-container="meta.contextmenu" ng-class="rowClass(calendarDay)">
+                    <tr ng-repeat="calendarDay in calendarDays | filter: {calendar_date: calendarForm.year} | filter: filterByMonth(calendarForm.month) | orderBy: calendar_date"
+                    contextmenu-item="calendarDay" contextmenu-container="meta.contextmenu" ng-class="rowClass(calendarDay)">
                         <td>{{ calendarDay.calendar_date | date: 'dd.MM.yyyy' }}</td>
                         <td>{{ weekDays[(calendarDay.calendar_date | date: 'EEEE')] }}</td>
                         <td>{{ (dayTypes | filter: {id: calendarDay.day_type})[0].name  }}</td>

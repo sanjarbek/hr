@@ -1,17 +1,25 @@
 # --- !Ups
 create table day_types (
   id serial primary key ,
-  name text unique ,
+  name text unique not null ,
+  shortname text not null,
   hours int not null default 0,
   type boolean not null default true,
   created_at   TIMESTAMP,
   updated_at   TIMESTAMP
 );
 
-insert into day_types(name, hours, type, created_at, updated_at)
-values('Рабочий', 8, true, localtimestamp, localtimestamp),
-('Выходной', 0, true, localtimestamp, localtimestamp),
-('Праздник', 0, true, localtimestamp, localtimestamp);
+insert into day_types(name, shortname, hours, type, created_at, updated_at)
+values('Рабочий (8)', 'Р', 8, true, localtimestamp, localtimestamp),
+('Рабочий (6)', 'Р', 6, true, localtimestamp, localtimestamp),
+('Рабочий (7)', 'Р', 7, true, localtimestamp, localtimestamp),
+('Выходной', 'В', 0, true, localtimestamp, localtimestamp),
+('Отпуск (трудовой)', 'О', 0, false , localtimestamp, localtimestamp),
+('Отпуск (отгул)', 'Отг', 0, false , localtimestamp, localtimestamp),
+('Отпуск (без сохр. Зп.)', 'О/Б', 0, false , localtimestamp, localtimestamp),
+('Невыясненные обстоятельство', 'Н', 0, false , localtimestamp, localtimestamp),
+('Болезнь', 'Б', 0, false , localtimestamp, localtimestamp),
+('Прогул', 'П', 0, false , localtimestamp, localtimestamp);
 
 create table calendar_types (
   id serial primary key ,

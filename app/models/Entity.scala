@@ -19,14 +19,7 @@ trait Model[K] extends KeyedEntity[K] {
   override def isPersisted() = this.id.toString.toLong > 0
 
   def save = {
-    if (isPersisted) {
-      table.update(this)
-      this
-    }
-    else {
-      table.insert(this)
-    }
-
+    table.insertOrUpdate(this)
   }
 
 }

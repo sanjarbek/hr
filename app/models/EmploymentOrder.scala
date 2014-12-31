@@ -1,6 +1,8 @@
 package models
 
-import models.Database.{MyLocalDate, TimeStamp}
+import java.time.LocalDate
+
+import models.Database.{TimeStamp}
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.functional.syntax._
@@ -11,7 +13,7 @@ import java.util.Date
 case class EmploymentOrder(
                             id: Long,
                             order_type_id: Int,
-                            date_of_order: Date,
+                            date_of_order: LocalDate,
                             position_id: Int,
                             contract_type_id: Int,
                             contract_number: Long,
@@ -19,10 +21,10 @@ case class EmploymentOrder(
                             salary: BigDecimal,
                             calendar_type_id: Int,
                             is_combined_work: Boolean,
-                            trial_period_start: Option[Date],
-                            trial_period_end: Option[Date],
-                            start_date: Date,
-                            end_date: Option[Date],
+                            trial_period_start: Option[LocalDate],
+                            trial_period_end: Option[LocalDate],
+                            start_date: LocalDate,
+                            end_date: Option[LocalDate],
                             override var created_at: TimeStamp,
                             override var updated_at: TimeStamp
                             ) extends Entity[Long] {
@@ -51,7 +53,7 @@ object EmploymentOrder {
   implicit val employmentOrderWrites: Writes[EmploymentOrder] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "order_type_id").write[Int] and
-      (JsPath \ "date_of_order").write[Date] and
+      (JsPath \ "date_of_order").write[LocalDate] and
       (JsPath \ "position_id").write[Int] and
       (JsPath \ "contract_type_id").write[Int] and
       (JsPath \ "contract_number").write[Long] and
@@ -59,10 +61,10 @@ object EmploymentOrder {
       (JsPath \ "salary").write[BigDecimal] and
       (JsPath \ "calendar_type_id").write[Int] and
       (JsPath \ "is_combined_work").write[Boolean] and
-      (JsPath \ "trial_period_start").write[Option[Date]] and
-      (JsPath \ "trial_period_end").write[Option[Date]] and
-      (JsPath \ "start_date").write[Date] and
-      (JsPath \ "end_date").write[Option[Date]] and
+      (JsPath \ "trial_period_start").write[Option[LocalDate]] and
+      (JsPath \ "trial_period_end").write[Option[LocalDate]] and
+      (JsPath \ "start_date").write[LocalDate] and
+      (JsPath \ "end_date").write[Option[LocalDate]] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(EmploymentOrder.unapply))
@@ -70,7 +72,7 @@ object EmploymentOrder {
   implicit val employmentOrderReads: Reads[EmploymentOrder] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "order_type_id").read[Int] and
-      (JsPath \ "date_of_order").read[Date] and
+      (JsPath \ "date_of_order").read[LocalDate] and
       (JsPath \ "position_id").read[Int] and
       (JsPath \ "contract_type_id").read[Int] and
       (JsPath \ "contract_number").read[Long] and
@@ -78,10 +80,10 @@ object EmploymentOrder {
       (JsPath \ "salary").read[BigDecimal] and
       (JsPath \ "calendar_type_id").read[Int] and
       (JsPath \ "is_combined_work").read[Boolean] and
-      (JsPath \ "trial_period_start").read[Option[Date]] and
-      (JsPath \ "trial_period_end").read[Option[Date]] and
-      (JsPath \ "start_date").read[Date] and
-      (JsPath \ "end_date").read[Option[Date]] and
+      (JsPath \ "trial_period_start").read[Option[LocalDate]] and
+      (JsPath \ "trial_period_end").read[Option[LocalDate]] and
+      (JsPath \ "start_date").read[LocalDate] and
+      (JsPath \ "end_date").read[Option[LocalDate]] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
     )(EmploymentOrder.apply _)

@@ -1,8 +1,9 @@
 package models
 
+import java.time.LocalDate
 import java.util.Date
 
-import models.Database.TimeStamp
+import models.Database.{TimeStamp}
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
@@ -20,9 +21,9 @@ case class Position(
                      employee_id: Long,
                      dismissal_order_id: Option[Long],
                      transfer_order_id: Option[Long],
-                     start_date: Date,
-                     end_date: Option[Date],
-                     close_date: Option[Date],
+                     start_date: LocalDate,
+                     end_date: Option[LocalDate],
+                     close_date: Option[LocalDate],
                      override var created_at: TimeStamp,
                      override var updated_at: TimeStamp
                      ) extends Entity[Long] {
@@ -49,9 +50,9 @@ object Position {
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "dismissal_order_id").write[Option[Long]] and
       (JsPath \ "transfer_order_id").write[Option[Long]] and
-      (JsPath \ "start_date").write[Date] and
-      (JsPath \ "end_date").write[Option[Date]] and
-      (JsPath \ "close_date").write[Option[Date]] and
+      (JsPath \ "start_date").write[LocalDate] and
+      (JsPath \ "end_date").write[Option[LocalDate]] and
+      (JsPath \ "close_date").write[Option[LocalDate]] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(Position.unapply))
@@ -63,9 +64,9 @@ object Position {
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "dismissal_order_id").read[Option[Long]] and
       (JsPath \ "transfer_order_id").read[Option[Long]] and
-      (JsPath \ "start_date").read[Date] and
-      (JsPath \ "end_date").read[Option[Date]] and
-      (JsPath \ "close_date").read[Option[Date]] and
+      (JsPath \ "start_date").read[LocalDate] and
+      (JsPath \ "end_date").read[Option[LocalDate]] and
+      (JsPath \ "close_date").read[Option[LocalDate]] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
     )(Position.apply _)

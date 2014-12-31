@@ -95,3 +95,8 @@ select.ng-dirty.ng-invalid {
 .modal-body {
     padding: 5px 20px;
 }
+
+td > hr {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}

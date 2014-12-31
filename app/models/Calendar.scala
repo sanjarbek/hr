@@ -2,7 +2,7 @@ package models
 
 import java.time.LocalDate
 
-import models.Database.{MyLocalDate, TimeStamp}
+import models.Database.{TimeStamp}
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl._
 import org.squeryl.annotations.Column
@@ -33,7 +33,6 @@ case class CalendarType(
 object CalendarType {
 
   import Database.calendarTypeTable
-  import Database.formatMyLocalDate
 
   implicit val calendarTypeWrites: Writes[CalendarType] = (
     (JsPath \ "id").write[Int] and
@@ -68,7 +67,7 @@ object CalendarType {
 case class Calendar(
                      id: Long,
                      calendar_type: Int,
-                     calendar_date: MyLocalDate,
+                     calendar_date: LocalDate,
                      day_type: Int,
                      override var created_at: TimeStamp,
                      override var updated_at: TimeStamp
@@ -89,12 +88,11 @@ case class Calendar(
 object Calendar {
 
   import Database.calendarTable
-  import Database.myLocalDateToLocalDate
 
   implicit val calendarWrites: Writes[Calendar] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "calendar_type").write[Int] and
-      (JsPath \ "calendar_date").write[MyLocalDate] and
+      (JsPath \ "calendar_date").write[LocalDate] and
       (JsPath \ "day_type").write[Int] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
@@ -103,7 +101,7 @@ object Calendar {
   implicit val calendarReads: Reads[Calendar] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "calendar_type").read[Int] and
-      (JsPath \ "calendar_date").read[MyLocalDate] and
+      (JsPath \ "calendar_date").read[LocalDate] and
       (JsPath \ "day_type").read[Int] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
@@ -140,6 +138,7 @@ object Calendar {
 case class DayType(
                     id: Int,
                     name: String,
+                    @Column("shortname") shortName: String,
                     hours: Int,
                     @Column("type")
                     dayType: Boolean,
@@ -167,6 +166,7 @@ object DayType {
   implicit val dayTypeWrites: Writes[DayType] = (
     (JsPath \ "id").write[Int] and
       (JsPath \ "name").write[String] and
+      (JsPath \ "shortName").write[String] and
       (JsPath \ "hours").write[Int] and
       (JsPath \ "dayType").write[Boolean] and
       (JsPath \ "created_at").write[TimeStamp] and
@@ -176,6 +176,7 @@ object DayType {
   implicit val dayTypeReads: Reads[DayType] = (
     (JsPath \ "id").read[Int] and
       (JsPath \ "name").read[String] and
+      (JsPath \ "shortName").read[String] and
       (JsPath \ "hours").read[Int] and
       (JsPath \ "dayType").read[Boolean] and
       (JsPath \ "created_at").read[TimeStamp] and

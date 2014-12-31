@@ -1,5 +1,7 @@
 package models
 
+import java.time.LocalDate
+
 import models.Database._
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.Query
@@ -12,7 +14,7 @@ import scala.collection.Iterable
 case class WorkingSheetDay(
                             id: Long,
                             employee_id: Long,
-                            working_day: MyLocalDate,
+                            working_day: LocalDate,
                             day_type: Int,
                             hours: Int,
                             override var created_at: TimeStamp,
@@ -38,7 +40,7 @@ object WorkingSheetDay {
   implicit val workingSheetDayWrites: Writes[WorkingSheetDay] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "employee_id").write[Long] and
-      (JsPath \ "working_day").write[MyLocalDate] and
+      (JsPath \ "working_day").write[LocalDate] and
       (JsPath \ "day_type").write[Int] and
       (JsPath \ "hours").write[Int] and
       (JsPath \ "created_at").write[TimeStamp] and
@@ -48,7 +50,7 @@ object WorkingSheetDay {
   implicit val workingSheetDayReads: Reads[WorkingSheetDay] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "employee_id").read[Long] and
-      (JsPath \ "working_day").read[MyLocalDate] and
+      (JsPath \ "working_day").read[LocalDate] and
       (JsPath \ "day_type").read[Int] and
       (JsPath \ "hours").read[Int] and
       (JsPath \ "created_at").read[TimeStamp] and
@@ -67,6 +69,14 @@ object WorkingSheetDay {
     from(workingSheetDayTable) {
       workingSheetDay => where(workingSheetDay.id === id) select (workingSheetDay)
     }.headOption
+  }
+
+  def deleteMonthData(date: java.time.LocalDate) = inTransaction {
+    workingSheetDayTable.deleteWhere(wsdt =>
+      wsdt.id <> 0
+      //      (wsdt.working_day.getMonthValue===date.getMonthValue)
+      //        and (wsdt.working_day.getYear===date.getYear)
+    )
   }
 
 }

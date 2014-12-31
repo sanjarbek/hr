@@ -1,7 +1,8 @@
 package controllers
 
 import java.text.SimpleDateFormat
-import java.time.{LocalDateTime, LocalDate}
+import java.time.temporal.{TemporalUnit, TemporalAmount}
+import java.time.{ZoneOffset, Period, LocalDateTime, LocalDate}
 import java.util.{UUID, Calendar, Date}
 
 import org.apache.poi.hwpf.HWPFDocument
@@ -19,7 +20,7 @@ import io.github.cloudify.scala.spdf._
 import java.io._
 import java.net._
 import play.api.templates.Html
-import models.Database.MyLocalDate
+import models.MyTypedExpressionFactories._
 
 
 trait Orders extends Controller with Security {
@@ -81,10 +82,17 @@ trait Orders extends Controller with Security {
 
               val department = Structure.findById(position.parent_id.get).get
 
-              val current_date = Instant.now().toDate
-              val trial_start = employmentOrder.trial_period_start.getOrElse(current_date)
-              val trial_end = employmentOrder.trial_period_end.getOrElse(current_date)
-              val trial_period = (trial_end.getTime - trial_start.getTime) / (1000 * 60 * 60 * 24) / 28
+
+              val current_date = LocalDate.now
+              val trial_start = employmentOrder.trial_period_start match {
+                case Some(date) => date
+                case None => current_date
+              }
+              val trial_end = employmentOrder.trial_period_end match {
+                case Some(date) => date
+                case None => current_date
+              }
+              val trial_period = Period.between(trial_start, trial_end).getMonths
 
               val keywords = Map(
                 "<Работник>" -> s"${employee.surname} ${employee.firstname} ${employee.lastname}",
@@ -251,7 +259,7 @@ trait Orders extends Controller with Security {
       valid = { order =>
         val newOrder = order.save
         Position.findByEmployeeId(newOrder.employee_id).reduceLeftOption {
-          (maxElement, element) => if (maxElement.start_date.after(element.start_date)) maxElement else element
+          (maxElement, element) => if (maxElement.start_date.isAfter(element.start_date)) maxElement else element
         } match {
           case Some(position) => position.copy(close_date = Some(newOrder.leaving_date), dismissal_order_id = Some(newOrder.id)).update
           case None => Logger.info("Сотрудник и так не принят на работу.")

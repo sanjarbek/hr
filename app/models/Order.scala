@@ -2,7 +2,7 @@ package models
 
 import java.util.Date
 
-import models.Database.{MyLocalDate, TimeStamp}
+import models.Database.TimeStamp
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
@@ -12,25 +12,28 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.json.Reads._
 import collection.Iterable
+import java.time.LocalDate
 
 case class Order(
                   id: Long,
                   order_type_id: Int,
                   nomer: Int,
-                  date_of_order: MyLocalDate,
+                  date_of_order: LocalDate,
                   override var created_at: TimeStamp,
                   override var updated_at: TimeStamp
                   ) extends Entity[Long]
 
 object Order {
 
-  import Database.{orderTable, localDateToMyLocalDate, myLocalDateToLocalDate}
+  import Database.{orderTable}
+  import MyTypedExpressionFactories._
+
 
   implicit val orderWrites: Writes[Order] = (
     (JsPath \ "id").write[Long] and
       (JsPath \ "order_type_id").write[Int] and
       (JsPath \ "nomer").write[Int] and
-      (JsPath \ "date_of_order").write[MyLocalDate] and
+      (JsPath \ "date_of_order").write[LocalDate] and
       (JsPath \ "created_at").write[TimeStamp] and
       (JsPath \ "updated_at").write[TimeStamp]
     )(unlift(Order.unapply))
@@ -39,7 +42,7 @@ object Order {
     (JsPath \ "id").read[Long] and
       (JsPath \ "order_type_id").read[Int] and
       (JsPath \ "nomer").read[Int] and
-      (JsPath \ "date_of_order").read[MyLocalDate] and
+      (JsPath \ "date_of_order").read[LocalDate] and
       (JsPath \ "created_at").read[TimeStamp] and
       (JsPath \ "updated_at").read[TimeStamp]
     )(Order.apply _)

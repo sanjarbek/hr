@@ -2,6 +2,7 @@ angular.module('app', [
     'ui.router',
     'ngCookies',
     'ngTable',
+    'ui.grid',
     'treeGrid',
     'ui.bootstrap',
     'ui.calendar',
@@ -314,11 +315,16 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 workingSheetDaysData: function (WorkSheetDayService) {
                     return WorkSheetDayService.list();
 //                    return WorkSheetDayService.list(1);
+                },
+                dayTypesData: function (DayTypeService) {
+                    return DayTypeService.list();
                 }
             },
-            controller: function ($scope, workingSheetDaysData) {
+            controller: function ($scope, workingSheetDaysData, dayTypesData) {
                 $scope.items = workingSheetDaysData;
-//                $scope.items = [];
+
+                $scope.dayTypes = dayTypesData;
+
                 $scope.monthDays = [
                     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
                 ];

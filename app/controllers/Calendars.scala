@@ -1,10 +1,9 @@
 package controllers
 
 
-import java.time.{LocalTime, DayOfWeek, LocalDate}
+import java.time.{DayOfWeek, LocalDate}
 import java.time.temporal.WeekFields
 
-import models.Database.MyLocalDate
 import models.{Calendar, DayType, CalendarType}
 import play.api.Logger
 import play.api.libs.json.{JsValue, JsError, Json}
