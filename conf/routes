@@ -180,6 +180,11 @@ POST          /seminars/save                          controllers.Seminars.save
 PUT           /seminars/update                        controllers.Seminars.update
 DELETE        /seminars/delete                        controllers.Seminars.delete(id: Long)
 
+
+# Urls for testing
+GET        /test        controllers.Employees.empTestList
+
+
 # Webjar plugin included.
 GET           /webjars/*file                          controllers.WebJarAssets.at(file)
 

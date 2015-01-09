@@ -1,12 +1,14 @@
 package controllers
 
+import java.time.LocalDateTime
 import java.util.Date
 
+import org.joda.time.DateTime
 import play.api._
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
-import models.Employee
+import models.{EmpTest, Employee}
 import play.api.data.validation._
 import play.api.libs.json._
 import play.api.libs.json.Reads._
@@ -89,4 +91,9 @@ object Employees extends Controller {
     }.getOrElse(NotFound(Json.toJson("NotFound")))
   }
 
+  def empTestList = Action {
+    EmpTest.insert(EmpTest(0L, "Bakyt", java.time.LocalDate.of(1921, 12, 1), None, LocalDateTime.now(), None))
+    val employees = EmpTest.findAll.map { employee => Json.toJson(employee)}
+    Ok(Json.toJson(employees))
+  }
 }

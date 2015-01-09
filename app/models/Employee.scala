@@ -3,6 +3,7 @@ package models
 import java.time.{LocalDateTime, LocalDate}
 
 import models.MyCustomTypes._
+import org.joda.time.DateTime
 import org.squeryl.annotations.{Column, ColumnBase}
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
@@ -12,6 +13,51 @@ import play.api.Logger
 import collection.Iterable
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+
+case class EmpTest(
+                    id: Long,
+                    surname: String,
+                    birthday: LocalDate,
+                    birthdayOp: Option[LocalDate],
+                    created_at: LocalDateTime,
+                    updated_at: Option[LocalDateTime]
+                    ) extends KeyedEntity[Long]
+
+object EmpTest {
+
+  import Database.{empTestTable}
+
+  implicit val employeeWrites: Writes[EmpTest] = (
+    (JsPath \ "id").write[Long] and
+      (JsPath \ "surname").write[String] and
+      (JsPath \ "birthday").write[LocalDate] and
+      (JsPath \ "birthdayOp").write[Option[LocalDate]] and
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[Option[LocalDateTime]]
+    )(unlift(EmpTest.unapply))
+
+  implicit val empTestReads: Reads[EmpTest] = (
+    (JsPath \ "id").read[Long] and
+      (JsPath \ "surname").read[String] and
+      (JsPath \ "birthday").read[LocalDate] and
+      (JsPath \ "birthdayOp").read[Option[LocalDate]] and
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[Option[LocalDateTime]]
+    )(EmpTest.apply _)
+
+  def allQ: Query[EmpTest] = from(empTestTable) {
+    employee => select(employee)
+  }
+
+  def findAll: Iterable[EmpTest] = inTransaction {
+    allQ.toList
+  }
+
+  def insert(employee: EmpTest): EmpTest = inTransaction {
+    empTestTable.insert(employee)
+  }
+
+}
 
 case class Employee(
                      id: Long,
