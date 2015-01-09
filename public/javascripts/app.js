@@ -12,7 +12,8 @@ angular.module('app', [
     'textAngular',
     'ckeditor',
     'smart-table',
-    'io.dennis.contextmenu'
+    'io.dennis.contextmenu',
+    'xeditable'
 ]);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider, $httpProvider) {
@@ -134,8 +135,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     order_type_id: 1,
                     is_combined_work: false,
                     end_date: null,
-                    created_at: '2014-01-01 00:00:00',
-                    updated_at: '2014-01-01 00:00:00',
+                    created_at: '2014-01-01T00:00:00',
+                    updated_at: '2014-01-01T00:00:00',
                     trial_period_end: null,
                     trial_period_start: null
                 }
@@ -365,8 +366,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     order_type_id: 2,
                     end_date: null,
                     close_date: null,
-                    created_at: '2014-01-01 00:00:00',
-                    updated_at: '2014-01-01 00:00:00'
+                    created_at: '2014-01-01T00:00:00',
+                    updated_at: '2014-01-01T00:00:00'
                 }
 
                 $scope.selected = null;
@@ -463,8 +464,8 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     order_type_id: 3,
                     is_combined_work: false,
                     end_date: null,
-                    created_at: '2014-01-01 00:00:00',
-                    updated_at: '2014-01-01 00:00:00',
+                    created_at: '2014-01-01T00:00:00',
+                    updated_at: '2014-01-01T00:00:00',
                     trial_period_end: null,
                     trial_period_start: null
                 }

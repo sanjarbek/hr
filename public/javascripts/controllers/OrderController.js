@@ -4,8 +4,8 @@ angular.module('app').controller('ModalLeavingReasonController', function ($scop
         id: 0,
         punkt: null,
         name: null,
-        created_at: '2014-01-01 00:00:00',
-        updated_at: '2014-01-01 00:00:00'
+        created_at: '2014-01-01T00:00:00',
+        updated_at: '2014-01-01T00:00:00'
     };
 
     $scope.saveLeavingReason = function () {

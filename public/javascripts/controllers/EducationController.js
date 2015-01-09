@@ -214,8 +214,8 @@ angular.module('app').controller('SeminarController', function ($scope, $filter,
             organizer: null,
             event_date: null,
             hasCertificate: false,
-            created_at: '2001-01-01 00:00:00',
-            updated_at: '2001-01-01 00:00:00'
+            created_at: '2001-01-01T00:00:00',
+            updated_at: '2001-01-01T00:00:00'
         };
     }
 

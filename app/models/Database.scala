@@ -5,6 +5,7 @@ import java.sql.Date
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, LocalDateTime, ZoneId}
 
+import com.fasterxml.jackson.core.JsonGenerator
 import org.joda.time.DateTime
 import org.squeryl.dsl._
 
@@ -47,10 +48,18 @@ object MyCustomTypes extends org.squeryl.PrimitiveTypeMode {
   implicit def optionLocalDateToTE(s: Option[LocalDate]) = optionLocalDateTEF.create(s)
 
   implicit val formatLocalDate = new Format[LocalDate] {
-    def writes(ld: LocalDate): JsValue = Json.toJson(ld.toString)
+    def writes(ld: LocalDate): JsValue = {
+      ld match {
+        case date: LocalDate => Json.toJson(date.toString)
+        case _ => Json.toJson(JsNull)
+      }
+    }
     def reads(js: JsValue): JsResult[LocalDate] = {
       try {
-        JsSuccess(LocalDate.parse(js.as[String]))
+        js match {
+          case JsNull => JsSuccess(null)
+          case JsString(str) => JsSuccess(LocalDate.parse(str))
+        }
       } catch {
         case e: IllegalArgumentException => JsError("Unable to parse localdate")
       }
@@ -78,9 +87,9 @@ object MyCustomTypes extends org.squeryl.PrimitiveTypeMode {
 
     def reads(js: JsValue): JsResult[LocalDateTime] = {
       try {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:m:s");
-        //        JsSuccess(LocalDateTime.parse(js.as[String], DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-        JsSuccess(LocalDateTime.parse(js.as[String], formatter))
+        //        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:m:s");
+        JsSuccess(LocalDateTime.parse(js.as[String], DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+        //        JsSuccess(LocalDateTime.parse(js.as[String], formatter))
       } catch {
         case e: IllegalArgumentException => JsError("Unable to parse localdate")
       }

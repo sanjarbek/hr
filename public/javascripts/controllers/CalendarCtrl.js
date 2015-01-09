@@ -6,8 +6,8 @@ angular.module('app').controller('CalendarTypeCtrl', function ($scope, $filter, 
         $scope.newCalendarTypeForm = {
             id: 0,
             name: null,
-            created_at: '2011-01-01 00:00:00',
-            updated_at: '2011-01-01 00:00:00'
+            created_at: '2011-01-01T00:00:00',
+            updated_at: '2011-01-01T00:00:00'
         }
     }
 
@@ -177,8 +177,8 @@ angular.module('app').controller('ModalCalendarTypeController', function ($scope
     $scope.newCalendarTypeForm = {
         id: 0,
         name: '',
-        created_at: '2014-01-01 00:00:00',
-        updated_at: '2014-01-01 00:00:00'
+        created_at: '2014-01-01T00:00:00',
+        updated_at: '2014-01-01T00:00:00'
     };
 
     $scope.saveCalendarType = function () {
@@ -188,8 +188,8 @@ angular.module('app').controller('ModalCalendarTypeController', function ($scope
         $scope.newCalendarTypeForm = {
             id: 0,
             name: '',
-            created_at: '2014-01-01 00:00:00',
-            updated_at: '2014-01-01 00:00:00'
+            created_at: '2014-01-01T00:00:00',
+            updated_at: '2014-01-01T00:00:00'
         };
     }
 

@@ -30,7 +30,8 @@ libraryDependencies ++= Seq(
   "org.apache.poi" % "poi" % "3.10.1",
   "org.webjars" % "font-awesome" % "4.2.0",
   "io.github.cloudify" %% "spdf" % "1.0.0",
-  "org.webjars" % "angular-ckeditor" % "0.2.0"
+  "org.webjars" % "angular-ckeditor" % "0.2.0",
+  "org.webjars" % "angular-xeditable" % "0.1.8"
 )
 
 playScalaSettings

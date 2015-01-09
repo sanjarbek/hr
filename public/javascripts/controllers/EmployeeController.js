@@ -82,8 +82,8 @@ angular.module('app').controller('EmployeeCreateController', function ($scope, $
         relationshipStatus: null,
         nationalityId: null,
         positionHistoryId: null,
-        created_at: '2011-01-01 00:00:00',
-        updated_at: '2011-01-01 00:00:00'
+        created_at: '2011-01-01T00:00:00',
+        updated_at: '2011-01-01T00:00:00'
     };
 
     $scope.saveEmployee = function () {
@@ -101,8 +101,8 @@ angular.module('app').controller('EmployeeCreateController', function ($scope, $
             relationshipStatus: null,
             nationalityId: null,
             positionHistoryId: null,
-            created_at: '2011-01-01 00:00:00',
-            updated_at: '2011-01-01 00:00:00'
+            created_at: '2011-01-01T00:00:00',
+            updated_at: '2011-01-01T00:00:00'
         };
     };
 
@@ -144,8 +144,8 @@ angular.module('app').controller('ModalRelationshipStatusController', function (
     $scope.newRelationshipStatusForm = {
         id: 0,
         name: null,
-        created_at: '2014-01-01 00:00:00',
-        updated_at: '2014-01-01 00:00:00'
+        created_at: '2014-01-01T00:00:00',
+        updated_at: '2014-01-01T00:00:00'
     };
 
     $scope.saveRelationshipStatus = function () {
@@ -155,8 +155,8 @@ angular.module('app').controller('ModalRelationshipStatusController', function (
         $scope.newRelationshipStatusForm = {
             id: 0,
             name: null,
-            created_at: '2014-01-01 00:00:00',
-            updated_at: '2014-01-01 00:00:00'
+            created_at: '2014-01-01T00:00:00',
+            updated_at: '2014-01-01T00:00:00'
         };
     }
 
@@ -175,8 +175,8 @@ angular.module('app').controller('ModalNationalityController', function ($scope,
     $scope.newNationalityForm = {
         id: 0,
         name: null,
-        created_at: '2014-01-01 00:00:00',
-        updated_at: '2014-01-01 00:00:00'
+        created_at: '2014-01-01T00:00:00',
+        updated_at: '2014-01-01T00:00:00'
     };
 
     $scope.saveNationality = function () {
@@ -186,8 +186,8 @@ angular.module('app').controller('ModalNationalityController', function ($scope,
         $scope.newNationalityForm = {
             id: 0,
             name: null,
-            created_at: '2014-01-01 00:00:00',
-            updated_at: '2014-01-01 00:00:00'
+            created_at: '2014-01-01T00:00:00',
+            updated_at: '2014-01-01T00:00:00'
         };
     }
 
