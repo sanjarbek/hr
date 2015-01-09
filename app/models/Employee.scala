@@ -1,9 +1,8 @@
 package models
 
-import java.time.LocalDate
+import java.time.{LocalDateTime, LocalDate}
 
-import models.Database.{TimeStamp, formatTimeStamp}
-import org.squeryl.PrimitiveTypeMode._
+import models.MyCustomTypes._
 import org.squeryl.annotations.{Column, ColumnBase}
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
@@ -27,8 +26,8 @@ case class Employee(
                      @Column("relationship_status_id") val relationshipStatus: Int,
                      @Column("nationality_id") val nationalityId: Int,
                      @Column("position_history_id") val positionHistoryId: Option[Long],
-                     override var created_at: TimeStamp,
-                     override var updated_at: TimeStamp
+                     override var created_at: LocalDateTime,
+                     override var updated_at: LocalDateTime
                      ) extends Entity[Long] {
   override def save = inTransaction {
     super.save.asInstanceOf[Employee]
@@ -59,8 +58,8 @@ object Employee {
       (JsPath \ "relationshipStatus").write[Int] and
       (JsPath \ "nationalityId").write[Int] and
       (JsPath \ "positionHistoryId").write[Option[Long]] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(Employee.unapply))
 
   implicit val employeeReads: Reads[Employee] = (
@@ -76,8 +75,8 @@ object Employee {
       (JsPath \ "relationshipStatus").read[Int] and
       (JsPath \ "nationalityId").read[Int] and
       (JsPath \ "positionHistoryId").read[Option[Long]] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(Employee.apply _)
 
   def allQ: Query[Employee] = from(employeeTable) {
@@ -136,8 +135,8 @@ object Employee {
 case class Nationality(
                         id: Int,
                         name: String,
-                        override var created_at: TimeStamp,
-                        override var updated_at: TimeStamp
+                        override var created_at: LocalDateTime,
+                        override var updated_at: LocalDateTime
                         ) extends Entity[Int] {
   override def save = inTransaction {
     super.save.asInstanceOf[Nationality]
@@ -158,15 +157,15 @@ object Nationality {
   implicit val nationalityWrites: Writes[Nationality] = (
     (JsPath \ "id").write[Int] and
       (JsPath \ "name").write[String] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(Nationality.unapply))
 
   implicit val nationalityReads: Reads[Nationality] = (
     (JsPath \ "id").read[Int] and
       (JsPath \ "name").read[String] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(Nationality.apply _)
 
   def allQ: Query[Nationality] = from(nationalityTable) {
@@ -188,8 +187,8 @@ object Nationality {
 case class RelationshipStatus(
                                id: Int,
                                name: String,
-                               override var created_at: TimeStamp,
-                               override var updated_at: TimeStamp
+                               override var created_at: LocalDateTime,
+                               override var updated_at: LocalDateTime
                                ) extends Entity[Int] {
   override def save = inTransaction {
     super.save.asInstanceOf[RelationshipStatus]
@@ -210,15 +209,15 @@ object RelationshipStatus {
   implicit val nationalityWrites: Writes[RelationshipStatus] = (
     (JsPath \ "id").write[Int] and
       (JsPath \ "name").write[String] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(RelationshipStatus.unapply))
 
   implicit val nationalityReads: Reads[RelationshipStatus] = (
     (JsPath \ "id").read[Int] and
       (JsPath \ "name").read[String] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(RelationshipStatus.apply _)
 
   def allQ: Query[RelationshipStatus] = from(relationshipStatusTable) {

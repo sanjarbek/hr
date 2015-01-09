@@ -1,9 +1,8 @@
 package models
 
-import java.time.LocalDate
+import java.time.{LocalDateTime, LocalDate}
 
-import models.Database.{TimeStamp}
-import org.squeryl.PrimitiveTypeMode._
+import models.MyCustomTypes._
 import org.squeryl._
 import org.squeryl.annotations.Column
 import play.api.libs.json.{Reads, JsPath, Writes}
@@ -13,8 +12,8 @@ import play.api.libs.functional.syntax._
 case class CalendarType(
                          id: Int,
                          name: String,
-                         override var created_at: TimeStamp,
-                         override var updated_at: TimeStamp
+                         override var created_at: LocalDateTime,
+                         override var updated_at: LocalDateTime
                          ) extends Entity[Int] {
 
   override def save = inTransaction {
@@ -37,15 +36,15 @@ object CalendarType {
   implicit val calendarTypeWrites: Writes[CalendarType] = (
     (JsPath \ "id").write[Int] and
       (JsPath \ "name").write[String] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(CalendarType.unapply))
 
   implicit val calendarTypeReads: Reads[CalendarType] = (
     (JsPath \ "id").read[Int] and
       (JsPath \ "name").read[String] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(CalendarType.apply _)
 
   def allQ: Query[CalendarType] = from(calendarTypeTable) {
@@ -69,8 +68,8 @@ case class Calendar(
                      calendar_type: Int,
                      calendar_date: LocalDate,
                      day_type: Int,
-                     override var created_at: TimeStamp,
-                     override var updated_at: TimeStamp
+                     override var created_at: LocalDateTime,
+                     override var updated_at: LocalDateTime
                      ) extends Entity[Long] {
 
   override def save = inTransaction {
@@ -94,8 +93,8 @@ object Calendar {
       (JsPath \ "calendar_type").write[Int] and
       (JsPath \ "calendar_date").write[LocalDate] and
       (JsPath \ "day_type").write[Int] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(Calendar.unapply))
 
   implicit val calendarReads: Reads[Calendar] = (
@@ -103,8 +102,8 @@ object Calendar {
       (JsPath \ "calendar_type").read[Int] and
       (JsPath \ "calendar_date").read[LocalDate] and
       (JsPath \ "day_type").read[Int] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(Calendar.apply _)
 
   def allQ: Query[Calendar] = from(calendarTable) {
@@ -142,8 +141,8 @@ case class DayType(
                     hours: Int,
                     @Column("type")
                     dayType: Boolean,
-                    override var created_at: TimeStamp,
-                    override var updated_at: TimeStamp
+                    override var created_at: LocalDateTime,
+                    override var updated_at: LocalDateTime
                     ) extends Entity[Int] {
 
   override def save = inTransaction {
@@ -169,8 +168,8 @@ object DayType {
       (JsPath \ "shortName").write[String] and
       (JsPath \ "hours").write[Int] and
       (JsPath \ "dayType").write[Boolean] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(DayType.unapply))
 
   implicit val dayTypeReads: Reads[DayType] = (
@@ -179,8 +178,8 @@ object DayType {
       (JsPath \ "shortName").read[String] and
       (JsPath \ "hours").read[Int] and
       (JsPath \ "dayType").read[Boolean] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(DayType.apply _)
 
   def allQ: Query[DayType] = from(dayTypeTable) {

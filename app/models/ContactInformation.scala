@@ -1,7 +1,8 @@
 package models
 
-import models.Database.{TimeStamp, formatTimeStamp}
-import org.squeryl.PrimitiveTypeMode._
+import java.time.LocalDateTime
+
+import models.MyCustomTypes._
 import org.squeryl.Query
 import collection.Iterable
 import play.api.libs.json._
@@ -15,8 +16,8 @@ case class ContactInformation(
                                email: Option[String],
                                home_phone: Option[String],
                                mobile_phone: String,
-                               override var created_at: TimeStamp,
-                               override var updated_at: TimeStamp
+                               override var created_at: LocalDateTime,
+                               override var updated_at: LocalDateTime
                                ) extends Entity[Long] {
 
   override def save = inTransaction {
@@ -43,8 +44,8 @@ object ContactInformation {
       (JsPath \ "email").write[Option[String]] and
       (JsPath \ "home_phone").write[Option[String]] and
       (JsPath \ "mobile_phone").write[String] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(ContactInformation.unapply))
 
   implicit val contactInformationReads: Reads[ContactInformation] = (
@@ -55,8 +56,8 @@ object ContactInformation {
       (JsPath \ "email").read[Option[String]] and
       (JsPath \ "home_phone").read[Option[String]] and
       (JsPath \ "mobile_phone").read[String] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(ContactInformation.apply _)
 
   def allQ: Query[ContactInformation] = from(contactInformationTable) {

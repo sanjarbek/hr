@@ -1,9 +1,9 @@
 package models
 
-import java.time.LocalDate
+import java.time.{LocalDateTime, LocalDate}
 
 import models.Database._
-import org.squeryl.PrimitiveTypeMode._
+import models.MyCustomTypes._
 import org.squeryl.Query
 import org.squeryl.annotations._
 import play.api.libs.functional.syntax._
@@ -17,8 +17,8 @@ case class WorkingSheetDay(
                             working_day: LocalDate,
                             day_type: Int,
                             hours: Int,
-                            override var created_at: TimeStamp,
-                            override var updated_at: TimeStamp
+                            override var created_at: LocalDateTime,
+                            override var updated_at: LocalDateTime
                             ) extends Entity[Long] {
 
   override def save = inTransaction {
@@ -43,8 +43,8 @@ object WorkingSheetDay {
       (JsPath \ "working_day").write[LocalDate] and
       (JsPath \ "day_type").write[Int] and
       (JsPath \ "hours").write[Int] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(WorkingSheetDay.unapply))
 
   implicit val workingSheetDayReads: Reads[WorkingSheetDay] = (
@@ -53,8 +53,8 @@ object WorkingSheetDay {
       (JsPath \ "working_day").read[LocalDate] and
       (JsPath \ "day_type").read[Int] and
       (JsPath \ "hours").read[Int] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(WorkingSheetDay.apply _)
 
   def allQ: Query[WorkingSheetDay] = from(workingSheetDayTable) {

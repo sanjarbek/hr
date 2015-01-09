@@ -7,17 +7,16 @@ import org.joda.time.DateTime
 import java.util.Date
 import org.squeryl.customtypes.{DateField, TimestampField}
 import org.squeryl.dsl._
-
-//import org.squeryl.dsl.ast.TypedExpressionNode
+import org.squeryl._
 
 import org.squeryl.{PrimitiveTypeMode, Table, Schema}
-import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.libs.json._
 
 
-object MyTypedExpressionFactories extends PrimitiveTypeMode {
+object MyCustomTypes extends PrimitiveTypeMode {
 
+  // --------------- java8 LocalDateTime to Timestamp ------------------------------
   implicit val localDateTEF = new NonPrimitiveJdbcMapper[Date, LocalDate, TDate](dateTEF, this) {
     def convertFromJdbc(d: Date) = d.toInstant.atZone(ZoneId.systemDefault).toLocalDate
 
@@ -44,92 +43,43 @@ object MyTypedExpressionFactories extends PrimitiveTypeMode {
       }
     }
   }
-}
+  // -----------------------------------------------------------------------------------------------------------------
 
+  // --------------- java8 LocalDateTime to Timestamp ------------------------------
+  implicit val localDateTimeTEF = new NonPrimitiveJdbcMapper[Timestamp, LocalDateTime, TTimestamp](timestampTEF, this) {
+    def convertFromJdbc(t: Timestamp) = t.toLocalDateTime
 
-object Database extends Schema {
-
-  //--------------------------------------------------------------------------------------------
-  class TimeStamp(t: Timestamp) extends TimestampField(t) {
-    override def toString = this.value.toString
+    def convertToJdbc(d: LocalDateTime) = Timestamp.from(d.atZone(ZoneId.systemDefault()).toInstant)
   }
 
-  implicit def LDTToTimeStamp(dateTime: LocalDateTime): TimeStamp = new TimeStamp(Timestamp.valueOf(dateTime))
+  implicit val optionLocalDateTimeTEF =
+    new TypedExpressionFactory[Option[LocalDateTime], TOptionTimestamp] with DeOptionizer[Timestamp, LocalDateTime, TTimestamp, Option[LocalDateTime], TOptionTimestamp] {
+      val deOptionizer = localDateTimeTEF
+    }
 
-  implicit def optionLDTToTimeStamp(dateTime: Option[LocalDateTime]): Option[TimeStamp] = {
-    dateTime.map(tmp => Some(new TimeStamp(Timestamp.valueOf(tmp)))).getOrElse(None)
-  }
+  implicit def localDateTimeToTE(s: LocalDateTime) = localDateTimeTEF.create(s)
 
-  implicit def timeStampToJoda(timeStamp: TimeStamp): LocalDateTime = timeStamp.value.toLocalDateTime
+  implicit def optionLocalDateTimeToTE(s: Option[LocalDateTime]) = optionLocalDateTimeTEF.create(s)
 
-  implicit def optionTimeStampToJoda(timeStamp: Option[TimeStamp]): Option[LocalDateTime] = {
-    timeStamp.map(tmp => Some(tmp.value.toLocalDateTime)).getOrElse(None)
-  }
+  implicit val formatLocalDateTime = new Format[LocalDateTime] {
+    def writes(ld: LocalDateTime): JsValue = Json.toJson(ld.toString)
 
-
-  implicit val formatTimeStamp = new Format[TimeStamp] {
-    def writes(ts: TimeStamp): JsValue = Json.toJson(ts.value.toString)
-
-    def reads(ts: JsValue): JsResult[TimeStamp] = {
+    def reads(js: JsValue): JsResult[LocalDateTime] = {
       try {
-        JsSuccess(new TimeStamp(Timestamp.valueOf(ts.as[String])))
+        JsSuccess(LocalDateTime.parse(js.toString()))
       } catch {
-        case e: IllegalArgumentException => JsError("Unable to parse timestamp")
+        case e: IllegalArgumentException => JsError("Unable to parse localdate")
       }
     }
   }
+  // -----------------------------------------------------------------------------------------------------------------
 
-  //  class MyLocalDate(d: Date) extends DateField(d) {
-  //    override def toString = {
-  //      this.value.toString
-  //    }
-  //  }
-  //
-  //  implicit def myLocalDateToLocalDate(date: MyLocalDate): LocalDate = {
-  //    val instant = Instant.ofEpochMilli(date.value.getTime)
-  //    LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate
-  //  }
-  //
-  //  implicit def optionMyLocalDateToLocalDate(date: Option[MyLocalDate]): Option[LocalDate] = {
-  //    date.map { tmp =>
-  //      val instant = Instant.ofEpochMilli(tmp.value.getTime)
-  //      Some(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate)
-  //    }.getOrElse(None)
-  //  }
-  //
-  //  implicit def localDateToMyLocalDate(date: LocalDate): MyLocalDate = {
-  //    val instant = date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
-  //    new MyLocalDate(Date.from(instant))
-  //  }
-  //
-  //  implicit def optionLocalDateToMyLocalDate(date: Option[LocalDate]): Option[MyLocalDate] = {
-  //    date.map { tmp =>
-  //      val instant = tmp.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
-  //      Some(new MyLocalDate(Date.from(instant)))
-  //    }.getOrElse(null)
-  //  }
-  //
-  //  implicit val formatMyLocalDate = new Format[MyLocalDate] {
-  //    def writes(mld: MyLocalDate): JsValue = {
-  //      if (mld == null) {
-  //        Json.toJson("")
-  //      } else {
-  //        val instant = Instant.ofEpochMilli(mld.value.getTime)
-  //        val localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate.toString
-  //        Json.toJson(localDate)
-  //      }
-  //    }
-  //
-  //    def reads(ts: JsValue): JsResult[MyLocalDate] = {
-  //      try {
-  //        val instant = LocalDate.parse(ts.as[String]).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant
-  //        JsSuccess(new MyLocalDate(Date.from(instant)))
-  //      } catch {
-  //        case e: IllegalArgumentException => JsError("Unable to parse date")
-  //      }
-  //    }
-  //  }
+}
 
+
+import models.MyCustomTypes._
+
+object Database extends Schema {
 
   //--------------------------------------------------------------------------------------------
 

@@ -1,10 +1,8 @@
 package models
 
-import java.time.LocalDate
-import java.util.Date
+import java.time.{LocalDateTime, LocalDate}
 
-import models.Database.{TimeStamp}
-import org.squeryl.PrimitiveTypeMode._
+import models.MyCustomTypes._
 import org.squeryl.{Query, KeyedEntity}
 import org.squeryl.Table
 import org.squeryl._
@@ -24,8 +22,8 @@ case class Position(
                      start_date: LocalDate,
                      end_date: Option[LocalDate],
                      close_date: Option[LocalDate],
-                     override var created_at: TimeStamp,
-                     override var updated_at: TimeStamp
+                     override var created_at: LocalDateTime,
+                     override var updated_at: LocalDateTime
                      ) extends Entity[Long] {
   override def save = inTransaction {
     super.save.asInstanceOf[Position]
@@ -41,7 +39,7 @@ case class Position(
 
 object Position {
 
-  import Database.{positionTable, formatTimeStamp}
+  import Database.{positionTable}
 
   implicit val positionWrites: Writes[Position] = (
     (JsPath \ "id").write[Long] and
@@ -53,8 +51,8 @@ object Position {
       (JsPath \ "start_date").write[LocalDate] and
       (JsPath \ "end_date").write[Option[LocalDate]] and
       (JsPath \ "close_date").write[Option[LocalDate]] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(Position.unapply))
 
   implicit val positionReads: Reads[Position] = (
@@ -67,8 +65,8 @@ object Position {
       (JsPath \ "start_date").read[LocalDate] and
       (JsPath \ "end_date").read[Option[LocalDate]] and
       (JsPath \ "close_date").read[Option[LocalDate]] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(Position.apply _)
 
   def allQ: Query[Position] = from(positionTable) {

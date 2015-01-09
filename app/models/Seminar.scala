@@ -1,9 +1,8 @@
 package models
 
-import java.time.LocalDate
+import java.time.{LocalDateTime, LocalDate}
+import MyCustomTypes._
 
-import models.Database.{TimeStamp}
-import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.Query
 import org.squeryl.annotations.Column
 import play.api.libs.functional.syntax._
@@ -18,8 +17,8 @@ case class Seminar(
                     organizer: String,
                     event_date: LocalDate,
                     @Column("has_certificate") val hasCertificate: Boolean,
-                    override var created_at: TimeStamp,
-                    override var updated_at: TimeStamp
+                    override var created_at: LocalDateTime,
+                    override var updated_at: LocalDateTime
                     ) extends Entity[Long] {
   override def save = inTransaction {
     super.save.asInstanceOf[Seminar]
@@ -44,8 +43,8 @@ object Seminar {
       (JsPath \ "organizer").write[String] and
       (JsPath \ "event_date").write[LocalDate] and
       (JsPath \ "hasCertificate").write[Boolean] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(Seminar.unapply))
 
   implicit val seminarReads: Reads[Seminar] = (
@@ -55,8 +54,8 @@ object Seminar {
       (JsPath \ "organizer").read[String] and
       (JsPath \ "event_date").read[LocalDate] and
       (JsPath \ "hasCertificate").read[Boolean] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(Seminar.apply _)
 
   def allQ: Query[Seminar] = from(seminarTable) {

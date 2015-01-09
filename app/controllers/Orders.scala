@@ -20,7 +20,7 @@ import io.github.cloudify.scala.spdf._
 import java.io._
 import java.net._
 import play.api.templates.Html
-import models.MyTypedExpressionFactories._
+import models.MyCustomTypes._
 
 
 trait Orders extends Controller with Security {

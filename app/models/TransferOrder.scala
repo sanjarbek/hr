@@ -1,14 +1,12 @@
 package models
 
-import java.time.LocalDate
+import java.time.{LocalDateTime, LocalDate}
 
-import models.Database.{TimeStamp}
+import MyCustomTypes._
 import org.squeryl.{Query, KeyedEntity}
-import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, JsPath, Writes}
 import scala.collection.Iterable
-import java.util.Date
 
 case class TransferOrder(
                           id: Long,
@@ -25,8 +23,8 @@ case class TransferOrder(
                           trial_period_end: Option[LocalDate],
                           start_date: LocalDate,
                           end_date: Option[LocalDate],
-                          override var created_at: TimeStamp,
-                          override var updated_at: TimeStamp
+                          override var created_at: LocalDateTime,
+                          override var updated_at: LocalDateTime
                           ) extends Entity[Long] {
 
   override def save = transaction {
@@ -84,8 +82,8 @@ object TransferOrder {
       (JsPath \ "trial_period_end").write[Option[LocalDate]] and
       (JsPath \ "start_date").write[LocalDate] and
       (JsPath \ "end_date").write[Option[LocalDate]] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(TransferOrder.unapply))
 
   implicit val transferOrderReads: Reads[TransferOrder] = (
@@ -103,8 +101,8 @@ object TransferOrder {
       (JsPath \ "trial_period_end").read[Option[LocalDate]] and
       (JsPath \ "start_date").read[LocalDate] and
       (JsPath \ "end_date").read[Option[LocalDate]] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(TransferOrder.apply _)
 
   def allQ: Query[TransferOrder] = from(transferOrderTable) {

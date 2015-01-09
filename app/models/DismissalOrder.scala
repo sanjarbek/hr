@@ -1,11 +1,11 @@
 package models
 
-import java.time.LocalDate
+import java.time.{LocalDateTime, LocalDate}
 import java.util.Date
 
 import models.Database._
+import models.MyCustomTypes._
 import org.squeryl.{Session, Query}
-import org.squeryl.PrimitiveTypeMode._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, JsPath, Writes}
 import scala.collection.Iterable
@@ -19,8 +19,8 @@ case class DismissalOrder(
                            employee_id: Long,
                            comment: String,
                            leaving_date: LocalDate,
-                           override var created_at: TimeStamp,
-                           override var updated_at: TimeStamp
+                           override var created_at: LocalDateTime,
+                           override var updated_at: LocalDateTime
                            ) extends Entity[Long] {
 
   override def save = transaction {
@@ -59,8 +59,8 @@ object DismissalOrder {
       (JsPath \ "employee_id").write[Long] and
       (JsPath \ "comment").write[String] and
       (JsPath \ "leaving_date").write[LocalDate] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(DismissalOrder.unapply))
 
   implicit val dismissalReads: Reads[DismissalOrder] = (
@@ -72,8 +72,8 @@ object DismissalOrder {
       (JsPath \ "employee_id").read[Long] and
       (JsPath \ "comment").read[String] and
       (JsPath \ "leaving_date").read[LocalDate] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(DismissalOrder.apply _)
 
   def allQ: Query[DismissalOrder] = from(dismissalOrderTable) {
@@ -103,8 +103,8 @@ case class LeavingReason(
                           id: Int,
                           punkt: String,
                           name: String,
-                          override var created_at: TimeStamp,
-                          override var updated_at: TimeStamp
+                          override var created_at: LocalDateTime,
+                          override var updated_at: LocalDateTime
                           ) extends Entity[Int] {
 
   override def save = inTransaction {
@@ -127,16 +127,16 @@ object LeavingReason {
     (JsPath \ "id").write[Int] and
       (JsPath \ "punkt").write[String] and
       (JsPath \ "name").write[String] and
-      (JsPath \ "created_at").write[TimeStamp] and
-      (JsPath \ "updated_at").write[TimeStamp]
+      (JsPath \ "created_at").write[LocalDateTime] and
+      (JsPath \ "updated_at").write[LocalDateTime]
     )(unlift(LeavingReason.unapply))
 
   implicit val leavingReasonReads: Reads[LeavingReason] = (
     (JsPath \ "id").read[Int] and
       (JsPath \ "punkt").read[String] and
       (JsPath \ "name").read[String] and
-      (JsPath \ "created_at").read[TimeStamp] and
-      (JsPath \ "updated_at").read[TimeStamp]
+      (JsPath \ "created_at").read[LocalDateTime] and
+      (JsPath \ "updated_at").read[LocalDateTime]
     )(LeavingReason.apply _)
 
   def allQ: Query[LeavingReason] = from(leavingReasonTable) {
