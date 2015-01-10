@@ -32,11 +32,9 @@
                 </div>
             </div>
         </section>
-        <footer>
-            <div class="row">
-                <div class="col-sm-12">
-                    <h6>Статус соединения к серверу: <span id="server-status"></span></h6>
-                </div>
+        <footer id="footer">
+            <div class="container">
+                <p class="text-muted">Статус соединения к серверу: <span id="server-status"></span></p>
             </div>
         </footer>
 
@@ -106,7 +104,7 @@
         $ ( function ( ) {
             @*var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");*@
             @*var ws = new ReconnectingWebSocket ( "ws://192.168.0.128:9001/connection/status" ) ;*@
-        var ws = new ReconnectingWebSocket ( "            @routes.Application.serverStatus.webSocketURL() " );
+        var ws = new ReconnectingWebSocket ( "             @routes.Application.serverStatus.webSocketURL() " );
         ws.onmessage = function ( msg ) {
         $ ( '#server-status' ).text ( msg.data ) ;
         $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;

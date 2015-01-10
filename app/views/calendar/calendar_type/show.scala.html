@@ -110,7 +110,17 @@
     <div class="form-group form-group-sm">
     <div class="col-sm-12 col-md-12 col-lg-12">
     <label for="name" class="control-label">Год:</label>
-    <input required class="form-control" type="number" name="name" ng-model="newCalendarForm.year"/>
+    <input required class="form-control" type="number" name="year" ng-model="newCalendarForm.year"/>
+    </div>
+    <span class="help-inline"></span>
+    </div>
+    <div class="form-group form-group-sm">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="name" class="control-label">Вид рабочего дня:</label>
+    <select required class="form-control" name="dayTypeId" ng-model="newCalendarForm.day_type"
+    ng-options="dayType.id as dayType.name for dayType in workingDayTypes">
+    <option value="">Выберите вид рабочего дня ...</option>
+    </select>
     </div>
     <span class="help-inline"></span>
     </div>

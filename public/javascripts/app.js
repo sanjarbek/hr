@@ -321,7 +321,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return DayTypeService.list();
                 }
             },
-            controller: function ($scope, workingSheetDaysData, dayTypesData) {
+            controller: function ($scope, $modal, $log, workingSheetDaysData, dayTypesData, WorkSheetDayService) {
                 $scope.items = workingSheetDaysData;
 
                 $scope.dayTypes = dayTypesData;
@@ -339,6 +339,39 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //                        $scope.items = result
 //                    });
 //                }
+
+                $scope.updateWorkDayType = function (dayType, employeeSheetDay) {
+                    WorkSheetDayService.changeWorkDayDayType(employeeSheetDay, dayType).then(function (result) {
+                    });
+                }
+
+                $scope.updateWorkDayHours = function (hours, employeeSheetDay) {
+                    WorkSheetDayService.changeWorkDayHours(employeeSheetDay, hours).then(function (result) {
+                    });
+                }
+
+                $scope.searchForm = {}
+
+                $scope.openPositionModal = function (size) {
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'positionModal.html',
+                        resolve: {
+                            structuresData: function (StructureService) {
+                                return StructureService.freepositions();
+                            }
+                        },
+                        controller: 'ModalStructuresController',
+                        size: size
+                    });
+
+                    modalInstance.result.then(function (result) {
+                        $scope.tempStructure = result.name;
+                        $scope.searchForm.structure = result.id;
+                    }, function () {
+                        console.info('Modal dismissed at: ' + new Date());
+                    });
+                }
             }
         })
         .state('panel.orders.dismissalOrders.create', {
@@ -1576,7 +1609,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 
     $urlRouterProvider.otherwise("/employees/list");
 
-}).run(function ($rootScope, $state, $log) {
+}).run(function ($rootScope, $state, $log, editableOptions, editableThemes) {
     $rootScope.$state = $state;
 //    $rootScope.$on('$stateChangeError', function (ev, current, previous, rejection) {
 ////        if (rejection && rejection.needsAuthentication === true) {
@@ -1593,5 +1626,9 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
     $rootScope.$on("$stateNotFound", function (event, toState, toParams, fromState, fromParams) {
         console.log("Page not found.");
     });
+
+    editableThemes.bs3.inputClass = 'input-sm';
+    editableThemes.bs3.buttonsClass = 'btn-sm';
+    editableOptions.theme = 'bs3';
 });
 

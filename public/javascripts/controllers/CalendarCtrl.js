@@ -157,6 +157,9 @@ angular.module('app').controller('CalendarTypeCtrl', function ($scope, $filter, 
             resolve: {
                 calendarTypeData: function () {
                     return $scope.calendarForm.type;
+                },
+                workingDayTypeData: function (DayTypeService) {
+                    return DayTypeService.list();
                 }
             }
 
@@ -202,16 +205,18 @@ angular.module('app').controller('ModalCalendarTypeController', function ($scope
     };
 });
 
-angular.module('app').controller('ModalCalendarController', function ($scope, $modalInstance, CalendarService, calendarTypeData) {
+angular.module('app').controller('ModalCalendarController', function ($scope, $modalInstance, CalendarService, calendarTypeData, workingDayTypeData) {
 
+    $scope.workingDayTypes = workingDayTypeData;
 
     $scope.newCalendarForm = {
         calendarType: calendarTypeData,
-        year: ''
+        year: null,
+        day_type: null
     };
 
     $scope.saveCalendar = function () {
-        $scope.ok(CalendarService.updateByTypeAndYear($scope.newCalendarForm.calendarType, $scope.newCalendarForm.year));
+        $scope.ok(CalendarService.updateByTypeAndYear($scope.newCalendarForm.calendarType, $scope.newCalendarForm.year, $scope.newCalendarForm.day_type));
 
     };
 

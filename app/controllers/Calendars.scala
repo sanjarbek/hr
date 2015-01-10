@@ -61,16 +61,15 @@ object Calendars extends Controller {
     Ok(Json.toJson(years.distinct))
   }
 
-  def create(calendarTypeId: Int, year: Int) = Action {
+  def create(calendarTypeId: Int, year: Int, workingDayTypeId: Int) = Action {
     val lengthOfYear = LocalDate.of(year, 1, 1).lengthOfYear()
     for (dayOfYear <- 1 to lengthOfYear) {
       val date = LocalDate.ofYearDay(year, dayOfYear)
-
       if (date.getDayOfWeek == DayOfWeek.SATURDAY || date.getDayOfWeek == DayOfWeek.SUNDAY) {
-        Calendar(0, calendarTypeId, date, 2, null, null).save
+        Calendar(0, calendarTypeId, date, 4, null, null).save
       }
       else {
-        Calendar(0, calendarTypeId, date, 1, null, null).save
+        Calendar(0, calendarTypeId, date, workingDayTypeId, null, null).save
       }
     }
     Ok(Json.toJson(year))

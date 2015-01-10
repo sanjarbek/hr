@@ -66,8 +66,8 @@ angular.module('app').service('DayTypeService', function ($http) {
 
 angular.module('app').service('CalendarService', function ($http, $q) {
 
-    this.updateByTypeAndYear = function (calendarType, year) {
-        return ($http.get('/calendar/create', {params: {calendarTypeId: calendarType, year: year}}).then(handleSuccess, handleError));
+    this.updateByTypeAndYear = function (calendarType, year, workingDayTypeId) {
+        return ($http.get('/calendar/create', {params: {calendarTypeId: calendarType, year: year, workingDayTypeId: workingDayTypeId}}).then(handleSuccess, handleError));
     }
 
     this.getByTypeAndYear = function (calendarType, year) {

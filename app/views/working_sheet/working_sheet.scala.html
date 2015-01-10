@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label for="tempPosition" class="control-label">Подразделение:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="hidden" name="position_id" ng-model="searchForm.structure" required />
+                        <input readonly class="form-control" type="text" name="tempStructure" ng-model="tempStructure" required />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-add" ng-click="openPositionModal()" type="button"><span class="glyphicon glyphicon-list"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <label class="control-label">Дата (месяц):</label>
+                    <input type="month" class="form-control" ng-model="searchForm.date" />
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label"> </label>
+                    <button ng-click="getWorkSheetDays()" class="btn btn-primary">Сгенерировать табель</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <table class="table table-condensed table-bordered table-striped">
+            <tr>
+                <th>Сотрудники</th>
+                <th ng-repeat="day in monthDays">{{ day }}</th>
+            </tr>
+            <tr ng-repeat="item in items | filter: {calendar_date: day}">
+                <td style="vertical-align: middle">{{ item.employee.surname }} {{ item.employee.firstname }} {{ item.employee.lastname }}</td>
+                <td ng-repeat="workingSheetDay in item.workingSheetDays" contextmenu-item="workingSheetDay" contextmenu-container="meta.contextmenu"
+                ng-class="rowClass(workingSheetDay)" >
+                    @*{{workingSheetDay.dayType.shortName}}({{workingSheetDay.dayType.hours}}) <hr>*@
+                    <a href="#" onbeforesave="updateWorkDayType($data, workingSheetDay.sheetDay)" editable-select="workingSheetDay.dayType" e-ng-options="s.name for s in dayTypes">{{workingSheetDay.dayType.shortName}}<sup> {{ workingSheetDay.dayType.hours}}</sup></a> <hr>
+                    <a href="#" onbeforesave="updateWorkDayHours($data, workingSheetDay.sheetDay)" editable-number="workingSheetDay.sheetDay.hours" e-min="0">{{ workingSheetDay.sheetDay.hours}}</a>
+                    </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+<!-- contextmenu -->
+<div contextmenu="meta.contextmenu" class="dropdown contextmenu">
+    <ul class="dropdown-menu" role="menu">
+        <li class="dropdown-header">
+              {{ meta.contextmenu.$item.working_day | date: 'dd.MM.yyyy' }}
+        </li>
+        <li ng-repeat="dayType in dayTypes">
+            <a role="menuitem" href ng-click="updateCalendarDay( meta.contextmenu.$item, dayType )" >
+                        {{ dayType.name }}
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<div>
+    <script type="text/ng-template" id="positionModal.html">
+    <div class="modal-header">
+    <h4 class="modal-title">Выберите подразделение</h4>
+    </div>
+    <div class="modal-body">
+    <treecontrol class="tree-classic"
+    tree-model="dataTheTree"
+    options="treeOptions"
+    on-selection="selectNode(node)"
+    >
+    {{node.name}}
+    </treecontrol>
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Выбрать</button>
+    <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+    </script>
+</div>
+
