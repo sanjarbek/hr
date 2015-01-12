@@ -2,7 +2,7 @@ angular.module('app', [
     'ui.router',
     'ngCookies',
     'ngTable',
-    'ui.grid',
+//    'ui.grid',
     'treeGrid',
     'ui.bootstrap',
     'ui.calendar',

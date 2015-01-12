@@ -116,18 +116,27 @@ object WorkingSheets extends Controller {
     for ((emp, pos) <- emp_pos) {
       val startDate = pos.start_date
       val endDate = pos.close_date.getOrElse(pos.end_date.getOrElse(endMonthDate))
+
       for (dayOfMonth <- 1 to lengthOfMonth) {
         val workingDate = LocalDate.of(tabelMonth.getYear, tabelMonth.getMonthValue, dayOfMonth)
 
-        if (workingDate.between(startDate, endDate)) {
-          if (workingDate.getDayOfWeek == DayOfWeek.SATURDAY || workingDate.getDayOfWeek == DayOfWeek.SUNDAY) {
-            WorkingSheetDay(0, emp.id, workingDate, 4, 0, null, null).save
-          } else {
-            WorkingSheetDay(0, emp.id, workingDate, 1, 8, null, null).save
+        WorkingSheetDay.findByEmployeeAndDate(emp.id, workingDate).map{ sheetDay =>
+          if (workingDate.between(startDate, endDate)) {
+            workingDate.getDayOfWeek match {
+              case DayOfWeek.SATURDAY | DayOfWeek.SUNDAY => sheetDay.copy(day_type = 4, hours = 0).update
+              case _ => sheetDay.copy(day_type = 1, hours = 8).update
+            }
           }
-        }
-        else {
-          WorkingSheetDay(0, emp.id, workingDate, 10, 0, null, null).save
+        }.getOrElse{
+          if (workingDate.between(startDate, endDate)) {
+            workingDate.getDayOfWeek match {
+              case DayOfWeek.SATURDAY | DayOfWeek.SUNDAY => WorkingSheetDay(0, emp.id, workingDate, 4, 0, null, null).save
+              case _ => WorkingSheetDay(0, emp.id, workingDate, 1, 8, null, null).save
+            }
+          }
+          else {
+            WorkingSheetDay(0, emp.id, workingDate, 10, 0, null, null).save
+          }
         }
       }
     }

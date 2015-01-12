@@ -71,6 +71,13 @@ object WorkingSheetDay {
     }.headOption
   }
 
+  def findByEmployeeAndDate(employeeId: Long, workingDate: LocalDate) = inTransaction {
+    from(workingSheetDayTable) {
+      wsd => where(wsd.employee_id===employeeId
+        and wsd.working_day===workingDate) select(wsd)
+    }.headOption
+  }
+
   def deleteMonthData(date: java.time.LocalDate) = inTransaction {
     workingSheetDayTable.deleteWhere(wsdt =>
       wsdt.id <> 0
