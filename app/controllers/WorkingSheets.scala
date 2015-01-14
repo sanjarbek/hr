@@ -11,6 +11,7 @@ import play.api.mvc.{Action, Controller}
 import org.squeryl.{Table, Schema}
 import models.MyCustomTypes._
 import scala.collection.mutable.ListBuffer
+import libs.Utils._
 
 object WorkingSheets extends Controller {
 
@@ -88,10 +89,10 @@ object WorkingSheets extends Controller {
 
     // Удаляем записи из таблицы табеля для указаного месяца и года.
     // Пока удаляются все записи. В будущем надо будет сделать чтобы удалялись только для указанного подразделения.
-    WorkingSheetDay.deleteMonthData(LocalDate.now)
+    //WorkingSheetDay.deleteMonthData(LocalDate.now)
 
 
-    // Находим список сотрудников
+    // Формируем список сотрудников за данный месяц
     val emp_pos = transaction {
       //      Session.currentSession.setLogger(msg => println(msg))
       from(models.Database.employeeTable, models.Database.positionTable) { (emp, ph) =>
@@ -103,15 +104,6 @@ object WorkingSheets extends Controller {
       }.toList
     }
 
-    implicit class RichLocalDate(d: LocalDate) {
-      def between(startDate: LocalDate, endDate: LocalDate): Boolean = {
-        if ((d.isEqual(startDate) || d.isAfter(startDate)) && (d.isEqual(endDate) || d.isBefore(endDate)))
-          true
-        else
-          false
-      }
-    }
-
     // Заполняем табель для найденных сотрудников за текущий месяц.
     for ((emp, pos) <- emp_pos) {
       val startDate = pos.start_date
@@ -120,6 +112,7 @@ object WorkingSheets extends Controller {
       for (dayOfMonth <- 1 to lengthOfMonth) {
         val workingDate = LocalDate.of(tabelMonth.getYear, tabelMonth.getMonthValue, dayOfMonth)
 
+        // Если за дату найдена запись сотрудника в таблице табеля, то просто обновляем, а если нет, создаем запись.
         WorkingSheetDay.findByEmployeeAndDate(emp.id, workingDate).map{ sheetDay =>
           if (workingDate.between(startDate, endDate)) {
             workingDate.getDayOfWeek match {
@@ -135,7 +128,7 @@ object WorkingSheets extends Controller {
             }
           }
           else {
-            WorkingSheetDay(0, emp.id, workingDate, 10, 0, null, null).save
+            WorkingSheetDay(0, emp.id, workingDate, 11, 0, null, null).save
           }
         }
       }

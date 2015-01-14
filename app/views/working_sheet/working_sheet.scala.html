@@ -16,15 +16,10 @@
                     <label class="control-label">Дата (месяц):</label>
                     <input type="month" class="form-control" ng-model="searchForm.date" />
                 </div>
-                <div class="col-sm-2 col-md-1 col-lg-1">
-                    <label class="control-label">&nbsp;</label>
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                <label class="control-label">&nbsp;</label>
                     <button ng-click="getWorkSheetDays()" class="form-control btn btn-primary">Сгенерировать табель</button>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-
             </div>
         </div>
     </div>
@@ -41,9 +36,9 @@
                 <td ng-repeat="workingSheetDay in item.workingSheetDays" contextmenu-item="workingSheetDay" contextmenu-container="meta.contextmenu"
                 ng-class="rowClass(workingSheetDay)" >
                     @*{{workingSheetDay.dayType.shortName}}({{workingSheetDay.dayType.hours}}) <hr>*@
-                    <a href="#" onbeforesave="updateWorkDayType($data, workingSheetDay.sheetDay)" editable-select="workingSheetDay.dayType" e-ng-options="s.name for s in dayTypes">{{workingSheetDay.dayType.shortName}}<sup> {{ workingSheetDay.dayType.hours}}</sup></a> <hr>
-                    <a href="#" onbeforesave="updateWorkDayHours($data, workingSheetDay.sheetDay)" editable-number="workingSheetDay.sheetDay.hours" e-min="0">{{ workingSheetDay.sheetDay.hours}}</a>
-                    </td>
+                <a href="#" popover="{{workingSheetDay.dayType.name}}" popover-trigger="mouseenter" onbeforesave="updateWorkDayType($data, workingSheetDay.sheetDay)" editable-select="workingSheetDay.dayType" e-ng-options="s.name for s in dayTypes">{{workingSheetDay.dayType.shortName}}<sup> {{ workingSheetDay.dayType.hours}}</sup></a> <hr>
+                <a href="#" popover-title="Количество отработанных часов за {{workingSheetDay.sheetDay.working_day}}" popover="{{workingSheetDay.sheetDay.hours}}" popover-trigger="mouseenter" onbeforesave="updateWorkDayHours($data, workingSheetDay.sheetDay)" editable-number="workingSheetDay.sheetDay.hours" e-min="0">{{ workingSheetDay.sheetDay.hours}}</a>
+                </td>
             </tr>
 
         </table>

@@ -153,8 +153,8 @@ GET           /orders/transfer/json/list              controllers.Orders.jsonTra
 GET           /worksheets/day/list                    controllers.WorkingSheets.workingDayList
 GET           /worksheets/day/json/list               controllers.WorkingSheets.workingDayListJson(structureId: Option[Int])
 GET           /worksheets/day/generate                controllers.WorkingSheets.generateWorkingMonth(structureId: Option[Int])
-PUT        /worksheets/day/updateDayType        controllers.WorkingSheets.updateWorkSheetDayDayType
-PUT        /worksheets/day/updateHours          controllers.WorkingSheets.updateWorkSheetDayHours
+PUT           /worksheets/day/updateDayType           controllers.WorkingSheets.updateWorkSheetDayDayType
+PUT           /worksheets/day/updateHours             controllers.WorkingSheets.updateWorkSheetDayHours
 
 GET           /contact_informations/show              controllers.ContactInformations.show
 GET           /contact_informations/json/get          controllers.ContactInformations.jsonEmployeeContact(employeeId: Long)
@@ -166,10 +166,10 @@ GET           /calendar_types/show                    controllers.Calendars.show
 POST          /calendar_types/save                    controllers.Calendars.saveCalendarType
 GET           /calendar_types/json/list               controllers.Calendars.jsonCalendarTypes
 GET           /calendar_types/json/years              controllers.Calendars.jsonCalendarTypeYears(calendarTypeId: Int)
-GET           /day_types/json/list                    controllers.Calendars.jsonCalendarDayTypes
+GET           /day_types/json/list                    controllers.Calendars.jsonCalendarDayTypes(dt: Option[Boolean])
 GET           /calendar/json/list                     controllers.Calendars.showCalendarByTypeAndYear(calendarTypeId: Int, year: Int)
 PUT           /calendar/update                        controllers.Calendars.updateCalendarDay
-GET        /calendar/create                     controllers.Calendars.create(calendarTypeId: Int, year: Int, workingDayTypeId: Int)
+GET           /calendar/create                        controllers.Calendars.create(calendarTypeId: Int, year: Int, workingDayTypeId: Int)
 
 GET           /relationship_statuses/json/list        controllers.Entities.jsonRelationshipStatusList
 POST          /relationship_statuses/save             controllers.Entities.saveRelationshipStatus
@@ -184,7 +184,7 @@ DELETE        /seminars/delete                        controllers.Seminars.delet
 
 
 # Urls for testing
-GET        /test                                controllers.Employees.empTestList
+GET           /test                                   controllers.Employees.empTestList
 
 
 # Webjar plugin included.

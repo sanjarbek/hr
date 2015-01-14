@@ -38,8 +38,11 @@ object Calendars extends Controller {
     Ok(Json.toJson(calendarTypes))
   }
 
-  def jsonCalendarDayTypes() = Action {
-    val dayTypes = DayType.findAll.filter(_.dayType).map { dayType => Json.toJson(dayType)}
+  def jsonCalendarDayTypes(dt: Option[Boolean]) = Action {
+    val dayTypes = dt match {
+      case Some(true) => DayType.findAll.filter(_.dayType).map { dayType => Json.toJson(dayType)}
+      case Some(false) | None => DayType.findAll.map { dayType => Json.toJson(dayType)}
+    }
     Ok(Json.toJson(dayTypes))
   }
 

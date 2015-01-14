@@ -318,7 +318,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 //                    return WorkSheetDayService.list(1);
                 },
                 dayTypesData: function (DayTypeService) {
-                    return DayTypeService.list();
+                    return DayTypeService.list(false);
                 }
             },
             controller: function ($scope, $modal, $log, workingSheetDaysData, dayTypesData, WorkSheetDayService) {
@@ -1601,7 +1601,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     return CalendarTypeService.list();
                 },
                 dayTypesData: function (DayTypeService) {
-                    return DayTypeService.list();
+                    return DayTypeService.list(true);
                 }
             },
             controller: 'CalendarTypeCtrl'

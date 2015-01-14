@@ -40,9 +40,6 @@ angular.module('app').service('CalendarTypeService', function ($http) {
 
     }
 
-
-    // I transform the successful response, unwrapping the application data
-    // from the API response payload.
     function handleSuccess(response) {
 
         return( response.data );
@@ -57,8 +54,8 @@ angular.module('app').service('DayTypeService', function ($http) {
                 return result;
             });
     }
-    this.list = function () {
-        return $http.get('/day_types/json/list').then(function (result) {
+    this.list = function (type) {
+        return $http.get('/day_types/json/list', {params: {'dt': type}}).then(function (result) {
             return result.data;
         });
     }
