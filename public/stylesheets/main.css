@@ -1,7 +1,8 @@
 html,
 body {
     overflow-x: hidden !important;
-    font-family: 'Source Sans Pro', sans-serif;
+    font: "normal normal normal 14px/1 FontAwesome";
+    /*font-family: 'Source Sans Pro', sans-serif;*/
     -webkit-font-smoothing: antialiased;
     min-height: 100%;
     /*background: #f9f9ff;*/
@@ -1374,11 +1375,11 @@ body > .header .logo .icon {
     /*padding-left: 0;*/
     /*}*/
 
-/*
-    Compenent: Progress bars
---------------------------------
-*/
-/* size variation */
+    /*
+        Compenent: Progress bars
+    --------------------------------
+    */
+    /* size variation */
 .progress.sm {
     height: 10px;
 }

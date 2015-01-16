@@ -13,7 +13,8 @@ angular.module('app', [
     'ckeditor',
     'smart-table',
     'io.dennis.contextmenu',
-    'xeditable'
+    'xeditable',
+    'ui.router.tabs'
 ]);
 
 angular.module('app').config(function ($stateProvider, $urlRouterProvider, $parseProvider, $httpProvider) {
@@ -26,6 +27,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 },
                 function (response) {
                     if (response.status == 401) {
+                        console.log(response.status);
                         console.log("Invalid token.");
                         $rootScope.$broadcast("InvalidToken");
                         $rootScope.sessionExpired = true;
@@ -44,10 +46,22 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                             });
                         $injector.get('$state').transitionTo('login');
                     } else if (response.status == 403) {
-                        console.log("Insufficient privileges.");
+                        console.log("Не достаточно прав для доступа к данному ресурсу.");
                         $rootScope.$broadcast("InsufficientPrivileges");
+                    } else {
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Ошибка запроса.',
+                            text: 'Произошла ошибка.',
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                            });
+
+                        return $q.reject(response);
                     }
-                    return $q.reject(response);
                 }
             );
         };
@@ -69,23 +83,22 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             url: '/orders',
             abstract: true,
             templateUrl: '/orders/tabTemplate',
-            controller: function ($scope, $state) {
-                $scope.tabs = [
-                    { heading: 'Прием на работу', route: 'panel.orders.employmentOrders.list', active: true},
-                    { heading: 'Перемещение', route: 'panel.orders.transferOrders.list', active: false },
-                    { heading: 'Увольнение', route: 'panel.orders.dismissalOrders.list', active: false }
-                ];
+            controller: function ($rootScope, $scope, $state) {
 
-                $scope.go = function (t) {
-                    $scope.tabs.forEach(function (tab) {
-                        tab.active = $scope.active(t.route);
-                    });
-                    $state.go(t.route);
+                $scope.initialise = function () {
+
+                    $scope.go = function (state) {
+                        $state.go(state);
+                    };
+
+                    $scope.tabData = [
+                        { heading: 'Прием на работу', route: 'panel.orders.employmentOrders.list'},
+                        { heading: 'Перемещение', route: 'panel.orders.transferOrders.list'},
+                        { heading: 'Увольнение', route: 'panel.orders.dismissalOrders.list'}
+                    ];
                 };
 
-                $scope.active = function (route) {
-                    return $state.includes(route);
-                };
+                $scope.initialise();
             }
         })
         .state('panel.orders.employmentOrders', {
@@ -326,13 +339,33 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 
                 $scope.dayTypes = dayTypesData;
 
-                $scope.monthDays = [
-                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
-                ];
+                $scope.monthDays = [1, 2, 3, 4];
 
-                $scope.changedValue = function (item, workingSheetDay) {
-                    alert(workingSheetDay.hours);
+                $scope.searchForm = {}
+
+                $scope.updateWorkSheetList = function () {
+                    if ($scope.searchForm.date == null) {
+                        var d = new Date();
+                        var month = d.getMonth() + 1;
+                        var year = d.getYear();
+                        var monthDays = new Date(year, month, 0).getDate();
+                        $scope.monthDays = [];
+                        for (var i = 1; i <= monthDays; i++) {
+                            $scope.monthDays.push(i);
+                        }
+
+                    } else {
+                        var d = new Date($scope.searchForm.date);
+                        var month = d.getMonth() + 1;
+                        var year = d.getYear();
+                        var monthDays = new Date(year, month, 0).getDate();
+                        $scope.monthDays = [];
+                        for (var i = 1; i <= monthDays; i++) {
+                            $scope.monthDays.push(i);
+                        }
+                    }
                 }
+                $scope.updateWorkSheetList();
 
 //                $scope.getWorkSheetDays = function() {
 //                    WorkSheetDayService.list(1).then(function(result){
@@ -349,8 +382,6 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     WorkSheetDayService.changeWorkDayHours(employeeSheetDay, hours).then(function (result) {
                     });
                 }
-
-                $scope.searchForm = {}
 
                 $scope.openPositionModal = function (size) {
 

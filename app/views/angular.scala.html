@@ -12,14 +12,14 @@
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("tree-control-attribute.css"))'>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("font-awesome.min.css"))'>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("xeditable.css"))'>
-        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/main.css"))'>
-        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/anim-in-out.css"))'>
-        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/custom_bootstrap.css"))'>
-        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/custom-ui-grid.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/treeGrid.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("javascripts/libs/ng-tags-input/ng-tags-input.min.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("javascripts/libs/ng-tags-input/ng-tags-input.bootstrap.min.css"))'>
         <link rel='stylesheet' href='@routes.Assets.at(("javascripts/libs/ds82-ng-contextmenu/contextmenu.css"))'>
+        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/main.css"))'>
+        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/anim-in-out.css"))'>
+        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/custom_bootstrap.css"))'>
+        <link rel='stylesheet' href='@routes.Assets.at(("stylesheets/smart-table.css"))'>
         @*<link rel='stylesheet' href='@routes.Assets.at(("javascripts/libs/ui-grid/ui-grid.css"))'>*@
     </head>
     <body>
@@ -98,13 +98,14 @@
         <script type='text/javascript' src='@routes.Assets.at("javascripts/libs/textAngular-1.2.2/textAngular.min.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/libs/ckeditor-4.4.5/ckeditor.js")'></script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/libs/ds82-ng-contextmenu/contextmenu.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/libs/ui-router-tabs/ui-router-tabs.js")'></script>
         @*<script type='text/javascript' src='@routes.Assets.at("javascripts/libs/ui-grid/ui-grid.js")'></script>*@
 
         <script type="text/javascript">
         $ ( function ( ) {
             @*var ws = new WebSocket ( " @routes.Application.serverStatus.webSocketURL() ");*@
             @*var ws = new ReconnectingWebSocket ( "ws://192.168.0.128:9001/connection/status" ) ;*@
-        var ws = new ReconnectingWebSocket ( "             @routes.Application.serverStatus.webSocketURL() " );
+        var ws = new ReconnectingWebSocket ( "              @routes.Application.serverStatus.webSocketURL() " );
         ws.onmessage = function ( msg ) {
         $ ( '#server-status' ).text ( msg.data ) ;
         $ ( '#server-status' ).addClass ( 'label label-success' ).removeClass ( 'label-warning' ) ;

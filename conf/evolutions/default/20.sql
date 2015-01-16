@@ -19,7 +19,8 @@ values('Рабочий (8)', 'Р', 8, true, localtimestamp, localtimestamp),
 ('Отпуск (без сохр. Зп.)', 'О/Б', 0, false , localtimestamp, localtimestamp),
 ('Невыясненные обстоятельство', 'Н', 0, false , localtimestamp, localtimestamp),
 ('Болезнь', 'Б', 0, false , localtimestamp, localtimestamp),
-('Прогул', 'П', 0, false , localtimestamp, localtimestamp);
+('Прогул', 'П', 0, false , localtimestamp, localtimestamp),
+('Не сотрудник', 'НР', 0, false , localtimestamp, localtimestamp);
 
 create table calendar_types (
   id serial primary key ,

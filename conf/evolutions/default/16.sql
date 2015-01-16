@@ -1,8 +1,8 @@
 # --- !Ups
 
 CREATE TABLE leaving_reasons (
-  id    SERIAL PRIMARY KEY,
-  punkt TEXT NOT NULL UNIQUE,
+  id         SERIAL PRIMARY KEY,
+  punkt      TEXT      NOT NULL UNIQUE,
   name       TEXT      NOT NULL UNIQUE,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL
@@ -56,13 +56,14 @@ CREATE TABLE order_types (
 INSERT INTO order_types (name, created_at, updated_at) VALUES
   ('Прием на работу', localtimestamp, localtimestamp),
   ('Перемещение', localtimestamp, localtimestamp),
-  ('Увольнение', localtimestamp, localtimestamp);
+  ('Увольнение', localtimestamp, localtimestamp),
+  ('Отпуск', localtimestamp, localtimestamp);
 
 
 CREATE TABLE orders (
-  id             BIGSERIAL PRIMARY KEY,
+  id            BIGSERIAL PRIMARY KEY,
   order_type_id INT REFERENCES order_types (id),
-  date_of_order  DATE,
+  date_of_order DATE,
   created_at    TIMESTAMP NOT NULL,
   updated_at    TIMESTAMP NOT NULL
 );
@@ -71,24 +72,24 @@ CREATE TABLE orders (
 CREATE TABLE employment_orders (
   position_id        INT,
   contract_type_id   INT,
-  contract_number BIGINT UNIQUE NOT NULL,
+  contract_number    BIGINT UNIQUE NOT NULL,
   employee_id        BIGINT,
   salary             NUMERIC(14, 2),
   calendar_type_id   SMALLINT,
-  is_combined_work BOOLEAN DEFAULT FALSE,
+  is_combined_work   BOOLEAN DEFAULT FALSE,
   trial_period_start DATE,
   trial_period_end   DATE,
   start_date         DATE,
-  end_date         DATE
+  end_date           DATE
 )
   INHERITS (orders);
 
 CREATE TABLE dismissal_orders (
-  employee_id       BIGINT    NOT NULL,
-  position_id INT,
-  leaving_reason_id INT       NOT NULL,
+  employee_id       BIGINT NOT NULL,
+  position_id       INT,
+  leaving_reason_id INT    NOT NULL,
   comment           TEXT,
-  leaving_date DATE
+  leaving_date      DATE
 )
   INHERITS (orders);
 
@@ -113,7 +114,7 @@ CREATE TABLE positions (
   position_id         INT,
   employee_id         BIGINT,
   dismissal_order_id  BIGINT,
-  transfer_order_id BIGINT,
+  transfer_order_id   BIGINT,
   start_date          DATE,
   end_date            DATE,
   close_date          DATE,
@@ -155,7 +156,7 @@ CREATE TABLE positions (
 -- EXECUTE PROCEDURE set_employee_dismissal_order();
 --------------------------------------------------------------------------------------
 
-  # -- !Downs
+# -- !Downs
 DROP TABLE IF EXISTS leaving_reasons CASCADE;
 DROP SEQUENCE IF EXISTS leaving_reasons_id_seq;
 DROP TABLE IF EXISTS positions CASCADE;

@@ -1,13 +1,8 @@
-<tabset>
-    <tab
-    ng-repeat="t in tabs"
-
-    heading="{{t.heading}}"
-
-    select="go(t)"
-
-    active="t.active">
-
-      </tab>
-</tabset>
-<div ui-view></div>
+<div class="row">
+    <div class="col-md-12">
+        @*<div class="nav-tabs-custom">*@
+    <tabs data="tabData" type="tabs" vertical = false />
+    <ui-view autoscroll></ui-view>
+        @*</div>*@
+    </div>
+</div>
