@@ -89,7 +89,7 @@ object WorkingSheets extends Controller {
 
     // Удаляем записи из таблицы табеля для указаного месяца и года.
     // Пока удаляются все записи. В будущем надо будет сделать чтобы удалялись только для указанного подразделения.
-    //WorkingSheetDay.deleteMonthData(LocalDate.now)
+    WorkingSheetDay.deleteMonthData(LocalDate.now)
 
 
     // Формируем список сотрудников за данный месяц
@@ -113,14 +113,14 @@ object WorkingSheets extends Controller {
         val workingDate = LocalDate.of(tabelMonth.getYear, tabelMonth.getMonthValue, dayOfMonth)
 
         // Если за дату найдена запись сотрудника в таблице табеля, то просто обновляем, а если нет, создаем запись.
-        WorkingSheetDay.findByEmployeeAndDate(emp.id, workingDate).map{ sheetDay =>
+        WorkingSheetDay.findByEmployeeAndDate(emp.id, workingDate).map { sheetDay =>
           if (workingDate.between(startDate, endDate)) {
             workingDate.getDayOfWeek match {
               case DayOfWeek.SATURDAY | DayOfWeek.SUNDAY => sheetDay.copy(day_type = 4, hours = 0).update
               case _ => sheetDay.copy(day_type = 1, hours = 8).update
             }
           }
-        }.getOrElse{
+        }.getOrElse {
           if (workingDate.between(startDate, endDate)) {
             workingDate.getDayOfWeek match {
               case DayOfWeek.SATURDAY | DayOfWeek.SUNDAY => WorkingSheetDay(0, emp.id, workingDate, 4, 0, null, null).save

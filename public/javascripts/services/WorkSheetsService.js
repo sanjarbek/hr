@@ -13,6 +13,12 @@ angular.module('app').service('WorkSheetDayService', function ($http) {
         });
     }
 
+    this.generate = function (structureId) {
+        return $http.get('/worksheets/day/generate', {params: {'structureId': structureId}}).then(function (result) {
+            return result.data;
+        });
+    }
+
     this.changeWorkDayDayType = function (workSheetDay, dayType) {
         return $http.put('/worksheets/day/updateDayType', {'sheetDayId': workSheetDay.id, 'dayTypeId': dayType.id}).then(function (result) {
             return result.data;

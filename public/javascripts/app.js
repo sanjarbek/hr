@@ -77,7 +77,17 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
         .state('panel', {
             url: '',
             abstract: true,
-            templateUrl: '/menu'
+            templateUrl: '/menu',
+            controller: function ($scope, $http) {
+                /**
+                 * Invalidate the token on the server.
+                 */
+                $scope.logout = function () {
+                    $http.post("/logout").then(function () {
+                        $scope.user = undefined;
+                    });
+                };
+            }
         })
         .state('panel.orders', {
             url: '/orders',
@@ -339,7 +349,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
 
                 $scope.dayTypes = dayTypesData;
 
-                $scope.monthDays = [1, 2, 3, 4];
+                $scope.monthDays = [];
 
                 $scope.searchForm = {}
 
@@ -366,6 +376,15 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     }
                 }
                 $scope.updateWorkSheetList();
+
+                $scope.updateWorkSheetListFromServer = function () {
+                    $scope.updateWorkSheetList();
+                    WorkSheetDayService.generate($scope.searchForm.structure).then(function (result) {
+                        console.log(result);
+                    });
+
+                }
+
 
 //                $scope.getWorkSheetDays = function() {
 //                    WorkSheetDayService.list(1).then(function(result){
@@ -1638,7 +1657,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             controller: 'CalendarTypeCtrl'
         });
 
-    $urlRouterProvider.otherwise("/employees/list");
+    $urlRouterProvider.otherwise("login");
 
 }).run(function ($rootScope, $state, $log, editableOptions, editableThemes) {
     $rootScope.$state = $state;

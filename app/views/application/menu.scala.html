@@ -19,10 +19,14 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li ng-class="{active: $state.includes('panel.employees')}"><a ui-sref="panel.employees.list">
-                        <span class="fa fa-users"> Сотрудники</span></a>
+                        <span class="fa fa-users"></span> Сотрудники</a>
                     </li>
-                    <li ng-class="{active: $state.includes('panel.orders')}"><a ui-sref="panel.orders.employmentOrders.list"><span class="fa fa-tasks"> Кадровые приказы</span></a></li>
-                    <li ng-class="{active: $state.includes('panel.worksheet')}"><a ui-sref="panel.worksheet.list"><span class="fa fa-list-alt"> Табель</span></a></li>
+                    <li ng-class="{active: $state.includes('panel.orders')}"><a ui-sref="panel.orders.employmentOrders.list"><span class="fa fa-tasks"></span>
+                        Кадровые приказы</a>
+                    </li>
+                    <li ng-class="{active: $state.includes('panel.worksheet')}"><a ui-sref="panel.worksheet.list"><span class="fa fa-list-alt"></span>
+                        Табель</a>
+                    </li>
                     @*<li><a href="#">Отчеты</a></li>*@
                 </ul>
                 <ul class="nav navbar-nav">
@@ -35,12 +39,12 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/logout"><span class="fa fa-power-off"></span></a></li>
+                    <li><a href="#" ng-click="logout()"><span class="fa fa-power-off"></span></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="fa fa-book"> Справочники</span> <span class="caret"></span></a>
+                            <span class="fa fa-book"></span> Справочники <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a ui-sref="panel.relationship_types.list">Виды родства</a></li>
                             @*<li><a ui-sref="panel.positions.list">Должности</a></li>*@

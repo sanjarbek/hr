@@ -1,8 +1,8 @@
 html,
 body {
     overflow-x: hidden !important;
-    font: "normal normal normal 14px/1 FontAwesome";
-    /*font-family: 'Source Sans Pro', sans-serif;*/
+
+    font-size: 12px;
     -webkit-font-smoothing: antialiased;
     min-height: 100%;
     /*background: #f9f9ff;*/

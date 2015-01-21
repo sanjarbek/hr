@@ -17,8 +17,19 @@
                     <input type="month" class="form-control" ng-model="searchForm.date" />
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
-                <label class="control-label">&nbsp;</label>
-                    <button ng-click="updateWorkSheetList()" class="form-control btn btn-primary">Сгенерировать табель</button>
+                    <br />
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" ng-click="updateWorkSheetListFromServer()">Показать табель</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#"><span class="fa fa-refresh"></span> Обновить табель частично</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#"><span class="fa fa-retweet"></span> Обновить табель полностью</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

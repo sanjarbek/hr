@@ -39,13 +39,6 @@ create table calendars (
   updated_at   TIMESTAMP
 );
 
-create table holidays (
-  id serial primary key ,
-  name text unique not null ,
-  created_at   TIMESTAMP,
-  updated_at   TIMESTAMP
-);
-
 create table sheet_working_days (
   id serial primary key ,
   employee_id integer not null ,
@@ -87,8 +80,6 @@ DROP TABLE IF EXISTS sheet_working_months_day_types;
 DROP SEQUENCE IF EXISTS sheet_working_months_day_types_id_seq;
 DROP TABLE IF EXISTS sheet_working_months;
 DROP SEQUENCE IF EXISTS sheet_working_months_id_seq;
-drop table if exists holidays;
-drop sequence if exists holidays_id_seq;
 DROP TABLE IF EXISTS calendars;
 DROP SEQUENCE IF EXISTS calendars_id_seq;
 DROP TABLE IF EXISTS calendar_types;

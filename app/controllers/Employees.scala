@@ -14,24 +14,16 @@ import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.templates.Html
 
-object Employees extends Controller {
+object Employees extends Application {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.employees.list())
   }
 
-  def jsonGet(id: Long) = Action {
+  def jsonGet(id: Long) = HasToken() { _ => currentId => implicit request =>
     Employee.findById(id).map { employee =>
       Ok(Json.toJson(employee))
     }.getOrElse(NotFound)
-
-    //    val employee = Employee.findById(id)
-    //    Ok(Json.toJson(employee))
-  }
-
-  def jsonList = Action { request =>
-    val employees = Employee.findAll.map { employee => Json.toJson(employee)}
-    Ok(Json.toJson(employees))
   }
 
   def newEmployee = Action { implicit request =>
@@ -72,11 +64,11 @@ object Employees extends Controller {
     )
   }
 
-  def template = Action {
+  def template = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.employees.default())
   }
 
-  def jsonEmployeesList(status: Option[Boolean]) = Action {
+  def jsonEmployeesList(status: Option[Boolean]) = HasToken() { _ => currentId => implicit request =>
     val employees = (status match {
       case Some(true) => Employee.findAllEmployed
       case Some(false) => Employee.findAllUnemployed

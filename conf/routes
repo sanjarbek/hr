@@ -5,12 +5,13 @@
 # Home page
 GET           /                                       controllers.Application.angular
 GET           /login                                  controllers.Application.login
-GET           /logout                                 controllers.Application.logout
+POST          /logout                                 controllers.Application.logout
 POST          /auth                                   controllers.Application.auth
 GET           /menu                                   controllers.Application.menu
 GET           /user                                   controllers.Application.user
 POST          /upload                                 controllers.Application.upload
 GET           /upload                                 controllers.Application.uploadForm
+GET           /ping                                   controllers.Application.ping
 
 # Состояния работоспособности сервера
 GET           /connection/status                      controllers.Application.serverStatus

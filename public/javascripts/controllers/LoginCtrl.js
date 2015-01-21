@@ -9,11 +9,10 @@ angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http,
     // Otherwise the user has to log in
     var token = $cookies["XSRF-TOKEN"];
     if (token) {
-        $http.get("/ping")
-            .then(
+        $http.get("/ping").then(
             function (response) {
                 // Token valid, fetch user data
-                alert("Token valid, fetch user data");
+                //alert("Token valid, fetch user data");
             },
             function (response) {
                 token = undefined;
@@ -30,12 +29,11 @@ angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http,
     }
 
     /**
-     * Login using the given credentials as (email,password).
+     * Login using the given credentials as (username,password).
      * The server adds the XSRF-TOKEN cookie which is then picked up by Play.
      */
     $scope.login = function (credentials) {
-        $http.post("/auth", credentials)
-            .then(
+        $http.post("/auth", credentials).then(
             function (response) { // success
                 token = response.data.token;
                 var userId = response.data.userId;
@@ -45,8 +43,7 @@ angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http,
                 // return 'empty' promise so the right `then` function is called
                 return $q.reject(response.data.err);
             }
-        )
-            .then(
+        ).then(
             function (response) {
                 $scope.user = response.data;
                 $state.go('panel.orders.employmentOrders.list');

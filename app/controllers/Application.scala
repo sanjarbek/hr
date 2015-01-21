@@ -31,6 +31,11 @@ trait Security {
 
   implicit val app: play.api.Application = play.api.Play.current
 
+  lazy val CacheExpiration = app.configuration.getInt("cache.expiration") match {
+    case Some(i) => i
+    case None => 600
+  }
+
   val AuthTokenHeader = "X-XSRF-TOKEN"
   val AuthTokenCookieKey = "XSRF-TOKEN"
   val AuthTokenUrlKey = "auth"
@@ -39,21 +44,19 @@ trait Security {
   def HasToken[A](p: BodyParser[A] = parse.anyContent)(f: String => Long => Request[A] => Result): Action[A] =
     Action(p) { implicit request =>
       val maybeToken = request.headers.get(AuthTokenHeader).orElse(request.getQueryString(AuthTokenUrlKey))
-      maybeToken flatMap { token =>
+      maybeToken map { token =>
         Cache.getAs[Long](token) map { userid =>
+          Cache.remove(token)
+          Cache.set(token, userid, CacheExpiration)
           f(token)(userid)(request)
-        }
-      } getOrElse Unauthorized(Json.obj("err" -> "No Token"))
+        } getOrElse Unauthorized(Json.obj("err" -> "Not found in cache."))
+      } getOrElse Unauthorized(Json.obj("err" -> "No Token."))
     }
 
 }
 
 /** General Application actions, mainly session management */
 trait Application extends Controller with Security {
-
-  lazy val CacheExpiration =
-    app.configuration.getInt("cache.expiration").getOrElse(60 /*seconds*/ * 2 /* minutes */)
-
 
   case class Login(username: String, password: String)
 
