@@ -1,8 +1,8 @@
 angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http, $q, $timeout, $state) {
     // This is only for demo purposes
     $scope.credentials = {
-        username: "samatov",
-        password: "admin12"
+        username: null,
+        password: null
     };
 
     // Check token cookie and try to authenticate
@@ -32,8 +32,8 @@ angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http,
      * Login using the given credentials as (username,password).
      * The server adds the XSRF-TOKEN cookie which is then picked up by Play.
      */
-    $scope.login = function (credentials) {
-        $http.post("/auth", credentials).then(
+    $scope.login = function () {
+        $http.post("/auth", $scope.credentials).then(
             function (response) { // success
                 token = response.data.token;
                 var userId = response.data.userId;

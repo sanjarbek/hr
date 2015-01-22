@@ -10,6 +10,7 @@ import java.util.Collections._
 import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.poi.poifs.filesystem.POIFSFileSystem
 import org.apache.poi.hwpf.HWPFDocument
+import org.mindrot.jbcrypt.BCrypt
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
@@ -46,7 +47,7 @@ trait Security {
       val maybeToken = request.headers.get(AuthTokenHeader).orElse(request.getQueryString(AuthTokenUrlKey))
       maybeToken map { token =>
         Cache.getAs[Long](token) map { userid =>
-          Cache.remove(token)
+          //          Cache.remove(token)
           Cache.set(token, userid, CacheExpiration)
           f(token)(userid)(request)
         } getOrElse Unauthorized(Json.obj("err" -> "Not found in cache."))
@@ -84,14 +85,17 @@ trait Application extends Controller with Security {
     loginForm.bind(request.body).fold(// Bind JSON body to form values
       formErrors => BadRequest(Json.obj("err" -> formErrors.errorsAsJson)),
       loginData => {
-        if (loginData.username == "samatov" && loginData.password == "admin12") {
-          val token = java.util.UUID.randomUUID().toString
-          Ok(Json.obj(
-            "authToken" -> token,
-            "userId" -> 100
-          )).withToken(token -> 100)
-        }
-        else NotFound(Json.obj("err" -> "User Not Found or Password Invalid"))
+        models.User.findByUsername(loginData.username).map { user =>
+          if (BCrypt.checkpw(loginData.password, user.passwordHash)) {
+            val token = java.util.UUID.randomUUID().toString
+            Ok(Json.obj(
+              "authToken" -> token,
+              "userId" -> user.id
+            )).withToken(token -> user.id)
+          } else {
+            NotFound(Json.toJson("Неверный пароль"))
+          }
+        }.getOrElse(NotFound(Json.toJson("Неверное имя пользователя")))
       }
     )
   }

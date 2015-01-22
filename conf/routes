@@ -183,6 +183,14 @@ POST          /seminars/save                          controllers.Seminars.save
 PUT           /seminars/update                        controllers.Seminars.update
 DELETE        /seminars/delete                        controllers.Seminars.delete(id: Long)
 
+#GET           /users/createTest                       controllers.Users.createTest
+#GET           /users/checkTest                        controllers.Users.checkPassword
+GET         /users/list                   controllers.Users.list
+GET         /users/json/list              controllers.Users.jsonList
+PUT         /users/change-password        controllers.Users.changePassword
+POST        /users/create                 controllers.Users.create
+PUT         /users/update                 controllers.Users.update
+PUT         /users/change-status          controllers.Users.changeStatus
 
 # Urls for testing
 GET           /test                                   controllers.Employees.empTestList

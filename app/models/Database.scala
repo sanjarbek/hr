@@ -137,6 +137,7 @@ object Database extends Schema {
   val leavingReasonTable: Table[LeavingReason] = table[LeavingReason]("leaving_reasons")
   val workingSheetDayTable: Table[WorkingSheetDay] = table[WorkingSheetDay]("sheet_working_days")
   val empTestTable: Table[EmpTest] = table[EmpTest]("emptest")
+  val userTable = table[User]("users")
 
   on(employeeTable) { emp => declare {
     emp.id is (autoIncremented("employees_id_seq"))
@@ -284,6 +285,10 @@ object Database extends Schema {
 
   on(empTestTable) { empTest => declare(
     empTest.id is (autoIncremented("emptest_id_seq")))
+  }
+
+  on(userTable) { user => declare(
+    user.id is (autoIncremented("users_id_seq")))
   }
 
 }

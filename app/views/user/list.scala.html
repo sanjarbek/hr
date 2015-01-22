@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <label><h4 class="panel-title">Список пользователей</h4></label>
+                <div class="pull-right">
+                    <button type="button" ng-click="showSearch()" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span> Поиск
+                    </button>
+                    <button type="button" ng-click="$state.go('panel.users.create')" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus"></span> Добавить нового пользователя
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <table st-table="users" class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Логин</th>
+                        <th>Пароль</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='user in users'>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.passwordHash }}</td>
+                        <td>
+                            <div class="pull-right">
+                                <a href="#" class="btn btn-xs btn-primary" popover="Редактировать" popover-trigger="mouseenter" ><span class="fa fa-edit"></span></a>
+                                <a href="#" class="btn btn-xs btn-default" popover="Поменять пароль" popover-trigger="mouseenter" popover-placement="left"><span class="fa fa-key"></span></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-light-blue">
+                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10" class="pagination-sm"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+

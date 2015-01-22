@@ -1655,27 +1655,33 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 }
             },
             controller: 'CalendarTypeCtrl'
-        });
+        })
+        .state('panel.users', {
+            abstract: true,
+            url: '/users',
+            template: '<div ui-view></div>'
+        })
+        .state('panel.users.list', {
+            url: '/list',
+            templateUrl: '/users/list',
+            resolve: {
+                usersData: function (UserService) {
+                    return UserService.list();
+                }
+            },
+            controller: 'UserController'
+        })
+    ;
 
     $urlRouterProvider.otherwise("login");
 
 }).run(function ($rootScope, $state, $log, editableOptions, editableThemes) {
     $rootScope.$state = $state;
-//    $rootScope.$on('$stateChangeError', function (ev, current, previous, rejection) {
-////        if (rejection && rejection.needsAuthentication === true) {
-//        if (rejection) {
-//            var returnUrl = $location.url();
-//            $log.log('returnUrl=' + returnUrl);
-//            console.log('returnUrl=' + returnUrl);
-//        }
+
+//    $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams) {
+//        console.log("You are not authenticated.");
+////        $state.go("login");
 //    });
-    $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams) {
-        console.log("You are not authenticated.");
-//        $state.go("login");
-    });
-    $rootScope.$on("$stateNotFound", function (event, toState, toParams, fromState, fromParams) {
-        console.log("Page not found.");
-    });
 
     editableThemes.bs3.inputClass = 'input-sm';
     editableThemes.bs3.buttonsClass = 'btn-sm';

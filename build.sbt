@@ -32,7 +32,8 @@ libraryDependencies ++= Seq(
   "io.github.cloudify" %% "spdf" % "1.0.0",
   "org.webjars" % "angular-ckeditor" % "0.2.0",
   "org.webjars" % "angular-xeditable" % "0.1.8",
-  "org.webjars" % "font-awesome" % "4.2.0"
+  "org.webjars" % "font-awesome" % "4.2.0",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 playScalaSettings
