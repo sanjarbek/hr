@@ -4,18 +4,18 @@ import models.Seminar
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc.{Action, Controller}
 
-object Seminars extends Controller {
+object Seminars extends Controller with Security {
 
-  def listTemplate = Action {
+  def listTemplate = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.seminar.list())
   }
 
-  def jsonList(employeeId: Long) = Action {
+  def jsonList(employeeId: Long) = HasToken() { _ => currentId => implicit request =>
     val seminars = Seminar.findEmployeeSeminars(employeeId).map { seminar => Json.toJson(seminar)}
     Ok(Json.toJson(seminars))
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val seminarJson = request.body
     seminarJson.validate[Seminar].fold(
       valid = { seminar =>
@@ -27,7 +27,7 @@ object Seminars extends Controller {
     )
   }
 
-  def update = Action(parse.json) { implicit request =>
+  def update = HasToken(parse.json) { _ => currentId => implicit request =>
     val seminarJson = request.body
     seminarJson.validate[Seminar].fold(
       valid = { seminar =>
@@ -40,7 +40,7 @@ object Seminars extends Controller {
     )
   }
 
-  def delete(id: Long) = Action {
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     Seminar.findById(id).map { seminar =>
       Seminar.delete(id)
       Ok(Json.toJson("Успешно удален."))

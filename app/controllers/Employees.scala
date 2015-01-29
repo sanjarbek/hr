@@ -14,7 +14,7 @@ import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.templates.Html
 
-object Employees extends Application {
+object Employees extends Controller with Security {
 
   def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.employees.list())
@@ -26,11 +26,11 @@ object Employees extends Application {
     }.getOrElse(NotFound)
   }
 
-  def newEmployee = Action { implicit request =>
+  def newEmployee = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.employees.create())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val employeeJson = request.body
     employeeJson.validate[Employee].fold(
       valid = { employee =>
@@ -43,15 +43,15 @@ object Employees extends Application {
     )
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.employees.show())
   }
 
-  def edit = Action {
+  def edit = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.employees.edit())
   }
 
-  def update = Action(parse.json) { implicit request =>
+  def update = HasToken(parse.json) { _ => currentId => implicit request =>
     val employeeJson = request.body
     employeeJson.validate[Employee].fold(
       valid = { employee =>
@@ -77,13 +77,13 @@ object Employees extends Application {
     Ok(Json.toJson(employees))
   }
 
-  def position(id: Long) = Action {
+  def position(id: Long) = HasToken() { _ => currentId => implicit request =>
     Employee.getPosition(id).map { order =>
       Ok(Json.toJson(order))
     }.getOrElse(NotFound(Json.toJson("NotFound")))
   }
 
-  def empTestList = Action {
+  def empTestList = HasToken() { _ => currentId => implicit request =>
     EmpTest.insert(EmpTest(0L, "Bakyt", java.time.LocalDate.of(1921, 12, 1), None, LocalDateTime.now(), None))
     val employees = EmpTest.findAll.map { employee => Json.toJson(employee)}
     Ok(Json.toJson(employees))

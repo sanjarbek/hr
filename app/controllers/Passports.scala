@@ -10,28 +10,28 @@ import models.{Passport, Employee}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-object Passports extends Controller {
+object Passports extends Controller with Security {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.passport.list())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val passports = Passport.findAll.map { passport => Json.toJson(passport)}
     Ok(Json.toJson(passports))
   }
 
-  def jsonEmployeePassport(employee_id: Long) = Action {
+  def jsonEmployeePassport(employee_id: Long) = HasToken() { _ => currentId => implicit request =>
     Passport.findEmployeePassport(employee_id).map {
       passport => Ok(Json.toJson(passport))
     }.getOrElse(Ok(JsNull))
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.passport.show())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val passportJson = request.body
     passportJson.validate[Passport].fold(
       valid = { passport =>
@@ -44,7 +44,7 @@ object Passports extends Controller {
     )
   }
 
-  def update = Action(parse.json) { implicit request =>
+  def update = HasToken(parse.json) { _ => currentId => implicit request =>
     val passportJson = request.body
     passportJson.validate[Passport].fold(
       valid = { passport =>
@@ -57,7 +57,7 @@ object Passports extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     Passport.delete(id)
     Ok(Json.toJson("Removed"))
   }

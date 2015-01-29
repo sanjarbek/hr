@@ -4,22 +4,22 @@ import play.api.mvc._
 import models.{Institution}
 import play.api.libs.json._
 
-object Institutions extends Controller {
+object Institutions extends Controller with Security {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.institution.list())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val institutions = Institution.findAll.map { institution => Json.toJson(institution)}
     Ok(Json.toJson(institutions))
   }
 
-  def create = Action { implicit request =>
+  def create = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.institution.create())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val institutionJson = request.body
     institutionJson.validate[Institution].fold(
       valid = { institution =>
@@ -32,12 +32,12 @@ object Institutions extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     Institution.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.institution.show())
   }
 

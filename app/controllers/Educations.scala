@@ -8,27 +8,27 @@ import models.{QualificationType, Education}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-object Educations extends Controller {
+object Educations extends Controller with Security {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.education.list())
   }
 
-  def jsonList(employeeId: Long) = Action {
+  def jsonList(employeeId: Long) = HasToken() { _ => currentId => implicit request =>
     val educations = Education.findEmployeeEducations(employeeId).map { education => Json.toJson(education)}
     Ok(Json.toJson(educations))
   }
 
-  def jsonEmployeeFamily(employeeId: Long) = Action {
+  def jsonEmployeeFamily(employeeId: Long) = HasToken() { _ => currentId => implicit request =>
     val educations = Education.findEmployeeEducations(employeeId).map { education => Json.toJson(education)}
     Ok(Json.toJson(educations))
   }
 
-  def create = Action { implicit request =>
+  def create = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.education.create())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val educationJson = request.body
     educationJson.validate[Education].fold(
       valid = { education =>
@@ -41,7 +41,7 @@ object Educations extends Controller {
     )
   }
 
-  def update = Action(parse.json) { implicit request =>
+  def update = HasToken(parse.json) { _ => currentId => implicit request =>
     val educationJson = request.body
     educationJson.validate[Education].fold(
       valid = { education =>
@@ -54,21 +54,21 @@ object Educations extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     Education.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.education.show())
   }
 
-  def jsonQualificationTypesList() = Action {
+  def jsonQualificationTypesList() = HasToken() { _ => currentId => implicit request =>
     val qualificationTypes = QualificationType.findAll.map { qualification => Json.toJson(qualification)}
     Ok(Json.toJson(qualificationTypes))
   }
 
-  def qualificationTypeSave() = Action(parse.json) { implicit request =>
+  def qualificationTypeSave() = HasToken(parse.json) { _ => currentId => implicit request =>
     val qualificationTypeJson = request.body
     qualificationTypeJson.validate[QualificationType].fold(
       valid = { qualificationType =>

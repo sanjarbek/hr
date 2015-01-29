@@ -13,13 +13,13 @@ import models.MyCustomTypes._
 import scala.collection.mutable.ListBuffer
 import libs.Utils._
 
-object WorkingSheets extends Controller {
+object WorkingSheets extends Controller with Security {
 
-  def workingDayList() = Action {
+  def workingDayList() = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.working_sheet.working_sheet())
   }
 
-  def workingDayListJson(structureId: Option[Int]) = Action {
+  def workingDayListJson(structureId: Option[Int]) = HasToken() { _ => currentId => implicit request =>
 
     val year = 2015
     val month = 1
@@ -69,7 +69,7 @@ object WorkingSheets extends Controller {
     Ok(Json.toJson(jsonData))
   }
 
-  def generateWorkingMonth(structureId: Option[Int]) = Action {
+  def generateWorkingMonth(structureId: Option[Int]) = HasToken() { _ => currentId => implicit request =>
     val year = 2015
     val month = 1
 
@@ -137,7 +137,7 @@ object WorkingSheets extends Controller {
     Ok("Finished.")
   }
 
-  def updateWorkSheetDayDayType = Action(parse.json) { implicit request =>
+  def updateWorkSheetDayDayType = HasToken(parse.json) { _ => currentId => implicit request =>
 
     case class Test(sheetDayId: Long, dayTypeId: Int)
     implicit val testReads: Reads[Test] = (
@@ -166,7 +166,7 @@ object WorkingSheets extends Controller {
     )
   }
 
-  def updateWorkSheetDayHours = Action(parse.json) { implicit request =>
+  def updateWorkSheetDayHours = HasToken(parse.json) { _ => currentId => implicit request =>
 
     case class Test(sheetDayId: Long, hours: Int)
     implicit val testReads: Reads[Test] = (

@@ -4,14 +4,14 @@ import models.{Nationality, RelationshipStatus}
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc.{Action, Controller}
 
-object Entities extends Controller {
+object Entities extends Controller with Security {
 
-  def jsonRelationshipStatusList = Action {
+  def jsonRelationshipStatusList = HasToken() { _ => currentId => implicit request =>
     val relationshipStatuses = RelationshipStatus.findAll.map { relationshipStatus => Json.toJson(relationshipStatus)}
     Ok(Json.toJson(relationshipStatuses))
   }
 
-  def saveRelationshipStatus = Action(parse.json) { implicit request =>
+  def saveRelationshipStatus = HasToken(parse.json) { _ => currentId => implicit request =>
     val relationshipStatusJson = request.body
     relationshipStatusJson.validate[RelationshipStatus].fold(
       valid = { relationshipStatus =>
@@ -24,12 +24,12 @@ object Entities extends Controller {
     )
   }
 
-  def jsonNationalityList = Action {
+  def jsonNationalityList = HasToken() { _ => currentId => implicit request =>
     val nationalities = Nationality.findAll.map { nationality => Json.toJson(nationality)}
     Ok(Json.toJson(nationalities))
   }
 
-  def saveNationality = Action(parse.json) { implicit request =>
+  def saveNationality = HasToken(parse.json) { _ => currentId => implicit request =>
     val nationalityJson = request.body
     nationalityJson.validate[Nationality].fold(
       valid = { nationality =>

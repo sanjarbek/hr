@@ -10,28 +10,28 @@ import models.{Military, Employee}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-object Militaries extends Controller {
+object Militaries extends Controller with Security {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.military.list())
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.military.show())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val militaries = Military.findAll.map { military => Json.toJson(military)}
     Ok(Json.toJson(militaries))
   }
 
-  def jsonEmployeeMilitary(employeeId: Long) = Action {
+  def jsonEmployeeMilitary(employeeId: Long) = HasToken() { _ => currentId => implicit request =>
     Military.findEmployeeMilitary(employeeId).map {
       military => Ok(Json.toJson(military))
     }.getOrElse(Ok(JsNull))
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val militaryJson = request.body
     militaryJson.validate[Military].fold(
       valid = { military =>
@@ -44,7 +44,7 @@ object Militaries extends Controller {
     )
   }
 
-  def update = Action(parse.json) { implicit request =>
+  def update = HasToken(parse.json) { _ => currentId => implicit request =>
     val militaryJson = request.body
     militaryJson.validate[Military].fold(
       valid = { military =>
@@ -57,7 +57,7 @@ object Militaries extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     Military.delete(id)
     Ok(Json.toJson("Removed"))
   }

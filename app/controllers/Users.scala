@@ -8,10 +8,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc.{Action, Controller}
 
-/**
- * Created by samatov on 22.01.2015.
- */
-object Users extends Application {
+object Users extends Controller with Security {
 
   //  def createTest = Action {
   //    val username = "admin"
@@ -27,7 +24,7 @@ object Users extends Application {
   //    Ok(Json.toJson(updated))
   //  }
 
-  def checkPassword = Action {
+  def checkPassword = HasToken() { _ => currentId => implicit request =>
     val username = "admin"
     val password = "test12"
 
@@ -40,11 +37,11 @@ object Users extends Application {
 
   }
 
-  def list = Action {
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.user.list())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val users = User.findAll map { user => Json.toJson(user)}
     Ok(Json.toJson(users))
   }

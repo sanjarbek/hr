@@ -4,22 +4,22 @@ import play.api.mvc._
 import models.{PositionType}
 import play.api.libs.json._
 
-object PositionCategories extends Controller {
+object PositionCategories extends Controller with Security {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.position_category.list())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val position_categories = PositionType.findAll.map { position_categories => Json.toJson(position_categories)}
     Ok(Json.toJson(position_categories))
   }
 
-  def create = Action { implicit request =>
+  def create = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.position_category.create())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val positionCategoryJson = request.body
     positionCategoryJson.validate[PositionType].fold(
       valid = { positionCategory =>
@@ -32,12 +32,12 @@ object PositionCategories extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     PositionType.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.position_category.show())
   }
 

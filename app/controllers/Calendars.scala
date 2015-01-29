@@ -9,9 +9,9 @@ import play.api.Logger
 import play.api.libs.json.{JsValue, JsError, Json}
 import play.api.mvc.{Action, Controller}
 
-object Calendars extends Controller {
+object Calendars extends Controller with Security {
 
-  def saveCalendarType = Action(parse.json) { implicit request =>
+  def saveCalendarType = HasToken(parse.json) { _ => currentId => implicit request =>
     val calendarTypeJson = request.body
     calendarTypeJson.validate[CalendarType].fold(
       valid = { calendarType =>
@@ -24,21 +24,21 @@ object Calendars extends Controller {
     )
   }
 
-  def showCalendarType = Action {
+  def showCalendarType = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.calendar.calendar_type.show())
   }
 
-  def showCalendarByTypeAndYear(calendarTypeId: Int, year: Int) = Action {
+  def showCalendarByTypeAndYear(calendarTypeId: Int, year: Int) = HasToken() { _ => currentId => implicit request =>
     val calendarYearDays = Calendar.findCalendarByType(calendarTypeId).filter(_.calendar_date.getYear == year).map { calendarYear => Json.toJson(calendarYear)}
     Ok(Json.toJson(calendarYearDays))
   }
 
-  def jsonCalendarTypes() = Action {
+  def jsonCalendarTypes() = HasToken() { _ => currentId => implicit request =>
     val calendarTypes = CalendarType.findAll.map { calendarType => Json.toJson(calendarType)}
     Ok(Json.toJson(calendarTypes))
   }
 
-  def jsonCalendarDayTypes(dt: Option[Boolean]) = Action {
+  def jsonCalendarDayTypes(dt: Option[Boolean]) = HasToken() { _ => currentId => implicit request =>
     val dayTypes = dt match {
       case Some(true) => DayType.findAll.filter(_.dayType).map { dayType => Json.toJson(dayType)}
       case Some(false) | None => DayType.findAll.map { dayType => Json.toJson(dayType)}
@@ -46,7 +46,7 @@ object Calendars extends Controller {
     Ok(Json.toJson(dayTypes))
   }
 
-  def updateCalendarDay = Action(parse.json) { implicit request =>
+  def updateCalendarDay = HasToken(parse.json) { _ => currentId => implicit request =>
     val calendarDayJson = request.body
     calendarDayJson.validate[Calendar].fold(
       valid = { calendarDay =>
@@ -59,12 +59,12 @@ object Calendars extends Controller {
     )
   }
 
-  def jsonCalendarTypeYears(calendarTypeId: Int) = Action {
+  def jsonCalendarTypeYears(calendarTypeId: Int) = HasToken() { _ => currentId => implicit request =>
     val years: List[Int] = Calendar.findCalendarTypeYears(calendarTypeId).map { calendarDate => calendarDate.calendar_date.getYear}
     Ok(Json.toJson(years.distinct))
   }
 
-  def create(calendarTypeId: Int, year: Int, workingDayTypeId: Int) = Action {
+  def create(calendarTypeId: Int, year: Int, workingDayTypeId: Int) = HasToken() { _ => currentId => implicit request =>
     val lengthOfYear = LocalDate.of(year, 1, 1).lengthOfYear()
     for (dayOfYear <- 1 to lengthOfYear) {
       val date = LocalDate.ofYearDay(year, dayOfYear)

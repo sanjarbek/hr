@@ -4,22 +4,22 @@ import play.api.mvc._
 import models.{RelationshipType}
 import play.api.libs.json._
 
-object RelationshipTypes extends Controller {
+object RelationshipTypes extends Controller with Security {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.relationship_type.list())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val relationship_types = RelationshipType.findAll.map { relationship_type => Json.toJson(relationship_type)}
     Ok(Json.toJson(relationship_types))
   }
 
-  def create = Action { implicit request =>
+  def create = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.relationship_type.create())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val relationshipTypeJson = request.body
     relationshipTypeJson.validate[RelationshipType].fold(
       valid = { relationship_type =>
@@ -32,12 +32,12 @@ object RelationshipTypes extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     RelationshipType.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.relationship_type.show())
   }
 

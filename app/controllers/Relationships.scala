@@ -10,39 +10,27 @@ import models.{Relationship,Employee}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-object Relationships extends Controller {
+object Relationships extends Controller with Security {
 
-  private val relationshipForm: Form[Relationship] = Form(
-    mapping(
-      "id" -> ignored(0L),
-      "employee_id" -> longNumber.verifying("There is not exists employee.", Employee.findById(_).nonEmpty),
-      "degree" -> number,
-      "surname" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "firstname" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "lastname" -> nonEmptyText(minLength = 2, maxLength = 20),
-      "birthday" -> date
-    )(Relationship.apply)(Relationship.unapply)
-  )
-
-  def list = Action { implicit  request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.relationship.list())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val relationships = Relationship.findAll.map { relationship => Json.toJson(relationship)}
     Ok(Json.toJson(relationships))
   }
 
-  def jsonEmployeeFamily(employeeId: Long) = Action {
+  def jsonEmployeeFamily(employeeId: Long) = HasToken() { _ => currentId => implicit request =>
     val relationships = Relationship.findEmployeeFamily(employeeId).map { relationship => Json.toJson(relationship)}
     Ok(Json.toJson(relationships))
   }
 
-  def create = Action { implicit request =>
+  def create = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.relationship.create())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val relationshipJson = request.body
     relationshipJson.validate[Relationship].fold(
       valid = { relationship =>
@@ -55,7 +43,7 @@ object Relationships extends Controller {
     )
   }
 
-  def update = Action(parse.json) { implicit request =>
+  def update = HasToken(parse.json) { _ => currentId => implicit request =>
     val relationshipJson = request.body
     relationshipJson.validate[Relationship].fold(
       valid = { relationship =>
@@ -68,12 +56,12 @@ object Relationships extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     Relationship.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.relationship.show())
   }
 

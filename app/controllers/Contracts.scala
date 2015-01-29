@@ -11,27 +11,27 @@ import models._
 import play.api.libs.json._
 import sun.util.calendar.LocalGregorianCalendar.Date
 
-object Contracts extends Controller {
+object Contracts extends Controller with Security {
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.contract.list())
   }
 
-  def jsonList = Action {
+  def jsonList = HasToken() { _ => currentId => implicit request =>
     val contracts = Contract.findAll.map { contract => Json.toJson(contract)}
     Ok(Json.toJson(contracts))
   }
 
-  def jsonEmployeeContractsList(id: Long) = Action {
+  def jsonEmployeeContractsList(id: Long) = HasToken() { _ => currentId => implicit request =>
     val contracts = Contract.findAllByEmployeeId(id).map { contract => Json.toJson(contract)}
     Ok(Json.toJson(contracts))
   }
 
-  def create = Action { implicit request =>
+  def create = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.contract.create())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val contractJson = request.body
     contractJson.validate[Contract].fold(
       valid = { contract =>
@@ -44,16 +44,16 @@ object Contracts extends Controller {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     Contract.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.contract.show())
   }
 
-  def download(id: Long) = Action {
+  def download(id: Long) = HasToken() { _ => currentId => implicit request =>
     Contract.findById(id).map { contract =>
       ContractType.findById(contract.contract_type).map { contract_type =>
         contract_type.file_path.map { filePath =>

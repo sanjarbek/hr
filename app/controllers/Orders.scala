@@ -23,21 +23,21 @@ import play.api.templates.Html
 import models.MyCustomTypes._
 
 
-trait Orders extends Controller with Security {
+object Orders extends Controller with Security {
 
-  def create = Action { implicit request =>
+  def create = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.create())
   }
 
-  def createEmployment = Action { implicit request =>
+  def createEmployment = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.employment.create())
   }
 
-  def listEmployment = Action { implicit request =>
+  def listEmployment = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.employment.list())
   }
 
-  def jsonEmploymentList() = Action { implicit request =>
+  def jsonEmploymentList() = HasToken() { _ => currentId => implicit request =>
     case class EmploymentOrderFull(order: EmploymentOrder, employee: Employee, calendarType: CalendarType, contractType: ContractType, position: Structure)
     implicit val testWrites: Writes[EmploymentOrderFull] = (
       (JsPath \ "order").write[EmploymentOrder] and
@@ -59,13 +59,13 @@ trait Orders extends Controller with Security {
     Ok(Json.toJson(employees))
   }
 
-  def jsonEmploymentOrderGet(employmentOrderId: Long) = Action {
+  def jsonEmploymentOrderGet(employmentOrderId: Long) = HasToken() { _ => currentId => implicit request =>
     EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
       Ok(Json.toJson(employmentOrder))
     }.getOrElse(NotFound(Json.toJson("Not found")))
   }
 
-  def getEmploymentOrderDocument(employmentOrderId: Long) = Action {
+  def getEmploymentOrderDocument(employmentOrderId: Long) = HasToken() { _ => currentId => implicit request =>
 
     EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
       ContractType.findById(employmentOrder.contract_type_id).map { contractType =>
@@ -126,7 +126,7 @@ trait Orders extends Controller with Security {
     }.getOrElse(NotFound("Не найдент приказ с таким номером."))
   }
 
-  def getEmploymentOrderContract(employmentOrderId: Long) = Action {
+  def getEmploymentOrderContract(employmentOrderId: Long) = HasToken() { _ => currentId => implicit request =>
     EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
       ContractType.findById(employmentOrder.contract_type_id).map { contractType =>
         contractType.file_path match {
@@ -176,7 +176,7 @@ trait Orders extends Controller with Security {
     }.getOrElse(NotFound("Не найдент такой приказ."))
   }
 
-  def comet = Action {
+  def comet = HasToken() { _ => currentId => implicit request =>
     val events = Enumerator(
       """<script>console.log('kiki')</script>""",
       """<script>console.log('foo')</script>""",
@@ -185,7 +185,7 @@ trait Orders extends Controller with Security {
     Ok.stream(events >>> Enumerator.eof).as(HTML)
   }
 
-  def saveEmployment = Action(parse.json) { implicit request =>
+  def saveEmployment = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[EmploymentOrder].fold(
       valid = { order =>
@@ -199,7 +199,7 @@ trait Orders extends Controller with Security {
     )
   }
 
-  def updateEmployment = Action(parse.json) { implicit request =>
+  def updateEmployment = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[EmploymentOrder].fold(
       valid = { order =>
@@ -219,15 +219,15 @@ trait Orders extends Controller with Security {
     )
   }
 
-  def createDismissal = Action { implicit request =>
+  def createDismissal = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.dismissal.create())
   }
 
-  def listDismissal = Action { implicit request =>
+  def listDismissal = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.dismissal.list())
   }
 
-  def jsonDismissalList() = Action { implicit request =>
+  def jsonDismissalList() = HasToken() { _ => currentId => implicit request =>
 
     case class DismissalOrderFull(order: DismissalOrder, employee: Employee, position: Structure)
 
@@ -247,13 +247,13 @@ trait Orders extends Controller with Security {
     Ok(Json.toJson(dismissals))
   }
 
-  def jsonDismissalOrderGet(employmentOrderId: Long) = Action {
+  def jsonDismissalOrderGet(employmentOrderId: Long) = HasToken() { _ => currentId => implicit request =>
     EmploymentOrder.findById(employmentOrderId).map { employmentOrder =>
       Ok(Json.toJson(employmentOrder))
     }.getOrElse(NotFound(Json.toJson("Not found")))
   }
 
-  def saveDismissal = Action(parse.json) { implicit request =>
+  def saveDismissal = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[DismissalOrder].fold(
       valid = { order =>
@@ -272,12 +272,12 @@ trait Orders extends Controller with Security {
     )
   }
 
-  def jsonLeavingReasonList = Action {
+  def jsonLeavingReasonList = HasToken() { _ => currentId => implicit request =>
     val leavingReasons = LeavingReason.findAll.map(leavingReason => Json.toJson(leavingReason))
     Ok(Json.toJson(leavingReasons))
   }
 
-  def saveLeavingReason = Action(parse.json) { implicit request =>
+  def saveLeavingReason = HasToken(parse.json) { _ => currentId => implicit request =>
     val leavingReasonJson = request.body
     leavingReasonJson.validate[LeavingReason].fold(
       valid = { leavingReason =>
@@ -290,7 +290,7 @@ trait Orders extends Controller with Security {
     )
   }
 
-  def updateDismissal = Action(parse.json) { implicit request =>
+  def updateDismissal = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[DismissalOrder].fold(
       valid = { order =>
@@ -308,15 +308,15 @@ trait Orders extends Controller with Security {
   }
 
 
-  def createTransfer = Action { implicit request =>
+  def createTransfer = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.transfer.create())
   }
 
-  def listTransfer = Action { implicit request =>
+  def listTransfer = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.transfer.list())
   }
 
-  def jsonTransferList() = Action { implicit request =>
+  def jsonTransferList() = HasToken() { _ => currentId => implicit request =>
     case class TransferOrderFull(order: TransferOrder, employee: Employee, calendarType: CalendarType, contractType: ContractType, position: Structure)
     implicit val testWrites: Writes[TransferOrderFull] = (
       (JsPath \ "order").write[TransferOrder] and
@@ -339,7 +339,7 @@ trait Orders extends Controller with Security {
   }
 
 
-  def saveTransfer = Action(parse.json) { implicit request =>
+  def saveTransfer = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[TransferOrder].fold(
       valid = { order =>
@@ -351,7 +351,7 @@ trait Orders extends Controller with Security {
     )
   }
 
-  def updateTransfer = Action(parse.json) { implicit request =>
+  def updateTransfer = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[TransferOrder].fold(
       valid = { order =>
@@ -372,15 +372,15 @@ trait Orders extends Controller with Security {
   }
 
 
-  def tabTemplate = Action {
+  def tabTemplate = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.tabTemplate())
   }
 
-  def list = Action { implicit request =>
+  def list = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.list())
   }
 
-  def addEmploymentOrder = Action {
+  def addEmploymentOrder = HasToken() { _ => currentId => implicit request =>
     //    Position.findByEmployeeId(7).max
     Ok("Saved")
   }
@@ -390,22 +390,22 @@ trait Orders extends Controller with Security {
   //    Ok(Json.toJson(orders))
   //  }
 
-  def jsonList() = Action { implicit request =>
+  def jsonList() = HasToken() { _ => currentId => implicit request =>
     val orders = Order.findAll.map { order => Json.toJson(order)}
     Ok(Json.toJson(orders))
   }
 
-  def jsonGet(id: Long) = Action {
+  def jsonGet(id: Long) = HasToken() { _ => currentId => implicit request =>
     Order.findById(id).map { order =>
       Ok(Json.toJson(order))
     }.getOrElse(NotFound)
   }
 
-  def show = Action {
+  def show = HasToken() { _ => currentId => implicit request =>
     Ok(views.html.order.show())
   }
 
-  def save = Action(parse.json) { implicit request =>
+  def save = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[Order].fold(
       valid = { order =>
@@ -418,7 +418,7 @@ trait Orders extends Controller with Security {
     )
   }
 
-  def update = Action(parse.json) { implicit request =>
+  def update = HasToken(parse.json) { _ => currentId => implicit request =>
     val orderJson = request.body
     orderJson.validate[Order].fold(
       valid = { order =>
@@ -433,12 +433,12 @@ trait Orders extends Controller with Security {
     )
   }
 
-  def delete(id: Long) = Action { implicit request =>
+  def delete(id: Long) = HasToken() { _ => currentId => implicit request =>
     //    Order.delete(id)
     Ok(Json.toJson("Removed"))
   }
 
-  def generate(id: Long) = Action { implicit request =>
+  def generate(id: Long) = HasToken() { _ => currentId => implicit request =>
     val pdf = Pdf(Play.current.configuration.getString("wkhtmltopdf.executablePath").get, new PdfConfig {
       orientation := Portrait
       pageSize := Play.current.configuration.getString("wkhtmltopdf.pageSize").map { pageSize => pageSize}.getOrElse("A4")
@@ -462,14 +462,9 @@ trait Orders extends Controller with Security {
 
   }
 
-  def tagsList(query: String) = Action {
+  def tagsList(query: String) = HasToken() { _ => currentId => implicit request =>
     val tags = OrderTag.findByName(query)
     Ok(Json.toJson(tags))
   }
-
-}
-
-object Orders extends Orders {
-
 
 }
