@@ -61,8 +61,8 @@ object Users extends Application {
       valid = { newPassword =>
         User.findById(newPassword.id).map { user =>
           user.copy(passwordHash = User.hashPassword(newPassword.password)).update
-          Ok(JsSuccess("Success"))
-        } getOrElse NotFound(JsError("Not such user"))
+          Ok(Json.toJson("Success"))
+        } getOrElse NotFound(Json.toJson("Not such user"))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))
@@ -78,7 +78,7 @@ object Users extends Application {
         Ok(Json.toJson(newUser))
       },
       invalid = { errors =>
-        BadRequest(Json.toJson(errors))
+        BadRequest(JsError.toFlatJson(errors))
       }
     )
   }
@@ -89,10 +89,10 @@ object Users extends Application {
       valid = { user =>
         User.findById(user.id).map { tmp =>
           Ok(Json.toJson(tmp.copy(username = user.username).update))
-        } getOrElse NotFound(JsError("Не существует такого пользователя"))
+        } getOrElse NotFound(Json.toJson("Не существует такого пользователя"))
       },
       invalid = { errors =>
-        BadRequest(Json.toJson(errors))
+        BadRequest(JsError.toFlatJson(errors))
       }
     )
   }
@@ -109,8 +109,8 @@ object Users extends Application {
       valid = { newStatus =>
         User.findById(newStatus.id) map { user =>
           user.copy(status = newStatus.status).update
-          Ok(JsSuccess("Success"))
-        } getOrElse NotFound(JsError("Не существует такого пользователя"))
+          Ok(Json.toJson("Success"))
+        } getOrElse NotFound(Json.toJson("Не существует такого пользователя"))
       },
       invalid = { errors =>
         BadRequest(JsError.toFlatJson(errors))

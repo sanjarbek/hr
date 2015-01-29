@@ -8,7 +8,7 @@ GET           /login                                  controllers.Application.lo
 POST          /logout                                 controllers.Application.logout
 POST          /auth                                   controllers.Application.auth
 GET           /menu                                   controllers.Application.menu
-GET           /user                                   controllers.Application.user
+GET           /user                                   controllers.Application.getLoggedUser
 POST          /upload                                 controllers.Application.upload
 GET           /upload                                 controllers.Application.uploadForm
 GET           /ping                                   controllers.Application.ping
@@ -185,12 +185,13 @@ DELETE        /seminars/delete                        controllers.Seminars.delet
 
 #GET           /users/createTest                       controllers.Users.createTest
 #GET           /users/checkTest                        controllers.Users.checkPassword
-GET         /users/list                   controllers.Users.list
-GET         /users/json/list              controllers.Users.jsonList
-PUT         /users/change-password        controllers.Users.changePassword
-POST        /users/create                 controllers.Users.create
-PUT         /users/update                 controllers.Users.update
-PUT         /users/change-status          controllers.Users.changeStatus
+GET           /users/list                             controllers.Users.list
+GET           /users/json/list                        controllers.Users.jsonList
+PUT           /users/change-password                  controllers.Users.changePassword
+POST          /users/create                           controllers.Users.create
+PUT           /users/update                           controllers.Users.update
+PUT           /users/change-status                    controllers.Users.changeStatus
+
 
 # Urls for testing
 GET           /test                                   controllers.Employees.empTestList

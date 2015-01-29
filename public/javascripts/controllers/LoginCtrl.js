@@ -21,7 +21,7 @@ angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http,
             }
         ).then(
             function (response) {
-                $scope.user = response.data;
+//                $scope.user = response.data;
             }, function (response) {
                 // Token invalid or fetching the user failed
             }
@@ -37,21 +37,35 @@ angular.module('app').controller('LoginCtrl', function ($scope, $cookies, $http,
             function (response) { // success
                 token = response.data.token;
                 var userId = response.data.userId;
-                return $http.get("/user"); // return another promise to chain `then`
+//                return $http.get("/user"); // return another promise to chain `then`
+                $state.go('panel.orders.employmentOrders.list');
             }, function (response) { // error
-                $scope.error = response.data.err;
+                PNotify.desktop.permission();
+                (new PNotify({
+                    title: 'Ошибка',
+                    text: response.data.err,
+                    desktop: {
+                        desktop: true
+                    }
+                })).get().click(function (e) {
+                        if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                    });
+//                $scope.error = response.data.err;
                 // return 'empty' promise so the right `then` function is called
                 return $q.reject(response.data.err);
             }
-        ).then(
-            function (response) {
-                $scope.user = response.data;
-                $state.go('panel.orders.employmentOrders.list');
-            },
-            function (response) {
-                console.log(response);
-            }
         );
+//        .then(
+//            function (response) {
+//                $scope.user = response.data;
+//                console.log(response.data);
+//                $state.go('panel.orders.employmentOrders.list');
+//            },
+//            function (response) {
+//                console.log("Ответ:")
+//                console.log(response.error);
+//            }
+//        );
     };
 
     /**

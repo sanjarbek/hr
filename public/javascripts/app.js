@@ -27,8 +27,7 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                 },
                 function (response) {
                     if (response.status == 401) {
-                        console.log(response.status);
-                        console.log("Invalid token.");
+                        console.log(response.data.error);
                         $rootScope.$broadcast("InvalidToken");
                         $rootScope.sessionExpired = true;
                         $timeout(function () {
@@ -48,6 +47,20 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
                     } else if (response.status == 403) {
                         console.log("Не достаточно прав для доступа к данному ресурсу.");
                         $rootScope.$broadcast("InsufficientPrivileges");
+                    } else if (response.status == 404) {
+                        PNotify.desktop.permission();
+                        (new PNotify({
+                            title: 'Ошибка.',
+                            text: response.data.err,
+                            desktop: {
+                                desktop: true
+                            }
+                        })).get().click(function (e) {
+                                if ($('.ui-pnotify-closer, .ui-pnotify-sticker, .ui-pnotify-closer *, .ui-pnotify-sticker *').is(e.target)) return;
+                            });
+
+                        return $q.reject(response);
+
                     } else {
                         PNotify.desktop.permission();
                         (new PNotify({
@@ -78,10 +91,15 @@ angular.module('app').config(function ($stateProvider, $urlRouterProvider, $pars
             url: '',
             abstract: true,
             templateUrl: '/menu',
-            controller: function ($scope, $http) {
-                /**
-                 * Invalidate the token on the server.
-                 */
+            resolve: {
+                userData: function ($http) {
+                    return $http.get("/user").then(function (result) {
+                        return result.data;
+                    });
+                }
+            },
+            controller: function ($scope, $http, userData) {
+                $scope.user = userData;
                 $scope.logout = function () {
                     $http.post("/logout").then(function () {
                         $scope.user = undefined;

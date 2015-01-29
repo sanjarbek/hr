@@ -7,6 +7,7 @@ import java.util
 import java.util.{Locale, Calendar}
 import java.util.Collections._
 
+import models.{Employee, User}
 import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.poi.poifs.filesystem.POIFSFileSystem
 import org.apache.poi.hwpf.HWPFDocument
@@ -42,16 +43,16 @@ trait Security {
   val AuthTokenUrlKey = "auth"
 
   /** Checks that a token is either in the header or in the query string */
-  def HasToken[A](p: BodyParser[A] = parse.anyContent)(f: String => Long => Request[A] => Result): Action[A] =
+  def HasToken[A](p: BodyParser[A] = parse.anyContent)(f: String => Int => Request[A] => Result): Action[A] =
     Action(p) { implicit request =>
       val maybeToken = request.headers.get(AuthTokenHeader).orElse(request.getQueryString(AuthTokenUrlKey))
       maybeToken map { token =>
-        Cache.getAs[Long](token) map { userid =>
+        Cache.getAs[Int](token) map { userid =>
           //          Cache.remove(token)
           Cache.set(token, userid, CacheExpiration)
           f(token)(userid)(request)
-        } getOrElse Unauthorized(Json.obj("err" -> "Not found in cache."))
-      } getOrElse Unauthorized(Json.obj("err" -> "No Token."))
+        } getOrElse Unauthorized(Json.obj("err" -> "Сессия соединения истекла"))
+      } getOrElse Unauthorized(Json.obj("err" -> "Не установлена сессия, пройдите аутентификацию"))
     }
 
 }
@@ -69,7 +70,7 @@ trait Application extends Controller with Security {
   )
 
   implicit class ResultWithToken(result: Result) {
-    def withToken(token: (String, Long)): Result = {
+    def withToken(token: (String, Int)): Result = {
       Cache.set(token._1, token._2, CacheExpiration)
       result.withCookies(Cookie(AuthTokenCookieKey, token._1, None, httpOnly = false))
     }
@@ -93,9 +94,9 @@ trait Application extends Controller with Security {
               "userId" -> user.id
             )).withToken(token -> user.id)
           } else {
-            NotFound(Json.toJson("Неверный пароль"))
+            NotFound(Json.obj("err" -> "Неверный пароль"))
           }
-        }.getOrElse(NotFound(Json.toJson("Неверное имя пользователя")))
+        }.getOrElse(NotFound(Json.obj("err" -> "Пользователь с таким именем не найден")))
       }
     )
   }
@@ -104,11 +105,16 @@ trait Application extends Controller with Security {
   def logout = Action { implicit request =>
     request.headers.get(AuthTokenHeader) map { token =>
       Redirect("/").discardingToken(token)
-    } getOrElse BadRequest(Json.obj("err" -> "No Token"))
+    } getOrElse BadRequest(Json.obj("err" -> "Не установлена сессия, пройдите аутентификацию"))
   }
 
-  def user = Action { implicit request =>
-    Ok(Json.obj("name" -> "Sanzhar", "role" -> "Administrator"))
+  def getLoggedUser = HasToken() { token => userId => implicit request =>
+    User.findById(userId) map { user =>
+      user.employee map { employee =>
+        Ok(Json.obj("firstname" -> employee.firstname, "surname" -> employee.surname))
+      } getOrElse NotFound(Json.obj("err" -> "Нету привязки данного пользователя к сотруднику"))
+    } getOrElse NotFound(Json.obj("err" -> "Не найден пользователь"))
+
   }
 
   /**
@@ -117,12 +123,7 @@ trait Application extends Controller with Security {
    * This action can be used by the route service.
    */
   def ping() = HasToken() { token => userId => implicit request =>
-    if (userId == 100) {
-      Ok(Json.obj("userId" -> userId)).withToken(token -> userId)
-    }
-    else {
-      NotFound(Json.obj("err" -> "User Not Found"))
-    }
+    Ok(Json.obj("userId" -> userId)).withToken(token -> userId)
   }
 
 }

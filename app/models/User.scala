@@ -13,6 +13,7 @@ import scala.collection.Iterable
 
 case class User(
                  id: Int,
+                 employee_id: Long,
                  username: String,
                  @Column("password_hash") passwordHash: String,
                  @Column("password_reset_token") passwordResetToken: Option[String],
@@ -31,6 +32,12 @@ case class User(
       tmp.save
     }
   }
+
+  def employee = inTransaction {
+    from(Database.employeeTable) { employee =>
+      where(employee.id === this.id) select (employee)
+    }.headOption
+  }
 }
 
 
@@ -40,6 +47,7 @@ object User {
 
   implicit val userWrites: Writes[User] = (
     (JsPath \ "id").write[Int] and
+      (JsPath \ "employee_id").write[Long] and
       (JsPath \ "username").write[String] and
       (JsPath \ "passwordHash").write[String] and
       (JsPath \ "passwordResetToken").write[Option[String]] and
@@ -51,6 +59,7 @@ object User {
 
   implicit val userReads: Reads[User] = (
     (JsPath \ "id").read[Int] and
+      (JsPath \ "employee_id").read[Long] and
       (JsPath \ "username").read[String] and
       (JsPath \ "passwordHash").read[String] and
       (JsPath \ "passwordResetToken").read[Option[String]] and
