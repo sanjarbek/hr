@@ -1,0 +1,54 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label><h4 class="panel-title">Новый пользователь</h4></label>
+        <div class="pull-right">
+            <button ng-disabled="!userForm.$valid" ng-click="saveUser()" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span>
+                Сохранить</button>
+            <button ng-click="$state.go('panel.users.list')" class="btn btn-default"><span class="glyphicon glyphicon-step-backward"></span>
+                Назад</button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" name="userForm" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="employee_id" class="control-label">Сотрудник:</label>
+                        <input type="text" ng-model="selected" typeahead-editable=false typeahead="employee as (employee.surname + ' ' + employee.firstname + ' ' + employee.lastname) for employee in employees | filter:$viewValue | limitTo:8"
+                        class="form-control">
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="surname" class="control-label">Логин:</label>
+                        <input class="form-control" type="text" name="username" ng-model="newUserForm.username" required />
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="firstname" class="control-label">Пароль:</label>
+                        <input class="form-control" type="text" name="passwordHash" ng-model="newUserForm.passwordHash" required />
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label for="lastname" class="control-label">Статус:</label>
+                        <input class="form-control" type="text" name="status" ng-model="newUserForm.status" required />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

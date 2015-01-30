@@ -8,6 +8,12 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc.{Action, Controller}
 
+import org.squeryl.{KeyedEntityDef, KeyedEntity}
+import org.squeryl.Query
+import org.squeryl.annotations._
+import org.squeryl.dsl.QueryDsl
+
+
 object Users extends Controller with Security {
 
   //  def createTest = Action {
@@ -42,8 +48,16 @@ object Users extends Controller with Security {
   }
 
   def jsonList = HasToken() { _ => currentId => implicit request =>
-    val users = User.findAll map { user => Json.toJson(user)}
-    Ok(Json.toJson(users))
+    val usersWithEmployees = User.findAllWithEmployeeInfo map { userEmployee =>
+      Json.obj(
+        "id" -> userEmployee._1.id,
+        "username" -> userEmployee._1.username,
+        "firstname" -> userEmployee._2.firstname,
+        "surname" -> userEmployee._2.surname,
+        "lastname" -> userEmployee._2.lastname
+      )
+    }
+    Ok(Json.toJson(usersWithEmployees))
   }
 
   def changePassword = HasToken(parse.json) { _ => currentid => request =>

@@ -43,7 +43,7 @@ case class User(
 
 object User {
 
-  import Database.{userTable}
+  import Database.{userTable, employeeTable}
 
   implicit val userWrites: Writes[User] = (
     (JsPath \ "id").write[Int] and
@@ -90,5 +90,11 @@ object User {
   }
 
   def hashPassword(p: String) = BCrypt.hashpw(p, BCrypt.gensalt())
+
+  def findAllWithEmployeeInfo = inTransaction {
+    from(userTable, employeeTable) { (user, employee) =>
+      where(user.employee_id === employee.id) select(user, employee)
+    }.toList
+  }
 
 }

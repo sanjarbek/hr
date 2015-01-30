@@ -7,8 +7,8 @@
                     <button type="button" ng-click="showSearch()" class="btn btn-primary">
                         <span class="glyphicon glyphicon-search"></span> Поиск
                     </button>
-                    <button type="button" ng-click="$state.go('panel.users.create')" class="btn btn-default">
-                        <span class="glyphicon glyphicon-plus"></span> Добавить нового пользователя
+                    <button type="button" ng-click="openUserCreateModal()" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span> Добавить нового пользователя
                     </button>
                 </div>
                 <div class="clearfix"></div>
@@ -17,14 +17,14 @@
                 <thead>
                     <tr>
                         <th>Логин</th>
-                        <th>Пароль</th>
+                        <th>ФИО</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat='user in users'>
                         <td>{{ user.username }}</td>
-                        <td>{{ user.passwordHash }}</td>
+                        <td>{{ user.surname }} {{ user.firstname }} {{ user.lastname }}</td>
                         <td>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-xs btn-primary" popover="Редактировать" popover-trigger="mouseenter" ><span class="fa fa-edit"></span></a>
@@ -44,4 +44,48 @@
         </div>
     </div>
 </div>
+
+<div>
+    <script type="text/ng-template" id="userCreateModal.html">
+    <div class="modal-header">
+    <h4 class="modal-title">Создания нового пользователя</h4>
+    </div>
+    <div class="modal-body">
+    <form class="form-horizontal" name="userForm" novalidate>
+    <fieldset>
+    <div class="form-group">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="employee_id" class="control-label">Сотрудник:</label>
+    <input type="text" ng-model="selected" typeahead-editable=false typeahead="employee as (employee.surname + ' ' + employee.firstname + ' ' + employee.lastname) for employee in employees | filter:$viewValue | limitTo:8"
+    class="form-control">
+    </div>
+    </div>
+    <div class="form-group">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="surname" class="control-label">Логин:</label>
+    <input class="form-control" type="text" name="username" ng-model="newUserForm.username" required />
+    </div>
+    </div>
+    <div class="form-group">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="firstname" class="control-label">Пароль:</label>
+    <input class="form-control" type="text" name="passwordHash" ng-model="newUserForm.passwordHash" required />
+    </div>
+    </div>
+    <div class="form-group">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <label for="lastname" class="control-label">Статус:</label>
+    <input class="form-control" type="text" name="status" ng-model="newUserForm.status" required />
+    </div>
+    </div>
+    </fieldset>
+    </form>
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">Сохранить</button>
+    <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+    </script>
+</div>
+
 
